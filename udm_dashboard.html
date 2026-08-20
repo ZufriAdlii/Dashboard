@@ -666,6 +666,57 @@
     font-weight:600; color:#94a3b8;
   }
   @media (prefers-reduced-motion: reduce){ #boot-loader .boot-bar span{ animation:none; } }
+
+  /* ================= MOBILE LAYOUT ================= */
+  @media (max-width: 760px){
+    #udmDashboardRoot{ flex-direction:column; }
+
+    /* sidebar becomes a horizontal strip across the top */
+    .sidebar{
+      width:100%;
+      height:auto;
+      position:static;
+      border-right:none;
+      border-bottom:1px solid var(--panel-border);
+      padding:12px 14px 14px;
+    }
+    .sidebar img{ max-width:120px; }
+
+    /* nav pills scroll sideways instead of stacking */
+    .sidebar .nav-item, .sidebar .choice-btn{ flex:0 0 auto; }
+    .sidebar > *{ margin-left:0; margin-right:0; }
+
+    .main{ padding:16px 14px 34px; }
+
+    /* headings shrink so they stop being clipped */
+    .topbar h1, .main h1{ font-size:19px; line-height:1.25; }
+
+    /* one card per row, full width */
+    .kpi-row{ grid-template-columns:repeat(2,1fr) !important; gap:10px; }
+    .content-grid{ grid-template-columns:1fr !important; }
+    .panel{ padding:14px 14px 16px; margin-bottom:14px; }
+    .panel h2{ font-size:13.5px; }
+
+    /* charts keep their aspect ratio and stay legible */
+    .panel .chart-wrap{ overflow-x:auto; }
+    .panel .chart-wrap svg{ min-width:300px; }
+
+    /* filters go full width and are big enough to tap */
+    .sidebar select, .sidebar input, .sidebar button{
+      width:100%; min-height:40px; font-size:14px;
+    }
+    .chart-controls{ flex-wrap:wrap; gap:8px; }
+
+    /* tables scroll rather than squash */
+    table{ font-size:12px; }
+    .table-wrap, .modal-body{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  }
+
+  @media (max-width: 420px){
+    .kpi-row{ grid-template-columns:1fr !important; }
+    .main{ padding:14px 11px 30px; }
+    .topbar h1, .main h1{ font-size:17px; }
+  }
 </style>
 </head>
 <body>
