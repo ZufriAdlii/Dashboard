@@ -1,0 +1,45 @@
+{
+  "name": "Utara Infra Dashboard Hub",
+  "short_name": "Utara Infra",
+  "description": "Progress reports and operational metrics for Utara Infra projects.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b0d12",
+  "theme_color": "#0b0d12",
+  "icons": [
+    {
+      "src": "UISB_NEW.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "UISB_NEW.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "UISB_NEW.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Project CD",
+      "short_name": "Project CD",
+      "description": "Deposit recovery tracker",
+      "url": "./cd_dashboard.html"
+    },
+    {
+      "name": "Team UDM",
+      "short_name": "Team UDM",
+      "description": "UDM project performance",
+      "url": "./udm_dashboard.html"
+    }
+  ]
+}
