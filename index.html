@@ -5,58 +5,124 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UTARA INFRA | Dashboard Hub</title>
 
-<!-- === TAMBAHAN IKON TAB BROWSER (FAVICON) DI SINI === -->
+<!-- === IKON TAB BROWSER (FAVICON) === -->
 <link rel="icon" type="image/png" href="UISB_NEW.png">
 
 <!-- === PWA: install as an app === -->
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#0b0d12">
+<meta name="theme-color" content="#07080b">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Utara Infra">
-<link rel="apple-touch-icon" href="UISB_NEW.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="shortcut icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <meta name="theme-color" content="#000000">
+
+<!-- === Typefaces: display serif + UI sans + data mono === -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --bg: #0b0d12;
-    --card-bg: rgba(22, 26, 38, 0.75);
-    --card-border: rgba(255, 255, 255, 0.08);
-    --card-border-hover: rgba(139, 124, 246, 0.45);
-    --text-main: #f1f5f9;
-    --text-muted: #94a3b8;
-    --accent: #8b7cf6;
-    --accent-glow: rgba(139, 124, 246, 0.25);
+    /* biru malam + hijau & kuning jenama Utara Infra */
+    --ink:        #050912;
+    --ink-panel:  rgba(15, 23, 38, 0.62);
+    --ink-solid:  #0C1524;
+    --brass:      #E4A93F;
+    --brass-deep: #8A6323;
+    --champagne:  #F6E6C4;
+    --platinum:   #E9EEF6;
+    --slate:      #8494AA;
+    --green:      #3FBE68;
+    --green-deep: #1F7A45;
+
+    --hair:        rgba(255, 255, 255, 0.075);
+    --hair-brass:  rgba(228, 169, 63, 0.34);
+    --glow-brass:  rgba(228, 169, 63, 0.16);
+
+    --f-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    --f-body:    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --f-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   * { box-sizing: border-box; }
-  
-  html, body { 
-    margin: 0; 
-    padding: 0; 
+
+  html, body {
+    margin: 0;
+    padding: 0;
     height: 100%;
     overflow: hidden;
   }
 
   body {
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: var(--bg);
-    background-image: 
-      radial-gradient(circle at 50% 0%, rgba(139, 124, 246, 0.18) 0%, transparent 50%),
-      radial-gradient(circle at 85% 85%, rgba(31, 95, 191, 0.09) 0%, transparent 40%),
-      radial-gradient(circle at 15% 90%, rgba(139, 124, 246, 0.05) 0%, transparent 35%);
-    color: var(--text-main);
+    font-family: var(--f-body);
+    background-color: var(--ink);
+    background-image:
+      radial-gradient(ellipse 95% 62% at 50% -12%, rgba(63, 190, 104, 0.14) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 55% at 86% 96%, rgba(228, 169, 63, 0.085) 0%, transparent 58%),
+      radial-gradient(ellipse 80% 60% at 6% 84%, rgba(52, 108, 210, 0.10) 0%, transparent 58%),
+      linear-gradient(180deg, #071023 0%, #050912 55%, #04070E 100%);
+    color: var(--platinum);
     height: 100vh;
     height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: 3.5vh 24px;
+    padding: 3.4vh 24px;
+    -webkit-font-smoothing: antialiased;
   }
 
+  /* vignette so the corners fall away like a plate under a lamp */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(ellipse 78% 70% at 50% 45%, transparent 44%, rgba(2, 5, 12, 0.62) 100%);
+  }
+
+  /* === ambient: a plotted route plan, drawn in brass hairline === */
+  .field {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  header, .grid, footer { position: relative; z-index: 2; }
+
+  /* === reveal choreography, released once the splash lifts === */
+  .reveal { opacity: 0; }
+  body.ready .reveal {
+    animation: rise 0.85s var(--ease) both;
+    animation-delay: var(--d, 0s);
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* === header === */
   header {
     text-align: center;
-    max-width: 600px;
+    max-width: 640px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -64,240 +130,345 @@
   }
 
   header .brand-logo {
-    max-width: clamp(180px, 16vw, 220px);
+    max-width: clamp(146px, 12.5vw, 186px);
     height: auto;
-    margin-bottom: 16px;
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.9)) 
-            drop-shadow(0 4px 18px rgba(139, 124, 246, 0.35));
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.55))
+            drop-shadow(0 6px 26px rgba(63, 190, 104, 0.32));
+    transition: transform 0.5s var(--ease), filter 0.5s var(--ease);
+  }
+  header .brand-logo:hover {
+    transform: scale(1.02);
+    filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.7))
+            drop-shadow(0 6px 30px rgba(63, 190, 104, 0.48));
   }
 
-  header .brand-logo:hover { transform: scale(1.03); }
-
-  header .eyebrow {
-    font-size: 11px;
-    letter-spacing: 3px;
-    color: var(--accent);
-    font-weight: 700;
-    margin-bottom: 8px;
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--f-mono);
+    font-size: 9.5px;
+    font-weight: 500;
+    letter-spacing: 0.34em;
     text-transform: uppercase;
+    color: var(--brass);
+    margin-bottom: 16px;
   }
+  .eyebrow::before,
+  .eyebrow::after {
+    content: "";
+    width: clamp(26px, 5vw, 54px);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--hair-brass));
+  }
+  .eyebrow::after { background: linear-gradient(90deg, var(--hair-brass), transparent); }
 
   header h1 {
-    font-size: clamp(26px, 3.2vw, 36px);
-    font-weight: 800;
-    margin: 0 0 8px;
-    color: #ffffff;
-    letter-spacing: -0.5px;
-    line-height: 1.2;
+    font-family: var(--f-display);
+    font-size: clamp(34px, 4.6vw, 54px);
+    font-weight: 500;
+    margin: 0 0 12px;
+    line-height: 1.06;
+    letter-spacing: 0.005em;
+    background: linear-gradient(180deg, #ffffff 8%, var(--champagne) 62%, #b99a63 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  header h1 em {
+    font-style: italic;
+    font-weight: 400;
   }
 
   header p {
-    color: var(--text-muted);
-    font-size: clamp(13px, 1.1vw, 14.5px);
+    color: var(--slate);
+    font-size: clamp(12.5px, 1.05vw, 14px);
     margin: 0;
-    line-height: 1.5;
+    line-height: 1.65;
+    max-width: 46ch;
   }
 
+  /* === cards === */
   .grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(260px, 320px));
-    gap: 22px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 318px));
+    gap: 20px;
     width: 100%;
-    max-width: 1040px;
+    max-width: 1360px;
     justify-content: center;
     margin: auto 0;
   }
 
   .card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    backdrop-filter: blur(16px);
-    border-radius: 20px;
-    padding: 26px;
+    background: linear-gradient(158deg, rgba(20, 32, 52, 0.72), rgba(10, 17, 29, 0.62));
+    border: 1px solid var(--hair);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-radius: 6px;
+    padding: 26px 24px 22px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 13px;
     text-decoration: none;
     color: inherit;
     position: relative;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+    isolation: isolate;
+    transition: transform 0.45s var(--ease),
+                border-color 0.45s var(--ease),
+                box-shadow 0.45s var(--ease);
   }
 
-  .card:not(.disabled):hover {
-    transform: translateY(-6px);
-    border-color: var(--card-border-hover);
-    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6), 0 0 22px var(--accent-glow);
+  /* signature: light travelling across a polished plate, tracked to the cursor */
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(340px circle at var(--mx, 50%) var(--my, 0%),
+                rgba(63, 190, 104, 0.16), transparent 64%);
+    opacity: 0;
+    transition: opacity 0.45s ease;
   }
+  /* engraved brass edge along the top */
+  .card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 18%;
+    right: 18%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--green) 35%, var(--brass) 65%, transparent);
+    opacity: 0;
+    transition: opacity 0.45s ease, left 0.55s var(--ease), right 0.55s var(--ease);
+  }
+
+  .card:not(.disabled):hover,
+  .card:not(.disabled):focus-visible {
+    transform: translateY(-5px);
+    border-color: var(--hair-brass);
+    box-shadow: 0 26px 50px -22px rgba(0, 0, 0, 0.85),
+                0 0 0 1px rgba(228, 169, 63, 0.06),
+                0 0 34px -8px var(--glow-brass);
+  }
+  .card:not(.disabled):hover::before { opacity: 1; }
+  .card:not(.disabled):hover::after,
+  .card:not(.disabled):focus-visible::after { opacity: 1; left: 0; right: 0; }
+  .card:focus-visible { outline: none; }
+  .card:not(.disabled):active { transform: translateY(-2px); }
 
   .card.disabled {
     cursor: not-allowed;
-    opacity: 0.55;
-    background: rgba(18, 21, 31, 0.4);
+    background: rgba(12, 14, 19, 0.45);
+    border-style: dashed;
+    border-color: rgba(255, 255, 255, 0.055);
+  }
+  .card.disabled > * { opacity: 0.62; }
+
+  .card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
   }
 
   .card-icon {
-    width: 46px;
-    height: 46px;
-    border-radius: 13px;
+    width: 42px;
+    height: 42px;
+    border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: linear-gradient(150deg, rgba(63, 190, 104, 0.20), rgba(228, 169, 63, 0.10));
+    border: 1px solid rgba(63, 190, 104, 0.28);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  }
+  .card-icon svg { width: 19px; height: 19px; stroke: var(--champagne); }
+  .card.disabled .card-icon {
+    background: rgba(255, 255, 255, 0.025);
+    border-color: rgba(255, 255, 255, 0.07);
+    box-shadow: none;
+  }
+  .card.disabled .card-icon svg { stroke: var(--slate); }
+
+  .kicker {
+    font-family: var(--f-mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--green);
+  }
+  .card.disabled .kicker { color: var(--slate); }
+
+  .card h2 {
+    font-family: var(--f-display);
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    margin: 2px 0 0;
+    color: #fff;
   }
 
-  .card-icon svg { width: 22px; height: 22px; }
+  .card p.desc {
+    font-size: 12.5px;
+    color: var(--slate);
+    line-height: 1.7;
+    margin: 0;
+    flex: 1;
+  }
 
-  .icon-cd { background: linear-gradient(135deg, #4a151b, #220a0d); border: 1px solid rgba(239, 68, 68, 0.25); }
-  .icon-udm { background: linear-gradient(135deg, #1e3a8a, #0f172a); border: 1px solid rgba(59, 130, 246, 0.25); }
-  .icon-cp { background: linear-gradient(135deg, #27272a, #18181b); border: 1px solid rgba(255, 255, 255, 0.08); }
+  .card-rule {
+    height: 1px;
+    background: linear-gradient(90deg, var(--hair), transparent);
+    margin-top: 2px;
+  }
 
-  .card h2 { font-size: 19px; font-weight: 700; margin: 0; color: #ffffff; letter-spacing: -0.3px; }
-
-  .card p.desc { font-size: 13px; color: var(--text-muted); line-height: 1.55; margin: 0; flex: 1; }
+  .meta {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: #6f7684;
+  }
+  .meta b { color: var(--champagne); font-weight: 500; }
 
   .card .tag {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    font-size: 12.5px;
-    font-weight: 600;
-    color: var(--accent);
-    margin-top: 4px;
-    transition: gap 0.2s ease;
+    gap: 9px;
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--champagne);
+    transition: gap 0.35s var(--ease), color 0.35s ease;
   }
-
-  .card:not(.disabled):hover .tag { gap: 12px; }
-  .card .tag svg { width: 14px; height: 14px; }
-  .card .tag.muted { color: #64748b; }
+  .card:not(.disabled):hover .tag { gap: 15px; color: #fff; }
+  .card .tag svg { width: 13px; height: 13px; }
+  .card .tag.muted { color: #5d636f; }
 
   .badge {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 9.5px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    padding: 4px 10px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #94a3b8;
+    font-family: var(--f-mono);
+    font-size: 8.5px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    padding: 5px 10px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    color: var(--slate);
     text-transform: uppercase;
+    white-space: nowrap;
   }
 
-  /* FOOTER STYLE 2 */
+  /* === footer === */
   footer {
     margin-bottom: auto;
-    padding-top: 10px;
+    padding-top: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .footer-rule {
+    width: 200px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--hair-brass), transparent);
   }
 
   .footer-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 8px 20px;
-    border-radius: 12px;
-    backdrop-filter: blur(10px);
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    font-size: 13.5px;
-    color: var(--text-muted);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    gap: 11px;
+    font-family: var(--f-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: #6f7684;
   }
 
   .footer-card .dot {
-    width: 7px;
-    height: 7px;
-    background-color: #22c55e;
+    width: 5px;
+    height: 5px;
+    background-color: var(--brass);
     border-radius: 50%;
-    box-shadow: 0 0 8px #22c55e;
+    box-shadow: 0 0 9px rgba(228, 169, 63, 0.9);
   }
 
   .footer-card .highlight {
-    color: #ffffff;
-    font-size: 14.5px;
-    font-weight: 700;
-    margin-left: 3px;
-    letter-spacing: 0.5px;
+    font-family: var(--f-display);
+    font-style: italic;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    color: var(--champagne);
+    margin-left: 2px;
   }
 
-  @media (max-height: 720px) {
-    body { padding: 2vh 20px; }
-    header .brand-logo { max-width: 160px; margin-bottom: 10px; }
-    header h1 { font-size: 24px; margin-bottom: 4px; }
-    .card { padding: 20px; gap: 10px; }
-    .grid { gap: 16px; }
-  }
-
-  @media (max-width: 900px) {
-    html, body { overflow: auto; height: auto; }
-    body { padding: 40px 20px; justify-content: flex-start; gap: 28px; }
-    header { margin-top: 0; }
-    footer { margin-bottom: 0; }
-    .grid { grid-template-columns: 1fr; max-width: 420px; }
-  }
-
-  /* === Splash / loading === */
-  #splash {
+  /* === splash / loading === */
+  #splash, #nav-loader {
     position: fixed;
     inset: 0;
-    z-index: 200;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 26px;
-    background-color: var(--bg);
-    background-image: radial-gradient(circle at 50% 40%, rgba(139, 124, 246, 0.16) 0%, transparent 55%);
-    transition: opacity 0.45s ease, visibility 0.45s ease;
+    gap: 28px;
+    background-color: var(--ink);
+    background-image: radial-gradient(ellipse 70% 55% at 50% 42%, rgba(63, 190, 104, 0.13) 0%, transparent 62%);
   }
+  #splash { z-index: 200; transition: opacity 0.6s ease, visibility 0.6s ease; }
   #splash.hide { opacity: 0; visibility: hidden; }
 
   .splash-lockup {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
-    animation: splash-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    gap: 18px;
+    animation: splash-in 0.9s var(--ease) both;
   }
 
   .splash-logo {
-    max-width: clamp(130px, 12vw, 170px);
+    max-width: clamp(120px, 11vw, 158px);
     height: auto;
-    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.85))
-            drop-shadow(0 4px 20px rgba(139, 124, 246, 0.4));
+    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6))
+            drop-shadow(0 6px 26px rgba(63, 190, 104, 0.42));
   }
 
   @keyframes splash-in {
-    from { opacity: 0; transform: translateY(14px) scale(0.96); }
+    from { opacity: 0; transform: translateY(16px) scale(0.97); }
     to   { opacity: 1; transform: none; }
   }
 
   .splash-wordmark {
-    font-size: clamp(24px, 3.1vw, 34px);
-    font-weight: 800;
-    letter-spacing: -0.5px;
+    font-family: var(--f-display);
+    font-size: clamp(22px, 2.6vw, 30px);
+    font-weight: 400;
+    letter-spacing: 0.46em;
+    text-indent: 0.46em;
     line-height: 1.1;
-    color: #fff;
-    text-shadow: 0 4px 22px rgba(139, 124, 246, 0.45);
+    color: var(--champagne);
+    text-shadow: 0 4px 26px rgba(228, 169, 63, 0.35);
     white-space: nowrap;
     text-align: center;
   }
 
   .splash-bar {
-    width: 190px;
-    height: 3px;
-    border-radius: 3px;
-    background: rgba(255, 255, 255, 0.09);
+    width: 168px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
     overflow: hidden;
   }
   .splash-bar span {
     display: block;
-    width: 40%;
+    width: 38%;
     height: 100%;
-    border-radius: 3px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    animation: splash-slide 1.1s ease-in-out infinite;
+    background: linear-gradient(90deg, transparent, var(--brass), transparent);
+    animation: splash-slide 1.5s ease-in-out infinite;
   }
   @keyframes splash-slide {
     0%   { transform: translateX(-120%); }
@@ -305,97 +476,71 @@
   }
 
   .splash-label {
-    font-size: 12px;
-    letter-spacing: 2.5px;
+    font-family: var(--f-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.32em;
     text-transform: uppercase;
-    font-weight: 600;
-    color: var(--text-muted);
+    font-weight: 400;
+    color: #6f7684;
   }
 
-  /* Overlay shown while a 1MB dashboard file loads */
+  /* overlay shown while a 1MB dashboard file loads */
   #nav-loader {
-    position: fixed;
-    inset: 0;
     z-index: 150;
     display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 26px;
-    background-color: var(--bg);
-    background-image: radial-gradient(circle at 50% 40%, rgba(139, 124, 246, 0.16) 0%, transparent 55%);
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.25s ease, visibility 0.25s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
   }
   #nav-loader.show { display: flex; opacity: 1; visibility: visible; transition: none; }
 
-  @media (prefers-reduced-motion: reduce) {
-    #splash .splash-logo, .splash-bar span, #nav-loader .ring { animation: none; }
-  }
-
-  /* === PWA install === */
-  .install-btn {
+  /* === fixed controls === */
+  .install-btn, .replay-btn {
     position: fixed;
     top: 22px;
-    right: 22px;
     z-index: 60;
-    display: none;                 /* revealed only when installable */
     align-items: center;
     gap: 9px;
-    padding: 9px 16px;
-    border-radius: 12px;
-    border: 1px solid rgba(139, 124, 246, 0.35);
-    background: rgba(22, 26, 38, 0.75);
-    backdrop-filter: blur(12px);
-    color: var(--text-main);
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.2px;
+    padding: 9px 15px;
+    border-radius: 5px;
+    font-family: var(--f-mono);
+    font-size: 9.5px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
     cursor: pointer;
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    background: rgba(16, 18, 24, 0.7);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    transition: transform 0.4s var(--ease), border-color 0.4s ease,
+                color 0.4s ease, box-shadow 0.4s ease;
+  }
+  .install-btn {
+    right: 22px;
+    display: none;                 /* revealed only when installable */
+    border: 1px solid var(--hair-brass);
+    color: var(--champagne);
   }
   .install-btn.show { display: inline-flex; }
-  .install-btn:hover {
-    transform: translateY(-2px);
-    border-color: var(--accent);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px var(--accent-glow);
-  }
-  .install-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-  .install-btn svg { width: 15px; height: 15px; stroke: var(--accent); }
-
   .replay-btn {
-    position: fixed;
-    top: 22px;
     left: 22px;
-    z-index: 60;
     display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 9px 14px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: rgba(22, 26, 38, 0.7);
-    backdrop-filter: blur(12px);
-    color: var(--text-muted);
-    font-family: inherit;
-    font-size: 12.5px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid var(--hair);
+    color: var(--slate);
   }
-  .replay-btn:hover {
-    color: var(--text-main);
-    border-color: var(--card-border-hover);
+  .install-btn:hover, .replay-btn:hover {
     transform: translateY(-2px);
+    border-color: var(--brass);
+    color: #fff;
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.5), 0 0 22px -6px var(--glow-brass);
   }
-  .replay-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-  .replay-btn svg { width: 14px; height: 14px; stroke: var(--accent); }
-  @media (max-width: 900px) { .replay-btn { top: auto; bottom: 20px; left: 20px; } }
-  @media print { .replay-btn { display: none; } }
+  .install-btn:focus-visible, .replay-btn:focus-visible {
+    outline: 1px solid var(--brass);
+    outline-offset: 3px;
+  }
+  .install-btn svg, .replay-btn svg { width: 13px; height: 13px; stroke: var(--brass); fill: none; }
 
+  /* === iOS install sheet === */
   .sheet-backdrop {
     position: fixed;
     inset: 0;
@@ -404,44 +549,84 @@
     align-items: center;
     justify-content: center;
     padding: 24px;
-    background: rgba(5, 6, 10, 0.7);
-    backdrop-filter: blur(4px);
+    background: rgba(4, 5, 8, 0.74);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
   }
   .sheet-backdrop.open { display: flex; }
 
   .sheet {
     width: 100%;
     max-width: 380px;
-    background: #12151f;
-    border: 1px solid var(--card-border);
-    border-radius: 18px;
-    padding: 24px;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+    background: var(--ink-solid);
+    border: 1px solid var(--hair);
+    border-top: 1px solid var(--hair-brass);
+    border-radius: 8px;
+    padding: 26px;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7);
   }
-  .sheet h3 { margin: 0 0 6px; font-size: 17px; color: #fff; font-weight: 700; }
-  .sheet p { margin: 0 0 16px; font-size: 13px; color: var(--text-muted); line-height: 1.55; }
-  .sheet ol { margin: 0 0 18px; padding-left: 18px; color: var(--text-muted); font-size: 13.5px; line-height: 1.9; }
-  .sheet ol strong { color: var(--text-main); }
+  .sheet h3 {
+    font-family: var(--f-display);
+    margin: 0 0 8px;
+    font-size: 24px;
+    color: var(--champagne);
+    font-weight: 500;
+  }
+  .sheet p { margin: 0 0 18px; font-size: 12.5px; color: var(--slate); line-height: 1.7; }
+  .sheet ol {
+    margin: 0 0 20px;
+    padding-left: 18px;
+    color: var(--slate);
+    font-size: 13px;
+    line-height: 2;
+  }
+  .sheet ol strong { color: var(--platinum); font-weight: 600; }
   .sheet-close {
     width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text-main);
-    font-family: inherit;
-    font-size: 13.5px;
-    font-weight: 600;
+    padding: 11px;
+    border-radius: 5px;
+    border: 1px solid var(--hair-brass);
+    background: rgba(228, 169, 63, 0.07);
+    color: var(--champagne);
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
     cursor: pointer;
+    transition: background 0.3s ease;
   }
-  .sheet-close:hover { background: rgba(255, 255, 255, 0.09); }
+  .sheet-close:hover { background: rgba(228, 169, 63, 0.14); }
+
+  /* === responsive === */
+  @media (max-height: 760px) {
+    body { padding: 2vh 20px; }
+    header .brand-logo { max-width: 128px; margin-bottom: 12px; }
+    header h1 { font-size: 30px; margin-bottom: 8px; }
+    .eyebrow { margin-bottom: 10px; }
+    header p { font-size: 12px; }
+    .card { padding: 20px 20px 18px; gap: 10px; }
+    .card h2 { font-size: 22px; }
+    .card-icon { width: 36px; height: 36px; }
+    .grid { gap: 16px; }
+    footer { gap: 10px; }
+  }
 
   @media (max-width: 900px) {
+    html, body { overflow: auto; height: auto; }
+    body { padding: 46px 20px 96px; justify-content: flex-start; gap: 34px; }
+    header { margin-top: 0; }
+    footer { margin-bottom: 0; }
+    .grid { grid-template-columns: 1fr; max-width: 420px; }
     .install-btn { top: auto; bottom: 20px; right: 20px; }
+    .replay-btn { top: auto; bottom: 20px; left: 20px; }
   }
+
   @media (prefers-reduced-motion: reduce) {
-    .install-btn, .card, header .brand-logo { transition: none; }
+    .splash-bar span, .splash-lockup { animation: none; }
+    .card, .install-btn, .replay-btn, header .brand-logo { transition: none; }
+    .reveal, body.ready .reveal { opacity: 1; transform: none; animation: none; }
   }
+  @media print { .replay-btn, .install-btn { display: none; } }
 </style>
 </head>
 <body>
@@ -486,65 +671,124 @@
     <div class="splash-label" id="nav-loader-text">Project CD</div>
   </div>
 
+  <!-- ambient: a route plan plotted in brass hairline -->
+  <svg class="field" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    <defs>
+      <pattern id="plan-grid" width="76" height="76" patternUnits="userSpaceOnUse">
+        <path d="M76 0H0V76" fill="none" stroke="rgba(63,190,104,0.055)" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="1440" height="900" fill="url(#plan-grid)"/>
+    <g fill="none" stroke="rgba(228,169,63,0.12)" stroke-width="1">
+      <path d="M-40 690 L210 690 L286 614 L520 614 L596 690 L900 690"/>
+      <path d="M286 614 L286 470 L430 470"/>
+      <path d="M1480 250 L1230 250 L1154 326 L980 326 L904 250 L700 250"/>
+      <path d="M1154 326 L1154 480 L1290 480 L1352 542 L1480 542"/>
+      <path d="M596 690 L596 812 L820 812"/>
+    </g>
+    <g fill="rgba(228, 169, 63,0.16)">
+      <rect x="283" y="611" width="6" height="6"/>
+      <rect x="593" y="687" width="6" height="6"/>
+      <rect x="427" y="467" width="6" height="6"/>
+      <rect x="1151" y="323" width="6" height="6"/>
+      <rect x="1287" y="477" width="6" height="6"/>
+      <rect x="901" y="247" width="6" height="6"/>
+    </g>
+  </svg>
+  <div class="grain"></div>
+
   <header>
-    <img src="UISB_NEW.png" alt="Utara Infra Logo" class="brand-logo">
-    <div class="eyebrow">Analytics Portal</div>
-    <h1>Utara Infra Dashboard Hub</h1>
-    <p>Direct access to all key progress reports and operational metrics in one centralized view.</p>
+    <img src="UISB_NEW.png" alt="Utara Infra" class="brand-logo reveal" style="--d:.05s">
+    <div class="eyebrow reveal" style="--d:.13s">Internal · Analytics Portal</div>
+    <h1 class="reveal" style="--d:.20s">Utara Infra <em>Dashboard Hub</em></h1>
+    <p class="reveal" style="--d:.27s">Every progress report and operational metric, gathered in one place. Choose a dashboard to begin.</p>
   </header>
 
   <div class="grid">
 
-    <a class="card" href="cd_dashboard.html">
-      <div class="card-icon icon-cd">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#fca5a5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="12" width="4" height="8" rx="1"/><rect x="10" y="7" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="17" rx="1"/></svg>
+    <a class="card reveal" style="--d:.36s" href="cd_dashboard.html">
+      <div class="card-head">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="12" width="4" height="8" rx="1"/><rect x="10" y="7" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="17" rx="1"/></svg>
+        </div>
+        <span class="kicker">Deposit recovery</span>
       </div>
       <h2>Project CD</h2>
-      <p class="desc">Deposit recovery tracker — monitoring applications and collection status across states, PICs, and Telcos. Covers 3,150 active records.</p>
+      <p class="desc">Track deposit applications and collection status across states, PICs and telcos.</p>
+      <div class="card-rule"></div>
+      <div class="meta"><b>3,150</b> active records</div>
       <span class="tag">
-        Access Dashboard
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        Open dashboard
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </span>
     </a>
 
-    <a class="card" href="udm_dashboard.html">
-      <div class="card-icon icon-udm">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>
+    <a class="card reveal" style="--d:.44s" href="udm_dashboard.html">
+      <div class="card-head">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>
+        </div>
+        <span class="kicker">Project performance</span>
       </div>
       <h2>Team UDM</h2>
-      <p class="desc">UDM project performance — tracking drafter progress, route distance by district, and overall completion status.</p>
+      <p class="desc">Drafter progress, route distance by district, and overall completion status.</p>
+      <div class="card-rule"></div>
+      <div class="meta">Drafters · Districts · Route km</div>
       <span class="tag">
-        Access Dashboard
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        Open dashboard
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </span>
     </a>
 
-    <div class="card disabled">
-      <span class="badge">Coming Soon</span>
-      <div class="card-icon icon-cp">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-6"/></svg>
+    <a class="card reveal" style="--d:.52s" href="cpc_dashboard.html">
+      <div class="card-head">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6"/><path d="M14 3l5 5"/><path d="M14 3v5h5"/><circle cx="17.5" cy="16.5" r="4.5"/><path d="M17.5 14.4v2.1l1.5 1"/></svg>
+        </div>
+        <span class="kicker">Permit compliance</span>
+      </div>
+      <h2>CPC Tracker</h2>
+      <p class="desc">Work permit expiry and CPC completion status by telco, PBM and district.</p>
+      <div class="card-rule"></div>
+      <div class="meta"><b>1,058</b> permit records</div>
+      <span class="tag">
+        Open dashboard
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </a>
+
+    <div class="card disabled reveal" style="--d:.60s">
+      <div class="card-head">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-6"/></svg>
+        </div>
+        <span class="badge">Next module</span>
       </div>
       <h2>Company Progress</h2>
-      <p class="desc">High-level overview of overall corporate performance. Module currently under development.</p>
-      <span class="tag muted">Unavailable</span>
+      <p class="desc">One view of overall company performance. This module is still being built.</p>
+      <div class="card-rule"></div>
+      <div class="meta">Not yet published</div>
+      <span class="tag muted">In development</span>
     </div>
 
   </div>
 
   <footer>
-    <div class="footer-card">
-      <div class="dot"></div>
-      <span>Prepared by <strong class="highlight">Zufri Adli</strong></span>
+    <div class="footer-rule reveal" style="--d:.68s"></div>
+    <div class="footer-card reveal" style="--d:.74s">
+      <span class="dot"></span>
+      <span>Prepared by</span>
+      <span class="highlight">Zufri Adli</span>
     </div>
   </footer>
 
   <button class="replay-btn" id="replay-btn" type="button" title="Replay the loading screen">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
     <span>Loading screen</span>
   </button>
 
   <button class="install-btn" id="install-btn" type="button">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 21h16"/></svg>
+    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 21h16"/></svg>
     <span id="install-btn-text">Install app</span>
   </button>
 
@@ -570,6 +814,14 @@
 
   var MIN_SPLASH = 1600;             // long enough for the logo to register
   var start = Date.now();
+  var released = false;
+
+  // Releases the staggered entrance of the hub content.
+  function release(){
+    if(released) return;
+    released = true;
+    document.body.classList.add('ready');
+  }
 
   function hideSplash(){
     // Arrived from a dashboard's "Back to Home Page"? That loader already
@@ -577,21 +829,41 @@
     if(window.__uisbSkipSplash){
       splash.style.transition = 'none';
       splash.classList.add('hide');
+      release();
       return;
     }
     var wait = Math.max(0, MIN_SPLASH - (Date.now() - start));
-    setTimeout(function(){ splash.classList.add('hide'); }, wait);
+    setTimeout(function(){ splash.classList.add('hide'); release(); }, wait);
   }
 
   if(window.__uisbSkipSplash){
     splash.style.transition = 'none';
     splash.classList.add('hide');
+    release();
   }
 
   if(document.readyState === 'complete') hideSplash();
   else window.addEventListener('load', hideSplash);
-  // safety net: never let the splash trap the user
-  setTimeout(function(){ splash.classList.add('hide'); }, 7000);
+  // safety net: never let the splash trap the user, and never leave the
+  // content hidden if something above fails
+  setTimeout(function(){ splash.classList.add('hide'); release(); }, 7000);
+  setTimeout(release, 3000);
+
+  // ---- Cursor-tracked sheen on the cards ------------------------------
+  var cards = document.querySelectorAll('.card');
+  if(window.matchMedia('(hover: hover)').matches){
+    cards.forEach(function(card){
+      card.addEventListener('mousemove', function(e){
+        var r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+        card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+      });
+      card.addEventListener('mouseleave', function(){
+        card.style.removeProperty('--mx');
+        card.style.removeProperty('--my');
+      });
+    });
+  }
 
   // ---- Navigation loader: the dashboards are ~1MB ---------------------
   var navLoader = document.getElementById('nav-loader');
@@ -623,9 +895,10 @@
     if(!e.persisted) return;
     navLoader.classList.remove('show');
     splash.classList.add('hide');
+    release();
   });
 
-  // ---- Replay button: preview both loading screens ------------------
+  // ---- Replay button: preview the loading screen ---------------------
   var replayBtn = document.getElementById('replay-btn');
   replayBtn.addEventListener('click', function(){
     var lockup = splash.querySelector('.splash-lockup');
@@ -640,6 +913,7 @@
       el.style.animation = a;
     });
 
+    splash.style.transition = '';
     splash.classList.remove('hide');
 
     // Preview the splash only. The dashboard overlay belongs to the cards.
