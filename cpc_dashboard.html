@@ -566,6 +566,15 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim);background:transpare
   .c-meta{grid-template-columns:1fr}
 }
 
+.msort{display:none;gap:10px;align-items:center;padding:12px 14px;background:var(--surface);
+       border:1px solid var(--line);border-top:0}
+.msort label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+             color:var(--faint)}
+.msort select{flex:1;min-width:0;font-family:var(--body);font-size:13.5px;padding:9px 10px;
+              border:1px solid var(--line-2);background:var(--field);color:var(--ink)}
+.msort button{padding:9px 12px;font-size:12px;letter-spacing:0}
+@media (max-width:760px){ .msort{display:flex} }
+
 /* ---------- table ---------- */
 .tablewrap{background:var(--surface);border:1px solid var(--line);border-top:0;
             max-height:72vh;overflow:auto;overscroll-behavior:contain}
@@ -579,6 +588,8 @@ thead th{position:sticky;top:0;z-index:3;background:var(--raised);color:var(--di
          padding:14px 14px;white-space:nowrap;cursor:pointer;font-weight:500;
          border-bottom:1px solid var(--line)}
 thead th:hover{color:var(--amber)}
+thead th.nosort{cursor:default}
+thead th.nosort:hover{color:var(--dim)}
 thead th .ar{opacity:.5;margin-left:6px}
 /* lajur No dibekukan semasa skrol mendatar */
 thead th:first-child{left:0;z-index:4}
@@ -831,6 +842,11 @@ footer.credit b{color:var(--dim);font-weight:400}
   <button class="ghost" id="share">Salin pautan</button>
   <button id="csv">Muat turun CSV</button>
 </div>
+</div>
+<div class="msort" id="msort">
+  <label for="msort-k">Susun</label>
+  <select id="msort-k"></select>
+  <button class="ghost" id="msort-dir" aria-label="Tukar arah susunan"></button>
 </div>
 <div id="shared-note"></div>
 <div class="tablewrap">
@@ -1510,7 +1526,7 @@ function moSorted(){
   return MO.rows.slice().sort((a,b)=>{
     let x=a[moSortK], y=b[moSortK];
     if(moSortK==='state'){ x=order[x]; y=order[y]; }
-    else if(moSortK==='uid'){ x=+x||0; y=+y||0; }
+
     if(x===null||x===undefined||x==='') return 1;
     if(y===null||y===undefined||y==='') return -1;
     if(typeof x==='number') return (x-y)*moSortDir;
@@ -1524,11 +1540,12 @@ function moDraw(){
   document.getElementById('mo-thead').innerHTML = COLS.map(c=>{
     const h = c.k==='eff' ? (MO.col4 || 'Tamat permit')
             : c.k==='days' ? (MO.col5 || 'Umur tamat') : c.h;
-    return `<th data-k="${c.k}">${h}<span class="ar">${c.k===moSortK?(moSortDir>0?'▲':'▼'):'↕'}</span></th>`;
+    return c.nosort ? `<th class="nosort">${h}</th>`
+                    : `<th data-k="${c.k}">${h}<span class="ar">${c.k===moSortK?(moSortDir>0?'▲':'▼'):'↕'}</span></th>`;
   }).join('');
-  document.getElementById('mo-rows').innerHTML = rows.map(r=>`<tr class="rowlink" data-uid="${r.uid}" tabindex="0">
+  document.getElementById('mo-rows').innerHTML = rows.map((r,i)=>`<tr class="rowlink" data-uid="${r.uid}" tabindex="0">
     <td class="cardcell" aria-hidden="true">
-      <div class="c-top"><span class="c-no">${r.uid}</span><span class="c-telco">${r.t}</span>
+      <div class="c-top"><span class="c-no">${fmt(i+1)}</span><span class="c-telco">${r.t}</span>
         <span class="tag ${CLS[r.state]}">${lblOf(r)}</span></div>
       <div class="c-name">${r.p}</div>
       <div class="c-pbm">${r.b}</div>
@@ -1539,7 +1556,7 @@ function moDraw(){
         <div><dt>Mula kerja CPC</dt><dd>${dstr(r.mc)}</dd></div>
       </dl>
     </td>
-    <td class="rno">${r.uid}</td>
+    <td class="rno">${fmt(i+1)}</td>
     <td>${r.t}</td>
     <td class="proj">${r.p}</td>
     <td>${r.b}</td>
@@ -1606,7 +1623,7 @@ document.getElementById('mo-filter').addEventListener('click',()=>{
 });
 document.getElementById('mo-csv').addEventListener('click',()=>{
   if(!MO) return;
-  const head = ['No','No dalam helaian','Telco','Nama Projek','PBM Terlibat','Mula Kerja WP','Status WP',
+  const head = ['Bil','No dalam helaian','Telco','Nama Projek','PBM Terlibat','Mula Kerja WP','Status WP',
                 'Tamat Permit','Tamat Lanjutan','Umur Tamat (hari)','Mula Kerja CPC','Status CPC','Status'];
   const esc = v => '"'+String(v??'').replace(/"/g,'""')+'"';
   const body = moSorted().map(r=>[r.uid,r.no,r.t,r.p,r.b,r.mw||'',r.sw,r.te||'',r.tl||'',
@@ -1750,7 +1767,7 @@ document.querySelector('.slicers').addEventListener('click',e=>{
 });
 
 const COLS = [
-  {k:'uid', h:'No',          cls:'num'},
+  {k:'#',   h:'No',          cls:'num', nosort:true},
   {k:'t',  h:'Telco',        cls:''},
   {k:'p',  h:'Nama projek',  cls:'proj'},
   {k:'b',  h:'PBM terlibat', cls:''},
@@ -1763,7 +1780,8 @@ const COLS = [
 let sortK='days', sortDir=-1;
 
 document.getElementById('thead').innerHTML = COLS.map(c=>
-  `<th data-k="${c.k}">${c.h}<span class="ar">${c.k===sortK?(sortDir>0?'▲':'▼'):'↕'}</span></th>`).join('');
+  c.nosort ? `<th class="nosort">${c.h}</th>`
+           : `<th data-k="${c.k}">${c.h}<span class="ar">${c.k===sortK?(sortDir>0?'▲':'▼'):'↕'}</span></th>`).join('');
 
 function current(){
   F.q = document.getElementById('q').value.trim().toLowerCase();
@@ -1773,7 +1791,7 @@ function current(){
   out.sort((a,b)=>{
     let x=a[sortK], y=b[sortK];
     if(sortK==='state'){ x=order[x]; y=order[y]; }
-    else if(sortK==='uid'){ x=+x||0; y=+y||0; }
+
     if(x===null||x===undefined||x==='') return 1;
     if(y===null||y===undefined||y==='') return -1;
     if(typeof x==='number') return (x-y)*sortDir;
@@ -1801,9 +1819,9 @@ function render(){
   const tb = document.getElementById('tbody');
   document.getElementById('empty').style.display = rows.length?'none':'block';
   const view = rows.slice(0,600);
-  tb.innerHTML = view.map(r=>`<tr class="rowlink" data-uid="${r.uid}" tabindex="0">
+  tb.innerHTML = view.map((r,i)=>`<tr class="rowlink" data-uid="${r.uid}" tabindex="0">
     <td class="cardcell" aria-hidden="true">
-      <div class="c-top"><span class="c-no">${r.uid}</span><span class="c-telco">${r.t}</span>
+      <div class="c-top"><span class="c-no">${fmt(i+1)}</span><span class="c-telco">${r.t}</span>
         <span class="tag ${CLS[r.state]}">${lblOf(r)}</span></div>
       <div class="c-name">${r.p}</div>
       <div class="c-pbm">${r.b}</div>
@@ -1814,7 +1832,7 @@ function render(){
         <div><dt>Mula kerja CPC</dt><dd>${dstr(r.mc)}</dd></div>
       </dl>
     </td>
-    <td class="rno">${r.uid}</td>
+    <td class="rno">${fmt(i+1)}</td>
     <td>${r.t}</td>
     <td class="proj">${r.p}</td>
     <td>${r.b}</td>
@@ -1825,6 +1843,7 @@ function render(){
     <td><span class="tag ${CLS[r.state]}">${lblOf(r)}</span></td>
   </tr>`).join('');
   writeHash();
+  syncMsort();
   const an = activeCount();
   document.getElementById('mfilter-n').textContent = an ? an : '';
   document.getElementById('hint').innerHTML = F.check !== null
@@ -1864,7 +1883,7 @@ document.getElementById('reset').addEventListener('click',()=>{
 });
 document.getElementById('csv').addEventListener('click',()=>{
   const rows = current();
-  const head = ['No','No dalam helaian','Telco','Nama Projek','PBM Terlibat','Mula Kerja WP','Status WP','Tamat Permit',
+  const head = ['Bil','No dalam helaian','Telco','Nama Projek','PBM Terlibat','Mula Kerja WP','Status WP','Tamat Permit',
                 'Tamat Lanjutan','Tarikh Berkuatkuasa','Umur Tamat (hari)','Mula Kerja CPC','Status CPC','Status'];
   const esc = v => '"'+String(v??'').replace(/"/g,'""')+'"';
   const body = rows.map(r=>[r.uid,r.no,r.t,r.p,r.b,r.mw||'',r.sw,r.te||'',r.tl||'',r.eff||'',
@@ -2023,6 +2042,16 @@ document.getElementById('share').addEventListener('click',async ()=>{
   }catch(e){}
   setTheme(t, true);
 })();
+
+/* ---- kawalan susun untuk skrin kecil (tajuk lajur tersembunyi di sana) ---- */
+const msortK = document.getElementById('msort-k');
+COLS.filter(c=>!c.nosort).forEach(c=>msortK.add(new Option(c.h, c.k)));
+function syncMsort(){
+  msortK.value = sortK;
+  document.getElementById('msort-dir').textContent = sortDir > 0 ? '↑ Menaik' : '↓ Menurun';
+}
+msortK.addEventListener('change',()=>{ sortK = msortK.value; render(); });
+document.getElementById('msort-dir').addEventListener('click',()=>{ sortDir = -sortDir; render(); });
 
 /* ---- popup butiran tapak ---- */
 const detail = document.getElementById('detail');

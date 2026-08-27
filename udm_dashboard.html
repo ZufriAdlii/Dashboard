@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>UDM Project Performance Dashboard</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <link rel="icon" type="image/png" href="UISB_NEW.png">
@@ -809,6 +809,74 @@
 .back-btn svg{width:14px;height:14px;flex:0 0 14px;stroke:currentColor;fill:none;stroke-width:1.9}
 .back-btn:hover{color:#33A754 !important;border-color:#33A754 !important;background:rgba(51,167,84,.08) !important}
 .back-btn:focus-visible{outline:1px solid #E0A34A;outline-offset:2px}
+</style>
+
+<style id="cpc-mobile-layer">
+/* ===== Susun atur mudah alih ===== */
+@media (max-width: 860px){
+  html, body{ overflow:auto !important; height:auto !important; }
+
+  /* sidebar -> bar mendatar di atas */
+  .sidebar{
+    width:100% !important; flex-direction:row !important; flex-wrap:wrap !important;
+    align-items:center; gap:8px; padding:12px 14px !important;
+    border-right:0 !important; border-bottom:1px solid var(--panel-border, rgba(255,255,255,.12)) !important;
+    position:sticky; top:0; z-index:50; overflow-x:auto;
+  }
+  .sidebar .brand, .sidebar .brand-logo{ margin:0 !important; flex:0 0 auto; }
+  .sidebar .brand img, .sidebar .brand-logo img{ max-width:96px !important; width:96px !important; }
+  .sidebar .menu-label, .sidebar .side-filter-label, .sidebar .side-select-label,
+  .sidebar .prepared-by, .sidebar .signoff, .sidebar .sig-line, .sidebar .sig-label,
+  .sidebar .sig-sub{ display:none !important; }
+  .side-btn, .nav-item{
+    margin:0 !important; flex:0 0 auto; white-space:nowrap; padding:9px 13px !important;
+    font-size:12px !important;
+  }
+  .back-btn{ order:-1; margin-bottom:0 !important; }
+
+  /* kandungan utama */
+  .main, .content, .page-section{ padding:14px 12px 40px !important; }
+  .topbar{ flex-wrap:wrap !important; gap:10px !important; }
+  .topbar h1, .main h1{ font-size:18px !important; }
+  .topbar-kpis{ width:100%; overflow-x:auto; }
+
+  /* grid -> satu atau dua lajur */
+  .kpi-row, .content-grid, .grid, .stateGrid, .card-grid, .row-2, .row-3{
+    grid-template-columns:1fr !important; gap:12px !important;
+  }
+  .kpi-row{ grid-template-columns:repeat(2,1fr) !important; }
+  .kpi-box, .fcard, .tk-card, .panel, .card{ min-width:0 !important; }
+
+  /* carta */
+  .chart-wrap, .chart-controls{ overflow-x:auto; }
+  svg{ max-width:100%; height:auto; }
+
+  /* jadual boleh ditatal mendatar */
+  .table-wrap, .list-table-wrap, .modal-body{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table{ min-width:560px; }
+
+  /* modal jadi skrin penuh */
+  .modal-box, .modal-overlay .modal-box{
+    width:100% !important; max-width:none !important; height:100% !important;
+    max-height:none !important; border-radius:0 !important;
+  }
+
+  /* penapis sisi yang muncul dalam sidebar */
+  #drafterFilterBlock, #overviewFilterBlock{
+    width:100%; display:flex !important; flex-wrap:wrap; gap:8px; order:5;
+  }
+  .ym-filter-row{ display:flex; gap:8px; flex:1 1 100%; }
+  .ms-dropdown, .side-select{ flex:1 1 140px; min-width:0; }
+  .drafter-filters{ display:flex; flex-wrap:wrap; gap:6px; }
+  .change-file-row{ flex:1 1 100%; }
+}
+
+@media (max-width: 520px){
+  .kpi-row{ grid-template-columns:1fr !important; }
+  .sidebar .brand img, .sidebar .brand-logo img{ width:80px !important; }
+  #gate-overlay .gleft, #udmGateOverlay .gleft{ padding:28px 20px !important; }
+  #gate-overlay .gright, #udmGateOverlay .gright{ padding:24px 20px !important; }
+}
 </style>
 </head>
 <body>
