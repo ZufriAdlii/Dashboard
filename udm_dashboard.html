@@ -812,68 +812,54 @@
 </style>
 
 <style id="cpc-mobile-layer">
-/* ===== Susun atur mudah alih ===== */
+/* ===== Susun atur mudah alih =====
+   Nota: jangan sekali-kali paksa display pada blok yang dikawal JavaScript
+   (#drafterFilterBlock, #overviewFilterBlock) - biar JS yang tentukan. */
 @media (max-width: 860px){
   html, body{ overflow:auto !important; height:auto !important; }
+  body{ display:block !important; }
 
-  /* sidebar -> bar mendatar di atas */
+  /* sidebar -> jalur penuh di atas, kekal susunan menegak */
   .sidebar{
-    width:100% !important; flex-direction:row !important; flex-wrap:wrap !important;
-    align-items:center; gap:8px; padding:12px 14px !important;
-    border-right:0 !important; border-bottom:1px solid var(--panel-border, rgba(255,255,255,.12)) !important;
-    position:sticky; top:0; z-index:50; overflow-x:auto;
+    width:100% !important; max-width:none !important; flex-direction:column !important;
+    padding:14px 14px 16px !important; border-right:0 !important;
+    border-bottom:1px solid rgba(255,255,255,.10) !important; flex-shrink:1 !important;
   }
-  .sidebar .brand, .sidebar .brand-logo{ margin:0 !important; flex:0 0 auto; }
-  .sidebar .brand img, .sidebar .brand-logo img{ max-width:96px !important; width:96px !important; }
-  .sidebar .menu-label, .sidebar .side-filter-label, .sidebar .side-select-label,
-  .sidebar .prepared-by, .sidebar .signoff, .sidebar .sig-line, .sidebar .sig-label,
-  .sidebar .sig-sub{ display:none !important; }
-  .side-btn, .nav-item{
-    margin:0 !important; flex:0 0 auto; white-space:nowrap; padding:9px 13px !important;
-    font-size:12px !important;
-  }
-  .back-btn{ order:-1; margin-bottom:0 !important; }
+  .sidebar .brand img, .sidebar .brand-logo img{ max-width:92px !important; width:92px !important; }
+  .sidebar .signoff, .sidebar .sig-line, .sidebar .sig-label, .sidebar .sig-sub,
+  .sidebar .prepared-by{ display:none !important; }
+
+  /* butang tab jadi baris melintang yang boleh ditatal */
+  .side-btn, .nav-item{ padding:10px 12px !important; font-size:12.5px !important; margin-bottom:8px !important; }
+
+  /* penapis: biar menegak penuh lebar, tiada jarak berlebihan */
+  .ym-filter-row{ flex-direction:row !important; gap:8px !important; }
+  .ms-dropdown{ flex:1 1 0; min-width:0; }
+  .ms-dropdown-btn, .side-select{ width:100% !important; }
 
   /* kandungan utama */
-  .main, .content, .page-section{ padding:14px 12px 40px !important; }
+  .main, .content{ padding:14px 12px 40px !important; width:100% !important; }
   .topbar{ flex-wrap:wrap !important; gap:10px !important; }
   .topbar h1, .main h1{ font-size:18px !important; }
   .topbar-kpis{ width:100%; overflow-x:auto; }
 
-  /* grid -> satu atau dua lajur */
-  .kpi-row, .content-grid, .grid, .stateGrid, .card-grid, .row-2, .row-3{
-    grid-template-columns:1fr !important; gap:12px !important;
-  }
-  .kpi-row{ grid-template-columns:repeat(2,1fr) !important; }
+  /* grid -> satu / dua lajur */
+  .kpi-row{ grid-template-columns:repeat(2,1fr) !important; gap:10px !important; }
+  .content-grid, .grid, .card-grid{ grid-template-columns:1fr !important; gap:12px !important; }
   .kpi-box, .fcard, .tk-card, .panel, .card{ min-width:0 !important; }
 
-  /* carta */
+  /* carta & jadual */
   .chart-wrap, .chart-controls{ overflow-x:auto; }
-  svg{ max-width:100%; height:auto; }
-
-  /* jadual boleh ditatal mendatar */
   .table-wrap, .list-table-wrap, .modal-body{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
   table{ min-width:560px; }
 
-  /* modal jadi skrin penuh */
-  .modal-box, .modal-overlay .modal-box{
-    width:100% !important; max-width:none !important; height:100% !important;
-    max-height:none !important; border-radius:0 !important;
-  }
-
-  /* penapis sisi yang muncul dalam sidebar */
-  #drafterFilterBlock, #overviewFilterBlock{
-    width:100%; display:flex !important; flex-wrap:wrap; gap:8px; order:5;
-  }
-  .ym-filter-row{ display:flex; gap:8px; flex:1 1 100%; }
-  .ms-dropdown, .side-select{ flex:1 1 140px; min-width:0; }
-  .drafter-filters{ display:flex; flex-wrap:wrap; gap:6px; }
-  .change-file-row{ flex:1 1 100%; }
+  /* modal skrin penuh */
+  .modal-box{ width:100% !important; max-width:none !important; height:100% !important;
+              max-height:none !important; border-radius:0 !important; }
 }
 
 @media (max-width: 520px){
   .kpi-row{ grid-template-columns:1fr !important; }
-  .sidebar .brand img, .sidebar .brand-logo img{ width:80px !important; }
   #gate-overlay .gleft, #udmGateOverlay .gleft{ padding:28px 20px !important; }
   #gate-overlay .gright, #udmGateOverlay .gright{ padding:24px 20px !important; }
 }
