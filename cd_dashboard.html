@@ -1125,6 +1125,10 @@
   #gate-overlay .gby{order:8; margin-top:22px}
   #gate-overlay .gnote{order:9}
 
+  /* display:contents menjadikan anak-anak gleft ahli flex, dan stretch lalai
+     meregangkan logo serta butang ke seluruh lebar - kunci saiz asalnya */
+  #gate-overlay .glogo{align-self:flex-start; width:auto; max-width:190px; height:auto; margin-bottom:18px}
+
   /* sasaran sentuh 44px mengikut garis panduan iOS dan Android */
   #gate-overlay .gback{min-height:44px; padding:0 14px 0 11px; font-size:10.5px}
   #gate-overlay .gbtn{min-height:44px; flex:1 1 auto; padding:0 16px}

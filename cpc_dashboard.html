@@ -688,6 +688,13 @@ footer.credit b{color:var(--dim);font-weight:400}
   #gate .gate-by{order:8; margin-top:22px}
   #gate .gate-note{order:9}
 
+  /* display:contents menjadikan anak-anak gleft ahli flex, dan stretch lalai
+     meregangkan logo serta butang ke seluruh lebar - kunci saiz asalnya */
+  /* .logo-wrap ada overflow:hidden, jadi hadkan tinggi imej dan bukan
+     lebar bekas, kalau tidak wordmark akan terpotong */
+  #gate .logo-gate{align-self:flex-start; width:auto; margin-bottom:16px; margin-left:-12px}
+  #gate .logo-gate .logo{height:38px; width:auto}
+
   /* sasaran sentuh 44px mengikut garis panduan iOS dan Android */
   #gate .back-btn{min-height:44px; padding:0 14px 0 11px; font-size:10.5px}
   #gate .gate-actions button{min-height:44px; flex:1 1 auto; padding:0 16px}
