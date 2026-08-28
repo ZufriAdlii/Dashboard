@@ -175,9 +175,9 @@ body{
 }
 
 .mast-brand{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.logo-gate{margin-bottom:22px;margin-left:-14px}
+.logo-gate{margin-bottom:22px;margin-left:-14px;overflow:visible}   /* aura tak dikerat lagi */
 .gate-left .back-btn{margin-bottom:20px}
-.logo-gate .logo{height:44px}
+.logo-gate .logo{height:46px}
 @media (max-width:700px){.logo{height:42px}.mast-brand{gap:12px}.logo-wrap{padding:8px 12px}}
 @media (prefers-reduced-motion:reduce){ .logo-wrap{animation:none} }
 
@@ -650,6 +650,7 @@ footer.credit b{color:var(--dim);font-weight:400}
 </style>
 
 <style id="mobile-gate-fix">
+#gate .d-mob{display:none}   /* asas, mesti sebelum media query */
 /* =====================================================================
    Pembetulan mudah alih untuk skrin muat naik
    1. Tatal: align-items:center + overflow-y:auto menyebabkan bahagian
@@ -693,8 +694,8 @@ footer.credit b{color:var(--dim);font-weight:400}
      meregangkan logo serta butang ke seluruh lebar - kunci saiz asalnya */
   /* .logo-wrap ada overflow:hidden, jadi hadkan tinggi imej dan bukan
      lebar bekas, kalau tidak wordmark akan terpotong */
-  #gate .logo-gate{align-self:flex-start; width:auto; margin-bottom:16px; margin-left:-12px}
-  #gate .logo-gate .logo{height:38px; width:auto}
+  #gate .logo-gate{align-self:flex-start; width:auto; margin-bottom:20px; margin-left:-12px}
+  #gate .logo-gate .logo{height:44px; width:auto}
 
   /* sasaran sentuh 44px mengikut garis panduan iOS dan Android */
   #gate .back-btn{min-height:44px; padding:0 14px 0 11px; font-size:10.5px}
@@ -707,7 +708,6 @@ footer.credit b{color:var(--dim);font-weight:400}
   #gate .d-desk{display:none}
   #gate .d-mob{display:inline}
 }
-#gate .d-mob{display:none}
 </style>
 
 <style id="mobile-shell-fix">
@@ -759,6 +759,7 @@ footer.credit b{color:var(--dim);font-weight:400}
         <button class="back-btn" id="gate-back" hidden>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg><span>Back to dashboard</span>
         </button>
+        <button id="gate-browse" class="ghost">Browse file</button>
         <button id="demo" class="ghost">Use sample data</button>
         <span class="spin" id="spin">Reading file&hellip;</span>
       </div>
@@ -2249,6 +2250,8 @@ document.getElementById('demo').addEventListener('click',()=>load(JSON.parse(JSO
 /* ---- buka semula gate tanpa terperangkap ---- */
 const gateBack = document.getElementById('gate-back');
 function closeGate(){ if(DATA){ gate.classList.add('hide'); gateBack.hidden = true; } }
+
+document.getElementById('gate-browse').addEventListener('click',()=>fileInput.click());
 
 document.getElementById('swap').addEventListener('click',()=>{
   errBox.classList.remove('show'); fileInput.value='';

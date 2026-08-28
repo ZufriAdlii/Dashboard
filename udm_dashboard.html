@@ -866,6 +866,7 @@
 </style>
 
 <style id="mobile-gate-fix">
+#udmGateOverlay .d-mob{display:none}   /* asas, mesti sebelum media query */
 /* =====================================================================
    Pembetulan mudah alih untuk skrin muat naik
    1. Tatal: align-items:center + overflow-y:auto menyebabkan bahagian
@@ -907,7 +908,7 @@
 
   /* display:contents menjadikan anak-anak gleft ahli flex, dan stretch lalai
      meregangkan logo serta butang ke seluruh lebar - kunci saiz asalnya */
-  #udmGateOverlay .glogo{align-self:flex-start; width:auto; max-width:190px; height:auto; margin-bottom:18px}
+  #udmGateOverlay .glogo{align-self:flex-start; width:auto; height:44px; margin-bottom:20px}
 
   /* sasaran sentuh 44px mengikut garis panduan iOS dan Android */
   #udmGateOverlay .gback{min-height:44px; padding:0 14px 0 11px; font-size:10.5px}
@@ -920,7 +921,6 @@
   #udmGateOverlay .d-desk{display:none}
   #udmGateOverlay .d-mob{display:inline}
 }
-#udmGateOverlay .d-mob{display:none}
 </style>
 
 <style id="mobile-shell-fix">

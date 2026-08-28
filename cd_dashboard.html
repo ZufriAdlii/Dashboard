@@ -1086,6 +1086,7 @@
 </style>
 
 <style id="mobile-gate-fix">
+#gate-overlay .d-mob{display:none}   /* asas, mesti sebelum media query */
 /* =====================================================================
    Pembetulan mudah alih untuk skrin muat naik
    1. Tatal: align-items:center + overflow-y:auto menyebabkan bahagian
@@ -1127,7 +1128,7 @@
 
   /* display:contents menjadikan anak-anak gleft ahli flex, dan stretch lalai
      meregangkan logo serta butang ke seluruh lebar - kunci saiz asalnya */
-  #gate-overlay .glogo{align-self:flex-start; width:auto; max-width:190px; height:auto; margin-bottom:18px}
+  #gate-overlay .glogo{align-self:flex-start; width:auto; height:44px; margin-bottom:20px}
 
   /* sasaran sentuh 44px mengikut garis panduan iOS dan Android */
   #gate-overlay .gback{min-height:44px; padding:0 14px 0 11px; font-size:10.5px}
@@ -1140,7 +1141,6 @@
   #gate-overlay .d-desk{display:none}
   #gate-overlay .d-mob{display:inline}
 }
-#gate-overlay .d-mob{display:none}
 </style>
 
 <style id="mobile-shell-fix">
