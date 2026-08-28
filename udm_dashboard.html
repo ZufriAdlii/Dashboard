@@ -864,6 +864,69 @@
   #gate-overlay .gright, #udmGateOverlay .gright{ padding:24px 20px !important; }
 }
 </style>
+
+<style id="mobile-gate-fix">
+/* =====================================================================
+   Pembetulan mudah alih untuk skrin muat naik
+   1. Tatal: align-items:center + overflow-y:auto menyebabkan bahagian
+      atas kotak keluar dari kawasan boleh tatal. flex-start membaikinya.
+   2. Kawasan selamat: viewport-fit=cover menghantar kandungan ke bawah
+      status bar iPhone, jadi env(safe-area-inset-*) diperlukan.
+   3. Susunan: kotak muat naik dinaikkan ke atas teks penerangan supaya
+      tindakan utama berada dalam skrin pertama.
+   ===================================================================== */
+@media (max-width:880px){
+  #udmGateOverlay{
+    align-items:flex-start;
+    padding-top:max(18px, env(safe-area-inset-top));
+    padding-bottom:max(18px, env(safe-area-inset-bottom));
+    padding-left:max(14px, env(safe-area-inset-left));
+    padding-right:max(14px, env(safe-area-inset-right));
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  /* gleft dileburkan supaya anak-anaknya boleh disusun semula satu per satu */
+  #udmGateOverlay .gleft{display:contents}
+  #udmGateOverlay .gbox{
+    display:flex; flex-direction:column;
+    padding:24px 20px calc(24px + env(safe-area-inset-bottom));
+    margin:auto 0;
+  }
+  #udmGateOverlay .gright{padding:0; margin:22px 0 0}
+
+  #udmGateOverlay .gback{order:1}
+  #udmGateOverlay .glogo{order:2}
+  #udmGateOverlay .geyebrow{order:3}
+  #udmGateOverlay h1{order:4; font-size:27px; margin-bottom:0}
+  #udmGateOverlay .gright{order:5}
+  #udmGateOverlay .gdesc{order:6; margin:26px 0 0; font-size:14px}
+  #udmGateOverlay .gfeats{order:7; margin:22px 0 0}
+  #udmGateOverlay .gby{order:8; margin-top:22px}
+  #udmGateOverlay .gnote{order:9}
+
+  /* sasaran sentuh 44px mengikut garis panduan iOS dan Android */
+  #udmGateOverlay .gback{min-height:44px; padding:0 14px 0 11px; font-size:10.5px}
+  #udmGateOverlay .gbtn{min-height:44px; flex:1 1 auto; padding:0 16px}
+  #udmGateOverlay .gdrop{padding:30px 18px}
+  #udmGateOverlay .gdrop svg{width:32px; height:32px; margin-bottom:12px}
+  #udmGateOverlay .gdrop .big{font-size:19px}
+
+  /* tiada apa yang boleh di-"drop" pada telefon */
+  #udmGateOverlay .d-desk{display:none}
+  #udmGateOverlay .d-mob{display:inline}
+}
+#udmGateOverlay .d-mob{display:none}
+</style>
+
+<style id="mobile-shell-fix">
+@media (max-width:860px){
+  .sidebar{padding-top:max(14px, env(safe-area-inset-top)) !important}
+  .main{padding-bottom:calc(34px + env(safe-area-inset-bottom))}
+  .back-btn{min-height:44px !important}
+  .update-file-btn{min-height:44px !important}
+}
+</style>
 </head>
 <body>
 
@@ -894,7 +957,7 @@
     <div class="gright">
       <div class="gdrop" id="udmDropZone">
         <svg viewBox="0 0 48 48" stroke-linecap="square"><path d="M24 31V9m0 0l-8 8m8-8l8 8"/><path d="M9 29v10h30V29"/></svg>
-        <div class="big">Drop your Excel file here</div>
+        <div class="big"><span class="d-desk">Drop your Excel file here</span><span class="d-mob">Tap to choose your Excel file</span></div>
         <div class="small">or click to browse &middot; .xlsx</div>
       </div>
       <input type="file" id="udmGateFileInput" accept=".xlsx,.xls" style="display:none;">
