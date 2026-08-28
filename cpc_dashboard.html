@@ -76,9 +76,6 @@ body{
       background-image:radial-gradient(1100px 620px at 78% -14%,rgba(51,167,84,.15),transparent 60%),
                        radial-gradient(820px 540px at 6% 108%,rgba(249,188,9,.10),transparent 58%)}
 #gate.hide{display:none}
-.gate-bar{display:flex;align-items:center;justify-content:flex-end;gap:12px;
-          width:100%;max-width:1080px;margin:0 auto 18px}
-.gate-theme{align-self:auto;flex:0 0 auto}
 
 /* ---------- butang kembali ---------- */
 [hidden]{display:none!important}
@@ -97,9 +94,6 @@ body{
 @media (max-width:700px){
   /* sasaran sentuh 44px dan penuh lebar supaya senang dicapai dengan ibu jari */
   .back-btn{min-height:44px;width:100%;padding:0 16px}
-  .gate-bar{flex-wrap:wrap}
-  .gate-bar .back-btn{flex:1 1 100%;order:2}
-  .gate-theme{order:1;margin-left:auto}
 }
 .gatebox{display:grid;grid-template-columns:1.12fr .88fr;max-width:1080px;width:100%;
          background:linear-gradient(160deg,var(--surface-2),var(--surface) 62%);
@@ -716,14 +710,26 @@ footer.credit b{color:var(--dim);font-weight:400}
   .wrap{padding-bottom:calc(56px + env(safe-area-inset-bottom))}
 }
 </style>
+
+<style id="gate-theme-inbox">
+/* togol tema di dalam kotak, sepadan dengan cd dan udm */
+#gate .gatebox{position:relative}
+#gate .gate-theme{
+  position:absolute; top:14px; right:14px; z-index:3;
+  width:44px; height:44px; padding:0; flex:0 0 auto;
+}
+@media (max-width:880px){
+  #gate .gate-theme{
+    position:static; order:0; align-self:flex-end; margin-bottom:6px;
+  }
+}
+</style>
 </head>
 <body>
 
 <div id="gate">
-  <div class="gate-bar">
-    <button class="ghost iconbtn gate-theme" id="gate-theme" aria-label="Switch theme" title="Switch theme"></button>
-  </div>
   <div class="gatebox">
+    <button class="ghost iconbtn gate-theme" id="gate-theme" aria-label="Switch theme" title="Switch theme"></button>
     <div class="gate-left">
       <a class="back-btn" href="index.html" title="Kembali ke Dashboard Hub">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg><span>Hub</span>
@@ -760,7 +766,7 @@ footer.credit b{color:var(--dim);font-weight:400}
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg><span>Back to dashboard</span>
         </button>
         <button id="gate-browse" class="ghost">Browse file</button>
-        <button id="demo" class="ghost">Use Existing data</button>
+        <button id="demo" class="ghost">Use sample data</button>
         <span class="spin" id="spin">Reading file&hellip;</span>
       </div>
       <details class="gate-note">

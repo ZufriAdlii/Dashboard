@@ -931,6 +931,204 @@
   .update-file-btn{min-height:44px !important}
 }
 </style>
+
+<style id="theme-alt">
+/* Tema "light" dijana daripada tema asal.
+   Sidebar dan skrin gate sengaja dikekalkan gelap. */
+:root[data-theme="light"]{--bg:#dadeea; --panel-bg:#d0d5e3; --panel-border:#bdc3d5; --text-light:#171a24; --text-muted:#5c6279; --yellow:#eeb52f; --green:#4ec085; --blue:#448dda; --orange:#e3813a; --pink:#dd4156; --cyan:#4dcec5; --drafter-adam:#d6aa48; --drafter-intan:#a25ac4; --drafter-nabihah:#4f91cf; --drafter-nasuha:#d04d72; --drafter-syafiqa:#61bc82; --shadow: 0 1px 2px rgba(246,246,246,0.3), 0 4px 14px rgba(246,246,246,0.25)}
+:root[data-theme="light"] .drafter-chip{background:#c7ccdf; border:1px solid #b3bace}
+:root[data-theme="light"] .drafter-chip:hover{background:#b8bed9}
+:root[data-theme="light"] .drafter-chip.selected{background:#aab1d0; border-color:#5764a9}
+:root[data-theme="light"] .side-select{background:#c7ccdf; border:1px solid #b3bace}
+:root[data-theme="light"] .topbar h1{color:#0f111a}
+:root[data-theme="light"] .kpi-box:hover{border-color:#9ca3c3}
+:root[data-theme="light"] .kpi-box.clickable:hover{background:#c5cade; border-color:#4a5378}
+:root[data-theme="light"] .kpi-box.clickable .kb-label .click-hint{color:#8990a8}
+:root[data-theme="light"] /* KPI detail modal */
+  .modal-overlay{background:rgba(230,233,244,0.72)}
+:root[data-theme="light"] .modal-box{background:#d1d5e5; border:1px solid #b6bcd0; box-shadow:0 24px 60px rgba(246,246,246,0.5)}
+:root[data-theme="light"] .modal-head{border-bottom:1px solid #bdc3d5}
+:root[data-theme="light"] .modal-head h3{color:#10121a}
+:root[data-theme="light"] .modal-close{color:#5c6279}
+:root[data-theme="light"] .modal-close:hover{background:#b8bed9; color:#0b0b0b}
+:root[data-theme="light"] .modal-body::-webkit-scrollbar-thumb{background:#adb5c9}
+:root[data-theme="light"] table.modal-table thead th{background:#c7ccdf; color:#2a2e41; border-bottom:1px solid #bdc3d5}
+:root[data-theme="light"] table.modal-table tbody td{border-bottom:1px solid #c7ccdf; color:#262a36}
+:root[data-theme="light"] table.modal-table tbody tr:hover{background:#c7cde1}
+:root[data-theme="light"] /* Project detail modal */
+  .detail-row{border-bottom:1px solid #c5cbdc}
+:root[data-theme="light"] .detail-row .dl{color:#5c6279}
+:root[data-theme="light"] .detail-row .dv{color:#141720}
+:root[data-theme="light"] .pm-btn{background:#c7ccdf; border:1px solid #b3bace}
+:root[data-theme="light"] .pm-btn:hover{background:#b8bed9; border-color:#4a5378}
+:root[data-theme="light"] .pm-btn-primary{background:#3d3267; border-color:#5c4c9d}
+:root[data-theme="light"] .pm-btn-primary:hover{background:#463976}
+:root[data-theme="light"] .list-table tbody td:first-of-type + td:hover{color:#533ae3}
+:root[data-theme="light"] .panel.zoomable:hover{border-color:#4a5378; background:#ccd1e1}
+:root[data-theme="light"] .panel.zoomable .zoom-hint{color:#868ca4}
+:root[data-theme="light"] .panel h2{color:#141720}
+:root[data-theme="light"] .radio-dot{border:1.5px solid #989898}
+:root[data-theme="light"] footer.note{color:#979db3}
+:root[data-theme="light"] .ms-dropdown-btn{background:#c7ccdf; border:1px solid #b3bace}
+:root[data-theme="light"] .ms-dropdown-btn svg{stroke:#5c6279}
+:root[data-theme="light"] .ms-dropdown.open .ms-dropdown-btn{border-color:#5764a9}
+:root[data-theme="light"] .ms-dropdown-panel{background:#c7ccdf; border:1px solid #b3bace; box-shadow:0 12px 28px rgba(246,246,246,0.45)}
+:root[data-theme="light"] .ms-dropdown-panel::-webkit-scrollbar-thumb{background:#adb5c9}
+:root[data-theme="light"] .ms-option{color:#262a36}
+:root[data-theme="light"] .ms-option:hover{background:#b8bed9}
+:root[data-theme="light"] .ms-option.all-option{border-bottom:1px solid #b6bcd0}
+:root[data-theme="light"] .list-search input{background:#c7ccdf; border:1px solid #b3bace}
+:root[data-theme="light"] .list-search input:focus{outline:1.5px solid #5764a9}
+:root[data-theme="light"] .list-batch-btn{background:#c7ccdf; border:1px solid #b3bace}
+:root[data-theme="light"] .list-batch-btn:hover{background:#b8bed9; border-color:#4a5378}
+:root[data-theme="light"] .list-table-wrap::-webkit-scrollbar-thumb{background:#adb5c9}
+:root[data-theme="light"] table.list-table thead th{background:#c7ccdf; color:#2a2e41}
+:root[data-theme="light"] table.list-table thead th:hover{color:#0b0b0b}
+:root[data-theme="light"] table.list-table tbody td{border-bottom:1px solid #c7ccdf; color:#262a36}
+:root[data-theme="light"] table.list-table tbody tr:hover{background:#c7cde1}
+:root[data-theme="light"] .status-pill.complete{background:rgba(78,192,133,0.15); color:#4ec085}
+:root[data-theme="light"] .status-pill.pending{background:rgba(227,129,58,0.15); color:#e3813a}
+:root[data-theme="light"] .status-pill.other{background:rgba(96,92,115,0.15); color:#605c73}
+:root[data-theme="light"] /* Upload gate */
+  .gate-overlay{background:radial-gradient(circle at 30% 0%, #c5cadf 0%, var(--bg) 55%)}
+:root[data-theme="light"] .gate-card{box-shadow:0 24px 60px rgba(246,246,246,0.5)}
+:root[data-theme="light"] .gate-card h2{color:#10121a}
+:root[data-theme="light"] .gate-btn-primary{background:linear-gradient(135deg,#5645d9,#5a4ec5); color:#0b0b0b}
+:root[data-theme="light"] .gate-btn-secondary{background:#c7ccdf; border:1px solid #b3bace}
+:root[data-theme="light"] .gate-divider{color:#8990a8}
+:root[data-theme="light"] .gate-divider::before, :root[data-theme="light"] .gate-divider::after{background:#bdc3d5}
+:root[data-theme="light"] .gate-status{color:#5c6279}
+:root[data-theme="light"] .gate-error{background:rgba(221,65,86,0.12); border:1px solid rgba(221,65,86,0.35); color:#e9354d}
+:root[data-theme="light"] .gate-back-link:hover{background:#c7ccdf}
+:root[data-theme="light"] .gate-meta{border-top:1px solid #bdc3d5; color:#8990a8}
+:root[data-theme="light"] .udm-change-file-btn{border:1px solid #b3bace}
+:root[data-theme="light"] .udm-change-file-btn:hover{background:#c7ccdf}
+</style>
+
+<style id="theme-toggle-css">
+/* butang togol tema - gaya sama seperti cpc */
+.theme-btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:40px; height:40px; min-height:40px; padding:0; flex:0 0 auto;
+  border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.02);
+  color:#8192A6; cursor:pointer; border-radius:0;
+  transition:color .15s, border-color .15s, background .15s;
+}
+.theme-btn svg{width:19px;height:19px;display:block;stroke:currentColor;fill:none}
+.theme-btn:hover{color:#33A754; border-color:#33A754; background:rgba(51,167,84,.08)}
+.theme-btn:focus-visible{outline:1px solid #E0A34A; outline-offset:2px}
+.sidebar .theme-btn{width:100%; height:auto; min-height:44px; margin-top:10px; gap:8px;
+  font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  font-size:10px; letter-spacing:.18em; text-transform:uppercase}
+@media (max-width:860px){ .sidebar .theme-btn{min-height:44px} }
+</style>
+
+<style id="gate-theme-light">
+/* Palet terang untuk skrin gate. Gate menggunakan set --g-* tersendiri,
+   jadi tanpa ini togol tema tidak mengubah apa-apa di skrin pertama. */
+:root[data-theme="light"] #udmGateOverlay{
+  --g-bg:#EEF1F5;
+  --g-surface:#FFFFFF;
+  --g-surface2:#F5F7FA;
+  --g-ink:#16202B;
+  --g-dim:#4A5A6B;
+  --g-faint:#63748A;
+  --g-line:rgba(16,27,41,.10);
+  --g-line2:rgba(16,27,41,.18);
+  --g-green:#1F8A44;
+  --g-amber:#B87A21;
+  --g-crit:#C4453A;
+}
+/* logo: versi gelap untuk latar cerah, dan sebaliknya */
+:root[data-theme="light"] #udmGateOverlay .glogo{filter:none}
+#udmGateOverlay .gbox{position:relative}
+#udmGateOverlay .gate-theme-btn{
+  position:absolute; top:14px; right:14px; z-index:3;
+  display:inline-flex; align-items:center; justify-content:center;
+  width:44px; height:44px; padding:0;
+  border:1px solid var(--g-line2); background:transparent;
+  color:var(--g-faint); cursor:pointer; border-radius:0;
+  transition:color .15s, border-color .15s, background .15s;
+}
+#udmGateOverlay .gate-theme-btn svg{width:19px;height:19px;stroke:currentColor;fill:none;display:block}
+#udmGateOverlay .gate-theme-btn:hover{color:var(--g-green); border-color:var(--g-green)}
+#udmGateOverlay .gate-theme-btn:focus-visible{outline:1px solid var(--g-amber); outline-offset:2px}
+@media (max-width:880px){
+  #udmGateOverlay .gate-theme-btn{
+    position:static; order:0; align-self:flex-end; margin-bottom:6px;
+  }
+}
+</style>
+<script id="theme-engine">
+(function(){
+  /* ---- peta warna carta: nilai asal -> nilai tema lawan ----------------
+     Carta dilukis dalam JavaScript dengan warna tetap, jadi ia tidak
+     mengikut CSS. TC() menterjemah warna itu mengikut tema semasa. ---- */
+  var MAP = {"#4a5066": "#979db3", "#d97490": "#d04d72", "#eef0f4": "#13171e", "#d9b25c": "#d6aa48", "#c9a0dc": "#a25ac4", "#666": "#989898", "#aeb3c0": "#444957", "#e05c6e": "#dd4156", "#9aa0b0": "#53596a", "#d8dbe2": "#242831", "#fff": "#0b0b0b", "#74a8d8": "#4f91cf", "#eceef3": "#141720", "#1f2430": "#c8cedb", "#8b93a8": "#5a6278", "#e7f6ec": "#0f2717", "#888": "#797979", "#c7cadb": "#2a2e41", "#dfe1e8": "#1f212b", "#2f9e58": "#2e9f58", "#171b2c": "#cbd0e4", "#6b7280": "#808694", "#f2f3f6": "#12141a", "#fafbfc": "#0b0f13", "#7d8399": "#686e84", "#e6e8ee": "#191c25", "#c9522f": "#cb512d", "#fdece4": "#2e1103", "#4ecdc4": "#4dcec5", "#8a90a6": "#5c6279", "#6b7288": "#787f95", "#e2833f": "#e3813a", "#4fbf85": "#4ec085", "#8b7cf6": "#472fee", "#4a90d9": "#448dda", "#eceef2": "#15191f", "#ffffff": "#0b0b0b", "#5b6178": "#868ca4", "#f2f3f7": "#10121a", "#262c3c": "#bdc3d5", "#7bc696": "#61bc82", "#1f9d55": "#1e9e55"};
+  var NEW_THEME = "light", DEFAULT_THEME = "dark";
+
+  window.TC = function(c){
+    if(document.documentElement.getAttribute('data-theme') === NEW_THEME){
+      return MAP[String(c).toLowerCase()] || c;
+    }
+    return c;
+  };
+
+  var MOON = '<svg viewBox="0 0 24 24" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.3A8.5 8.5 0 1 1 9.7 3.5a6.8 6.8 0 0 0 10.8 10.8z"/></svg>';
+  var SUN  = '<svg viewBox="0 0 24 24" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.4M12 19.2v2.4M4.2 12H1.8M22.2 12h-2.4M6.5 6.5 4.8 4.8M19.2 19.2l-1.7-1.7M17.5 6.5l1.7-1.7M4.8 19.2l1.7-1.7"/></svg>';
+
+  function apply(t, quiet){
+    document.documentElement.setAttribute('data-theme', t);
+    try{ localStorage.setItem('ui-theme', t); }catch(e){}
+
+    document.querySelectorAll('meta[name="theme-color"]').forEach(function(m){ m.remove(); });
+    var meta = document.createElement('meta');
+    meta.setAttribute('name','theme-color');
+    meta.setAttribute('content', t === 'dark' ? '#10131c' : '#dadeea');
+    document.head.appendChild(meta);
+
+    var btn = document.getElementById('theme-toggle');
+    if(btn){
+      var toDark = (t !== 'dark');
+      btn.innerHTML = (t === 'dark' ? SUN : MOON) +
+        '<span class="tt-label">' + (t === 'dark' ? 'Terang' : 'Gelap') + '</span>';
+      var msg = toDark ? 'Tukar ke tema gelap' : 'Tukar ke tema terang';
+      btn.setAttribute('title', msg);
+      btn.setAttribute('aria-label', msg);
+    }
+    /* butang yang sama pada skrin gate, tanpa label teks */
+    var gbtn = document.getElementById('gate-theme-toggle');
+    if(gbtn){
+      gbtn.innerHTML = (t === 'dark' ? SUN : MOON);
+      var gmsg = (t !== 'dark') ? 'Tukar ke tema gelap' : 'Tukar ke tema terang';
+      gbtn.setAttribute('title', gmsg);
+      gbtn.setAttribute('aria-label', gmsg);
+    }
+    if(!quiet) redraw();
+  }
+
+  /* carta dilukis semula supaya warnanya ikut tema baharu */
+  function redraw(){
+    if(typeof render === 'function'){ try{ render(); }catch(e){} }
+  }
+
+  function init(){
+    var saved = null;
+    try{ saved = localStorage.getItem('ui-theme'); }catch(e){}
+    apply(saved === 'dark' || saved === 'light' ? saved : DEFAULT_THEME, true);
+    ['theme-toggle','gate-theme-toggle'].forEach(function(id){
+      var b = document.getElementById(id);
+      if(b) b.addEventListener('click', function(){
+        var cur = document.documentElement.getAttribute('data-theme');
+        apply(cur === 'dark' ? 'light' : 'dark');
+      });
+    });
+  }
+  if(document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
 </head>
 <body>
 
@@ -946,6 +1144,7 @@
 
   <div class="gate-overlay" id="udmGateOverlay" style="display:none;">
   <div class="gbox">
+    <button type="button" class="gate-theme-btn" id="gate-theme-toggle" aria-label="Tukar tema"></button>
     <div class="gleft">
       <a class="gback" href="index.html">
         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
@@ -975,6 +1174,7 @@
   <div id="udmDashboardRoot" style="display:none;">
   <nav class="sidebar">
     <a class="back-btn" href="index.html" title="Kembali ke Dashboard Hub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg><span>Hub</span></a>
+    <button type="button" class="theme-btn" id="theme-toggle" aria-label="Tukar tema"></button>
 
     <div class="brand">
       <img src="UISB_NEW.png" alt="Utara Infra" style="width:100%; max-width:130px; height:auto;">
@@ -1239,7 +1439,7 @@ function runUdmDashboard(initialData){
   var RAW = initialData;
 
   var DRAFTER_COLORS = {
-    'Adam':'#d9b25c','Intan':'#c9a0dc','Nabihah':'#74a8d8','Nasuha':'#d97490','Syafiqa':'#7bc696','Tbc':'#5b6178'
+    'Adam':TC('#d9b25c'),'Intan':TC('#c9a0dc'),'Nabihah':TC('#74a8d8'),'Nasuha':TC('#d97490'),'Syafiqa':TC('#7bc696'),'Tbc':TC('#5b6178')
   };
   var DRAFTER_ORDER = ['Adam','Intan','Nabihah','Nasuha','Syafiqa'];
 
@@ -1279,8 +1479,8 @@ function runUdmDashboard(initialData){
     for(var t=0; t<=ticks; t++){
       var gx = leftLabelW + (chartW * t/ticks);
       var gv = maxVal * t/ticks;
-      gridHtml += '<line x1="'+gx.toFixed(1)+'" y1="'+topPad+'" x2="'+gx.toFixed(1)+'" y2="'+(totalH-topPad)+'" stroke="#262c3c" stroke-width="1"/>';
-      gridHtml += '<text x="'+gx.toFixed(1)+'" y="'+(totalH-2)+'" font-size="10.5" fill="#6b7288" text-anchor="'+(t===0?'start':(t===ticks?'end':'middle'))+'">'+escapeHtml(axisLabelFn(gv))+'</text>';
+      gridHtml += '<line x1="'+gx.toFixed(1)+'" y1="'+topPad+'" x2="'+gx.toFixed(1)+'" y2="'+(totalH-topPad)+'" stroke="'+TC('#262c3c')+'" stroke-width="1"/>';
+      gridHtml += '<text x="'+gx.toFixed(1)+'" y="'+(totalH-2)+'" font-size="10.5" fill="'+TC('#6b7288')+'" text-anchor="'+(t===0?'start':(t===ticks?'end':'middle'))+'">'+escapeHtml(axisLabelFn(gv))+'</text>';
     }
 
     var barFontSize = Math.max(10.5, Math.min(13, rowH*0.4));
@@ -1300,9 +1500,9 @@ function runUdmDashboard(initialData){
       var opacity = (hasSelection && !selected) ? '0.38' : '1';
       var groupStyle = opts.onClick ? 'cursor:pointer;' : '';
       barsHtml += '<g class="bar-item" data-idx="'+i+'" style="'+groupStyle+'" opacity="'+opacity+'">' +
-        '<text x="'+(leftLabelW-10)+'" y="'+(barY+barH/2)+'" font-size="'+barFontSize.toFixed(1)+'" fill="#c7cadb" text-anchor="end" dominant-baseline="middle">'+escapeHtml(d.label)+'</text>' +
-        '<rect x="'+leftLabelW+'" y="'+barY.toFixed(1)+'" width="'+Math.max(w,1).toFixed(1)+'" height="'+barH.toFixed(1)+'" rx="2" fill="'+color+'"'+(selected?' stroke="#fff" stroke-width="1.5"':'')+'></rect>' +
-        '<text x="'+(leftLabelW + w + 8)+'" y="'+(barY+barH/2)+'" font-size="'+(barFontSize+0.5).toFixed(1)+'" font-weight="600" fill="#f2f3f7" dominant-baseline="middle">'+escapeHtml(valueLabelFn(d.val))+'</text>' +
+        '<text x="'+(leftLabelW-10)+'" y="'+(barY+barH/2)+'" font-size="'+barFontSize.toFixed(1)+'" fill="'+TC('#c7cadb')+'" text-anchor="end" dominant-baseline="middle">'+escapeHtml(d.label)+'</text>' +
+        '<rect x="'+leftLabelW+'" y="'+barY.toFixed(1)+'" width="'+Math.max(w,1).toFixed(1)+'" height="'+barH.toFixed(1)+'" rx="2" fill="'+color+'"'+(selected?' stroke="'+TC('#fff')+'" stroke-width="1.5"':'')+'></rect>' +
+        '<text x="'+(leftLabelW + w + 8)+'" y="'+(barY+barH/2)+'" font-size="'+(barFontSize+0.5).toFixed(1)+'" font-weight="600" fill="'+TC('#f2f3f7')+'" dominant-baseline="middle">'+escapeHtml(valueLabelFn(d.val))+'</text>' +
         (opts.onClick ? '<rect x="0" y="'+y+'" width="'+totalW+'" height="'+rowH+'" fill="transparent"></rect>' : '') +
         '</g>';
     });
@@ -1370,13 +1570,13 @@ function runUdmDashboard(initialData){
     items.forEach(function(d){
       var pct = ((d.val/total)*100).toFixed(1);
       legendHtml += '<circle cx="'+legendX+'" cy="'+legendY+'" r="6" fill="'+colorFn(d)+'"/>' +
-        '<text x="'+(legendX+14)+'" y="'+(legendY+5)+'" font-size="13.5" fill="#dfe1e8">'+escapeHtml(d.label)+'</text>' +
-        '<text x="'+(legendX+14)+'" y="'+(legendY+22)+'" font-size="11.5" fill="#8a90a6">'+escapeHtml(valueLabelFn(d.val))+' ('+pct+'%)</text>';
+        '<text x="'+(legendX+14)+'" y="'+(legendY+5)+'" font-size="13.5" fill="'+TC('#dfe1e8')+'">'+escapeHtml(d.label)+'</text>' +
+        '<text x="'+(legendX+14)+'" y="'+(legendY+22)+'" font-size="11.5" fill="'+TC('#8a90a6')+'">'+escapeHtml(valueLabelFn(d.val))+' ('+pct+'%)</text>';
       legendY += legendSpacing;
     });
 
-    var centerLabel = '<text x="'+cx+'" y="'+(cy-6)+'" font-size="12.5" fill="#8a90a6" text-anchor="middle">Total</text>' +
-      '<text x="'+cx+'" y="'+(cy+16)+'" font-size="16" fill="#eceef3" text-anchor="middle" font-weight="700">'+escapeHtml(valueLabelFn(total))+'</text>';
+    var centerLabel = '<text x="'+cx+'" y="'+(cy-6)+'" font-size="12.5" fill="'+TC('#8a90a6')+'" text-anchor="middle">Total</text>' +
+      '<text x="'+cx+'" y="'+(cy+16)+'" font-size="16" fill="'+TC('#eceef3')+'" text-anchor="middle" font-weight="700">'+escapeHtml(valueLabelFn(total))+'</text>';
 
     container.innerHTML = '<svg viewBox="0 0 '+totalW+' '+totalH+'" width="100%" height="'+totalH+'" xmlns="http://www.w3.org/2000/svg">' +
       slicesHtml + centerLabel + legendHtml + '</svg>';
@@ -1402,8 +1602,8 @@ function runUdmDashboard(initialData){
     for(var t=0;t<=ticks;t++){
       var gy = topPad + plotH - (plotH*t/ticks);
       var gv = niceMax*t/ticks;
-      gridHtml += '<line x1="'+leftPad+'" y1="'+gy.toFixed(1)+'" x2="'+(leftPad+plotW)+'" y2="'+gy.toFixed(1)+'" stroke="#262c3c" stroke-width="1"/>';
-      gridHtml += '<text x="'+(leftPad-8)+'" y="'+(gy+3).toFixed(1)+'" font-size="11" fill="#8a90a6" text-anchor="end">'+escapeHtml(valueLabelFn(gv))+'</text>';
+      gridHtml += '<line x1="'+leftPad+'" y1="'+gy.toFixed(1)+'" x2="'+(leftPad+plotW)+'" y2="'+gy.toFixed(1)+'" stroke="'+TC('#262c3c')+'" stroke-width="1"/>';
+      gridHtml += '<text x="'+(leftPad-8)+'" y="'+(gy+3).toFixed(1)+'" font-size="11" fill="'+TC('#8a90a6')+'" text-anchor="end">'+escapeHtml(valueLabelFn(gv))+'</text>';
     }
 
     var n = items.length;
@@ -1425,18 +1625,18 @@ function runUdmDashboard(initialData){
       var groupStyle = opts.onClick ? 'cursor:pointer;' : '';
       barsHtml += '<g class="col-item" data-idx="'+i+'" style="'+groupStyle+'">' +
         '<rect x="'+(leftPad+slot*i).toFixed(1)+'" y="'+topPad+'" width="'+slot.toFixed(1)+'" height="'+plotH+'" fill="transparent"></rect>' +
-        '<rect x="'+barX.toFixed(1)+'" y="'+barY.toFixed(1)+'" width="'+barW.toFixed(1)+'" height="'+barH.toFixed(1)+'" fill="'+barColor+'" opacity="'+opacity+'"'+(selected?' stroke="#fff" stroke-width="1.5"':'')+'><title>'+escapeHtml(d.label)+': '+escapeHtml(valueLabelFn(d.val))+'</title></rect>' +
+        '<rect x="'+barX.toFixed(1)+'" y="'+barY.toFixed(1)+'" width="'+barW.toFixed(1)+'" height="'+barH.toFixed(1)+'" fill="'+barColor+'" opacity="'+opacity+'"'+(selected?' stroke="'+TC('#fff')+'" stroke-width="1.5"':'')+'><title>'+escapeHtml(d.label)+': '+escapeHtml(valueLabelFn(d.val))+'</title></rect>' +
         '</g>';
       if(d.val>0){
-        labelsHtml += '<text x="'+cx.toFixed(1)+'" y="'+(barY-8).toFixed(1)+'" font-size="11.5" font-weight="600" fill="#eceef3" text-anchor="middle">'+escapeHtml(valueLabelFn(d.val))+'</text>';
+        labelsHtml += '<text x="'+cx.toFixed(1)+'" y="'+(barY-8).toFixed(1)+'" font-size="11.5" font-weight="600" fill="'+TC('#eceef3')+'" text-anchor="middle">'+escapeHtml(valueLabelFn(d.val))+'</text>';
       }
       var showLabel = (n<=20) || (i % Math.ceil(n/20) === 0);
       if(showLabel){
-        labelsHtml += '<text x="'+cx.toFixed(1)+'" y="'+(topPad+plotH+16)+'" font-size="10" fill="#8a90a6" text-anchor="middle">'+escapeHtml(d.label)+'</text>';
+        labelsHtml += '<text x="'+cx.toFixed(1)+'" y="'+(topPad+plotH+16)+'" font-size="10" fill="'+TC('#8a90a6')+'" text-anchor="middle">'+escapeHtml(d.label)+'</text>';
       }
     });
-    lineHtml = '<polyline points="'+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' ')+'" fill="none" stroke="#eceef3" stroke-width="1.6" style="pointer-events:none;"/>';
-    pts.forEach(function(p){ lineHtml += '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="2.4" fill="#eceef3" style="pointer-events:none;"/>'; });
+    lineHtml = '<polyline points="'+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' ')+'" fill="none" stroke="'+TC('#eceef3')+'" stroke-width="1.6" style="pointer-events:none;"/>';
+    pts.forEach(function(p){ lineHtml += '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="2.4" fill="'+TC('#eceef3')+'" style="pointer-events:none;"/>'; });
 
     container.innerHTML = '<svg viewBox="0 0 '+totalW+' '+totalH+'" width="100%" height="'+totalH+'" xmlns="http://www.w3.org/2000/svg">' +
       gridHtml + barsHtml + lineHtml + labelsHtml + '</svg>';
@@ -1470,8 +1670,8 @@ function runUdmDashboard(initialData){
     for(var t=0;t<=ticks;t++){
       var gy = topPad + plotH - (plotH*t/ticks);
       var gv = niceMax*t/ticks;
-      gridHtml += '<line x1="'+leftPad+'" y1="'+gy.toFixed(1)+'" x2="'+(leftPad+plotW)+'" y2="'+gy.toFixed(1)+'" stroke="#262c3c" stroke-width="1"/>';
-      gridHtml += '<text x="'+(leftPad-8)+'" y="'+(gy+3).toFixed(1)+'" font-size="10.5" fill="#8a90a6" text-anchor="end">'+escapeHtml((gv>=1000?(gv/1000).toFixed(0)+'K':fmtInt(gv)))+'</text>';
+      gridHtml += '<line x1="'+leftPad+'" y1="'+gy.toFixed(1)+'" x2="'+(leftPad+plotW)+'" y2="'+gy.toFixed(1)+'" stroke="'+TC('#262c3c')+'" stroke-width="1"/>';
+      gridHtml += '<text x="'+(leftPad-8)+'" y="'+(gy+3).toFixed(1)+'" font-size="10.5" fill="'+TC('#8a90a6')+'" text-anchor="end">'+escapeHtml((gv>=1000?(gv/1000).toFixed(0)+'K':fmtInt(gv)))+'</text>';
     }
 
     var n = months.length;
@@ -1481,7 +1681,7 @@ function runUdmDashboard(initialData){
       var x = leftPad + slot*i;
       var showLabel = (n<=20) || (i % Math.ceil(n/16) === 0) || i===n-1;
       if(showLabel){
-        xAxisHtml += '<text x="'+x.toFixed(1)+'" y="'+(topPad+plotH+16)+'" font-size="9" fill="#8a90a6" text-anchor="middle">'+escapeHtml(m.label)+'</text>';
+        xAxisHtml += '<text x="'+x.toFixed(1)+'" y="'+(topPad+plotH+16)+'" font-size="9" fill="'+TC('#8a90a6')+'" text-anchor="middle">'+escapeHtml(m.label)+'</text>';
       }
     });
 
@@ -1508,7 +1708,7 @@ function runUdmDashboard(initialData){
           linesHtml += '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.6" fill="'+s.color+'" opacity="0" class="ml-series" data-si="'+si+'" style="'+cursor+'"><title>'+escapeHtml(tip)+'</title></circle>' +
             '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="2.4" fill="'+s.color+'" opacity="'+lineOpacity+'" style="pointer-events:none;"><title>'+escapeHtml(tip)+'</title></circle>';
           var labelY = p[1] - 7 - (si % 3) * 10;
-          labelsHtml += '<text x="'+p[0].toFixed(1)+'" y="'+labelY.toFixed(1)+'" font-size="9.5" font-weight="600" fill="#ffffff" opacity="'+lineOpacity+'" text-anchor="middle" style="pointer-events:none;">'+escapeHtml(fmtInt(s.values[i]))+'</text>';
+          labelsHtml += '<text x="'+p[0].toFixed(1)+'" y="'+labelY.toFixed(1)+'" font-size="9.5" font-weight="600" fill="'+TC('#ffffff')+'" opacity="'+lineOpacity+'" text-anchor="middle" style="pointer-events:none;">'+escapeHtml(fmtInt(s.values[i]))+'</text>';
         }
       });
     });
@@ -1766,8 +1966,8 @@ function runUdmDashboard(initialData){
     var row = currentDetailRow;
     var statusVal = row[7] || row[6] || '-';
     var statusIsGood = statusVal === 'Complete';
-    var statusColor = statusIsGood ? '#1f9d55' : '#c9522f';
-    var statusBg = statusIsGood ? '#e7f6ec' : '#fdece4';
+    var statusColor = statusIsGood ? TC('#1f9d55') : TC('#c9522f');
+    var statusBg = statusIsGood ? TC('#e7f6ec') : TC('#fdece4');
 
     var locationFields = [
       {label:'District', value: row[1] || '-'},
@@ -1874,7 +2074,7 @@ function runUdmDashboard(initialData){
       '<div class="section-title">Distance Progress</div>'+
       '<div class="progress-box">'+
         '<div class="progress-row"><div class="progress-label">Total TP</div><div class="progress-track"><div class="progress-fill" style="width:'+tpPct+'%; background:#8b93a8;"></div></div><div class="progress-val">'+escapeHtml(fmtDist(tp))+'</div></div>'+
-        '<div class="progress-row"><div class="progress-label">Total Actual</div><div class="progress-track"><div class="progress-fill" style="width:'+actPct+'%; background:'+(statusIsGood?'#2f9e58':'#e2833f')+';"></div></div><div class="progress-val">'+escapeHtml(fmtDist(actual))+'</div></div>'+
+        '<div class="progress-row"><div class="progress-label">Total Actual</div><div class="progress-track"><div class="progress-fill" style="width:'+actPct+'%; background:'+(statusIsGood?TC('#2f9e58'):TC('#e2833f'))+';"></div></div><div class="progress-val">'+escapeHtml(fmtDist(actual))+'</div></div>'+
       '</div>'+
 
       '<div class="signoff">'+
@@ -2225,7 +2425,7 @@ function runUdmDashboard(initialData){
       });
       var districtArr = Object.keys(byDistrict).map(function(d){return {label:d, val:byDistrict[d]};})
         .filter(function(d){return d.val>0;}).sort(function(a,b){return b.val-a.val;});
-      renderHBarSVG(document.getElementById('ov-chartDistrict'), districtArr, function(){return '#4ecdc4';}, function(v){return fmtDist(v);}, function(v){return fmtDist(v);}, {
+      renderHBarSVG(document.getElementById('ov-chartDistrict'), districtArr, function(){return TC('#4ecdc4');}, function(v){return fmtDist(v);}, function(v){return fmtDist(v);}, {
         onClick: function(d){
           ovDistrictSel.value = (ovDistrictSel.value === d.label) ? 'All' : d.label;
           render();
@@ -2239,16 +2439,16 @@ function runUdmDashboard(initialData){
         var s = r[7] || 'Unknown';
         byStatus[s] = (byStatus[s]||0) + r[4];
       });
-      var statusColors = {'Complete':'#4fbf85','Assigned Awaiting site':'#e2833f'};
+      var statusColors = {'Complete':TC('#4fbf85'),'Assigned Awaiting site':TC('#e2833f')};
       var statusArr = Object.keys(byStatus).map(function(s){return {label:s, val:byStatus[s]};})
         .filter(function(d){return d.val>0;}).sort(function(a,b){return b.val-a.val;});
-      renderDonutSVG(document.getElementById('ov-chartStatusUDM'), statusArr, function(d){return statusColors[d.label]||'#4a90d9';}, function(v){return fmtDist(v);});
+      renderDonutSVG(document.getElementById('ov-chartStatusUDM'), statusArr, function(d){return statusColors[d.label]||TC('#4a90d9');}, function(v){return fmtDist(v);});
 
       // Monthly distance (Date Completed On Site (UDM) -> Total TP)
       var months = buildMonthRange(RAW, 11);
       var monthlyVals = fillMonthSeries(rows, 11, function(r){return r[4];}, months);
       var monthItems = months.map(function(mo,i){return {label: monthLabel(mo.y,mo.m).slice(0,3)+(mo.m===1?(' '+mo.y):''), val: monthlyVals[i], y:mo.y, m:mo.m};});
-      renderColumnChart(document.getElementById('ov-chartMonthly'), monthItems, '#4fbf85', function(v){return fmtInt(v);}, {
+      renderColumnChart(document.getElementById('ov-chartMonthly'), monthItems, TC('#4fbf85'), function(v){return fmtInt(v);}, {
         onClick: function(d){
           var ym = ('0'+d.m).slice(-2);
           if(ovYearMonth.isExactlySelected(String(d.y), ym)){ ovYearMonth.setYearMonth(null, null); }
@@ -2262,7 +2462,7 @@ function runUdmDashboard(initialData){
       var projMonths = buildMonthRange(RAW, 11);
       var projCounts = fillMonthSeries(rows, 11, function(){return 1;}, projMonths);
       var projItems = projMonths.map(function(mo,i){return {label: monthLabel(mo.y,mo.m).slice(0,3)+(mo.m===1?(' '+mo.y):''), val: projCounts[i], y:mo.y, m:mo.m};});
-      renderColumnChart(document.getElementById('ov-chartProjMonthly'), projItems, '#8b7cf6', function(v){return fmtInt(v);}, {
+      renderColumnChart(document.getElementById('ov-chartProjMonthly'), projItems, TC('#8b7cf6'), function(v){return fmtInt(v);}, {
         onClick: function(d){
           var ym = ('0'+d.m).slice(-2);
           if(ovYearMonth.isExactlySelected(String(d.y), ym)){ ovYearMonth.setYearMonth(null, null); }
@@ -2397,7 +2597,7 @@ function runUdmDashboard(initialData){
       });
       var distArr = DRAFTER_ORDER.map(function(d){return {label:d, val:(byDrafter[d]?byDrafter[d].dist:0)};})
         .filter(function(d){return d.val>0;}).sort(function(a,b){return b.val-a.val;});
-      renderHBarSVG(document.getElementById('dr-chartDistance'), distArr, function(d){return DRAFTER_COLORS[d.label]||'#888';}, function(v){return fmtDist(v);}, function(v){return fmtDist(v);}, {
+      renderHBarSVG(document.getElementById('dr-chartDistance'), distArr, function(d){return DRAFTER_COLORS[d.label]||TC('#888');}, function(v){return fmtDist(v);}, function(v){return fmtDist(v);}, {
         onClick: function(d){ toggleDrafter(d.label); render(); },
         isSelected: function(d){ return selectedDrafters.has(d.label); }
       });
@@ -2412,7 +2612,7 @@ function runUdmDashboard(initialData){
       });
       var compArr = DRAFTER_ORDER.map(function(d){return {label:d, val:(byDrafter[d]?byDrafter[d].completed:0)};})
         .filter(function(d){return d.val>0;}).sort(function(a,b){return b.val-a.val;});
-      renderHBarSVG(document.getElementById('dr-chartCompleted'), compArr, function(d){return DRAFTER_COLORS[d.label]||'#888';}, function(v){return fmtInt(v);}, function(v){return fmtInt(v);}, {
+      renderHBarSVG(document.getElementById('dr-chartCompleted'), compArr, function(d){return DRAFTER_COLORS[d.label]||TC('#888');}, function(v){return fmtInt(v);}, function(v){return fmtInt(v);}, {
         onClick: function(d){ toggleDrafter(d.label); render(); },
         isSelected: function(d){ return selectedDrafters.has(d.label); }
       });
@@ -2421,7 +2621,7 @@ function runUdmDashboard(initialData){
       var months = buildMonthRange(RAW, 9);
       var monthlyVals = fillMonthSeries(rows, 9, function(r){return r[5];}, months);
       var monthItems = months.map(function(mo,i){return {label: monthLabel(mo.y,mo.m).slice(0,3)+(mo.m===1?(' '+mo.y):''), val: monthlyVals[i], y:mo.y, m:mo.m};});
-      renderColumnChart(document.getElementById('dr-chartMonthly'), monthItems, '#e05c6e', function(v){return fmtInt(v);}, {
+      renderColumnChart(document.getElementById('dr-chartMonthly'), monthItems, TC('#e05c6e'), function(v){return fmtInt(v);}, {
         onClick: function(d){
           var ym = ('0'+d.m).slice(-2);
           if(drCompletedYM.isExactlySelected(String(d.y), ym)){ drCompletedYM.setYearMonth(null, null); }
@@ -2718,5 +2918,6 @@ function runUdmDashboard(initialData){
   document.addEventListener('drop', function(e){ e.preventDefault(); });
 })();
 </script>
+
 </body>
 </html>
