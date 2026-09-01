@@ -864,327 +864,6 @@
   #gate-overlay .gright, #udmGateOverlay .gright{ padding:24px 20px !important; }
 }
 </style>
-
-<style id="mobile-gate-fix">
-#udmGateOverlay .d-mob{display:none}   /* asas, mesti sebelum media query */
-/* =====================================================================
-   Pembetulan mudah alih untuk skrin muat naik
-   1. Tatal: align-items:center + overflow-y:auto menyebabkan bahagian
-      atas kotak keluar dari kawasan boleh tatal. flex-start membaikinya.
-   2. Kawasan selamat: viewport-fit=cover menghantar kandungan ke bawah
-      status bar iPhone, jadi env(safe-area-inset-*) diperlukan.
-   3. Susunan: kotak muat naik dinaikkan ke atas teks penerangan supaya
-      tindakan utama berada dalam skrin pertama.
-   ===================================================================== */
-@media (max-width:880px){
-  #udmGateOverlay{
-    align-items:flex-start;
-    padding-top:max(18px, env(safe-area-inset-top));
-    padding-bottom:max(18px, env(safe-area-inset-bottom));
-    padding-left:max(14px, env(safe-area-inset-left));
-    padding-right:max(14px, env(safe-area-inset-right));
-    overscroll-behavior:contain;
-    -webkit-overflow-scrolling:touch;
-  }
-
-  /* gleft dileburkan supaya anak-anaknya boleh disusun semula satu per satu */
-  #udmGateOverlay .gleft{display:contents}
-  #udmGateOverlay .gbox{
-    display:flex; flex-direction:column;
-    padding:24px 20px calc(24px + env(safe-area-inset-bottom));
-    margin:auto 0;
-  }
-  #udmGateOverlay .gright{padding:0; margin:22px 0 0}
-
-  #udmGateOverlay .gback{order:1}
-  #udmGateOverlay .glogo{order:2}
-  #udmGateOverlay .geyebrow{order:3}
-  #udmGateOverlay h1{order:4; font-size:27px; margin-bottom:0}
-  #udmGateOverlay .gright{order:5}
-  #udmGateOverlay .gdesc{order:6; margin:26px 0 0; font-size:14px}
-  #udmGateOverlay .gfeats{order:7; margin:22px 0 0}
-  #udmGateOverlay .gby{order:8; margin-top:22px}
-  #udmGateOverlay .gnote{order:9}
-
-  /* display:contents menjadikan anak-anak gleft ahli flex, dan stretch lalai
-     meregangkan logo serta butang ke seluruh lebar - kunci saiz asalnya */
-  #udmGateOverlay .glogo{align-self:flex-start; width:auto; height:44px; margin-bottom:20px}
-
-  /* sasaran sentuh 44px mengikut garis panduan iOS dan Android */
-  #udmGateOverlay .gback{min-height:44px; padding:0 14px 0 11px; font-size:10.5px}
-  #udmGateOverlay .gbtn{min-height:44px; flex:1 1 auto; padding:0 16px}
-  #udmGateOverlay .gdrop{padding:30px 18px}
-  #udmGateOverlay .gdrop svg{width:32px; height:32px; margin-bottom:12px}
-  #udmGateOverlay .gdrop .big{font-size:19px}
-
-  /* tiada apa yang boleh di-"drop" pada telefon */
-  #udmGateOverlay .d-desk{display:none}
-  #udmGateOverlay .d-mob{display:inline}
-}
-</style>
-
-<style id="mobile-shell-fix">
-@media (max-width:860px){
-  .sidebar{padding-top:max(14px, env(safe-area-inset-top)) !important}
-  .main{padding-bottom:calc(34px + env(safe-area-inset-bottom))}
-  .back-btn{min-height:44px !important}
-  .update-file-btn{min-height:44px !important}
-}
-</style>
-
-<style id="theme-alt">
-/* Tema "light" dijana daripada tema asal.
-   Sidebar dan skrin gate sengaja dikekalkan gelap. */
-:root[data-theme="light"]{--bg:#F4F6FA; --panel-bg:#FFFFFF; --panel-border:#E1E5ED; --text-light:#171a24; --text-muted:#5c6279; --yellow:#eeb52f; --green:#4ec085; --blue:#448dda; --orange:#e3813a; --pink:#dd4156; --cyan:#4dcec5; --drafter-adam:#d6aa48; --drafter-intan:#a25ac4; --drafter-nabihah:#4f91cf; --drafter-nasuha:#d04d72; --drafter-syafiqa:#61bc82; --shadow: 0 1px 2px rgba(246,246,246,0.3), 0 4px 14px rgba(246,246,246,0.25)}
-:root[data-theme="light"] .drafter-chip{background:#EFF2F7; border:1px solid #D9DEE8}
-:root[data-theme="light"] .drafter-chip:hover{background:#E4E8F0}
-:root[data-theme="light"] .drafter-chip.selected{background:#DCE2EE; border-color:#5764a9}
-:root[data-theme="light"] .side-select{background:#EFF2F7; border:1px solid #D9DEE8}
-:root[data-theme="light"] .topbar h1{color:#0f111a}
-:root[data-theme="light"] .kpi-box:hover{border-color:#B9C0D2}
-:root[data-theme="light"] .kpi-box.clickable:hover{background:#E9EDF5; border-color:#4a5378}
-:root[data-theme="light"] .kpi-box.clickable .kb-label .click-hint{color:#8990a8}
-:root[data-theme="light"] /* KPI detail modal */
-  .modal-overlay{background:rgba(230,233,244,0.72)}
-:root[data-theme="light"] .modal-box{background:#FFFFFF; border:1px solid #DEE3EC; box-shadow:0 24px 60px rgba(246,246,246,0.5)}
-:root[data-theme="light"] .modal-head{border-bottom:1px solid #E1E5ED}
-:root[data-theme="light"] .modal-head h3{color:#10121a}
-:root[data-theme="light"] .modal-close{color:#5c6279}
-:root[data-theme="light"] .modal-close:hover{background:#E4E8F0; color:#0b0b0b}
-:root[data-theme="light"] .modal-body::-webkit-scrollbar-thumb{background:#C3CAD8}
-:root[data-theme="light"] table.modal-table thead th{background:#EFF2F7; color:#2a2e41; border-bottom:1px solid #E1E5ED}
-:root[data-theme="light"] table.modal-table tbody td{border-bottom:1px solid #EFF2F7; color:#262a36}
-:root[data-theme="light"] table.modal-table tbody tr:hover{background:#EDF1F8}
-:root[data-theme="light"] /* Project detail modal */
-  .detail-row{border-bottom:1px solid #c5cbdc}
-:root[data-theme="light"] .detail-row .dl{color:#5c6279}
-:root[data-theme="light"] .detail-row .dv{color:#141720}
-:root[data-theme="light"] .pm-btn{background:#EFF2F7; border:1px solid #D9DEE8}
-:root[data-theme="light"] .pm-btn:hover{background:#E4E8F0; border-color:#4a5378}
-:root[data-theme="light"] .pm-btn-primary{background:#3d3267; border-color:#5c4c9d}
-:root[data-theme="light"] .pm-btn-primary:hover{background:#463976}
-:root[data-theme="light"] .list-table tbody td:first-of-type + td:hover{color:#533ae3}
-:root[data-theme="light"] .panel.zoomable:hover{border-color:#4a5378; background:#ccd1e1}
-:root[data-theme="light"] .panel.zoomable .zoom-hint{color:#868ca4}
-:root[data-theme="light"] .panel h2{color:#141720}
-:root[data-theme="light"] .radio-dot{border:1.5px solid #989898}
-:root[data-theme="light"] footer.note{color:#979db3}
-:root[data-theme="light"] .ms-dropdown-btn{background:#EFF2F7; border:1px solid #D9DEE8}
-:root[data-theme="light"] .ms-dropdown-btn svg{stroke:#5c6279}
-:root[data-theme="light"] .ms-dropdown.open .ms-dropdown-btn{border-color:#5764a9}
-:root[data-theme="light"] .ms-dropdown-panel{background:#EFF2F7; border:1px solid #D9DEE8; box-shadow:0 12px 28px rgba(246,246,246,0.45)}
-:root[data-theme="light"] .ms-dropdown-panel::-webkit-scrollbar-thumb{background:#C3CAD8}
-:root[data-theme="light"] .ms-option{color:#262a36}
-:root[data-theme="light"] .ms-option:hover{background:#E4E8F0}
-:root[data-theme="light"] .ms-option.all-option{border-bottom:1px solid #DEE3EC}
-:root[data-theme="light"] .list-search input{background:#EFF2F7; border:1px solid #D9DEE8}
-:root[data-theme="light"] .list-search input:focus{outline:1.5px solid #5764a9}
-:root[data-theme="light"] .list-batch-btn{background:#EFF2F7; border:1px solid #D9DEE8}
-:root[data-theme="light"] .list-batch-btn:hover{background:#E4E8F0; border-color:#4a5378}
-:root[data-theme="light"] .list-table-wrap::-webkit-scrollbar-thumb{background:#C3CAD8}
-:root[data-theme="light"] table.list-table thead th{background:#EFF2F7; color:#2a2e41}
-:root[data-theme="light"] table.list-table thead th:hover{color:#0b0b0b}
-:root[data-theme="light"] table.list-table tbody td{border-bottom:1px solid #EFF2F7; color:#262a36}
-:root[data-theme="light"] table.list-table tbody tr:hover{background:#EDF1F8}
-:root[data-theme="light"] .status-pill.complete{background:rgba(78,192,133,0.15); color:#4ec085}
-:root[data-theme="light"] .status-pill.pending{background:rgba(227,129,58,0.15); color:#e3813a}
-:root[data-theme="light"] .status-pill.other{background:rgba(96,92,115,0.15); color:#605c73}
-:root[data-theme="light"] /* Upload gate */
-  .gate-overlay{background:radial-gradient(circle at 30% 0%, #c5cadf 0%, var(--bg) 55%)}
-:root[data-theme="light"] .gate-card{box-shadow:0 24px 60px rgba(246,246,246,0.5)}
-:root[data-theme="light"] .gate-card h2{color:#10121a}
-:root[data-theme="light"] .gate-btn-primary{background:linear-gradient(135deg,#5645d9,#5a4ec5); color:#0b0b0b}
-:root[data-theme="light"] .gate-btn-secondary{background:#EFF2F7; border:1px solid #D9DEE8}
-:root[data-theme="light"] .gate-divider{color:#8990a8}
-:root[data-theme="light"] .gate-divider::before, :root[data-theme="light"] .gate-divider::after{background:#E1E5ED}
-:root[data-theme="light"] .gate-status{color:#5c6279}
-:root[data-theme="light"] .gate-error{background:rgba(221,65,86,0.12); border:1px solid rgba(221,65,86,0.35); color:#e9354d}
-:root[data-theme="light"] .gate-back-link:hover{background:#EFF2F7}
-:root[data-theme="light"] .gate-meta{border-top:1px solid #E1E5ED; color:#8990a8}
-:root[data-theme="light"] .udm-change-file-btn{border:1px solid #D9DEE8}
-:root[data-theme="light"] .udm-change-file-btn:hover{background:#EFF2F7}
-</style>
-
-<style id="theme-toggle-css">
-/* butang togol tema - gaya sama seperti cpc */
-.theme-btn{
-  display:inline-flex; align-items:center; justify-content:center;
-  width:40px; height:40px; min-height:40px; padding:0; flex:0 0 auto;
-  border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.02);
-  color:#8192A6; cursor:pointer; border-radius:0;
-  transition:color .15s, border-color .15s, background .15s;
-}
-.theme-btn svg{width:19px;height:19px;display:block;stroke:currentColor;fill:none}
-.theme-btn:hover{color:#33A754; border-color:#33A754; background:rgba(51,167,84,.08)}
-.theme-btn:focus-visible{outline:1px solid #E0A34A; outline-offset:2px}
-.sidebar .theme-btn{width:100%; height:auto; min-height:44px; margin-top:10px; gap:8px;
-  font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
-  font-size:10px; letter-spacing:.18em; text-transform:uppercase}
-@media (max-width:860px){ .sidebar .theme-btn{min-height:44px} }
-</style>
-
-<style id="gate-theme-light">
-/* Palet terang untuk skrin gate. Gate menggunakan set --g-* tersendiri,
-   jadi tanpa ini togol tema tidak mengubah apa-apa di skrin pertama. */
-:root[data-theme="light"] #udmGateOverlay{
-  --g-bg:#EEF1F5;
-  --g-surface:#FFFFFF;
-  --g-surface2:#F5F7FA;
-  --g-ink:#16202B;
-  --g-dim:#4A5A6B;
-  --g-faint:#63748A;
-  --g-line:rgba(16,27,41,.10);
-  --g-line2:rgba(16,27,41,.18);
-  --g-green:#1F8A44;
-  --g-amber:#B87A21;
-  --g-crit:#C4453A;
-}
-/* logo: versi gelap untuk latar cerah, dan sebaliknya */
-:root[data-theme="light"] #udmGateOverlay .glogo{filter:none}
-#udmGateOverlay .gbox{position:relative}
-#udmGateOverlay .gate-theme-btn{
-  position:absolute; top:14px; right:14px; z-index:3;
-  display:inline-flex; align-items:center; justify-content:center;
-  width:44px; height:44px; padding:0;
-  border:1px solid var(--g-line2); background:transparent;
-  color:var(--g-faint); cursor:pointer; border-radius:0;
-  transition:color .15s, border-color .15s, background .15s;
-}
-#udmGateOverlay .gate-theme-btn svg{width:19px;height:19px;stroke:currentColor;fill:none;display:block}
-#udmGateOverlay .gate-theme-btn:hover{color:var(--g-green); border-color:var(--g-green)}
-#udmGateOverlay .gate-theme-btn:focus-visible{outline:1px solid var(--g-amber); outline-offset:2px}
-@media (max-width:880px){
-  #udmGateOverlay .gate-theme-btn{
-    position:static; order:0; align-self:flex-end; margin-bottom:6px;
-  }
-}
-</style>
-<script id="theme-engine">
-(function(){
-  /* ---- peta warna carta: nilai asal -> nilai tema lawan ----------------
-     Carta dilukis dalam JavaScript dengan warna tetap, jadi ia tidak
-     mengikut CSS. TC() menterjemah warna itu mengikut tema semasa. ---- */
-  var MAP = {"#4a5066": "#979db3", "#d97490": "#d04d72", "#eef0f4": "#13171e", "#d9b25c": "#d6aa48", "#c9a0dc": "#a25ac4", "#666": "#989898", "#aeb3c0": "#444957", "#e05c6e": "#dd4156", "#9aa0b0": "#53596a", "#d8dbe2": "#242831", "#fff": "#0b0b0b", "#74a8d8": "#4f91cf", "#eceef3": "#141720", "#1f2430": "#c8cedb", "#8b93a8": "#5a6278", "#e7f6ec": "#0f2717", "#888": "#797979", "#c7cadb": "#2a2e41", "#dfe1e8": "#1f212b", "#2f9e58": "#2e9f58", "#171b2c": "#cbd0e4", "#6b7280": "#808694", "#f2f3f6": "#12141a", "#fafbfc": "#0b0f13", "#7d8399": "#686e84", "#e6e8ee": "#191c25", "#c9522f": "#cb512d", "#fdece4": "#2e1103", "#4ecdc4": "#4dcec5", "#8a90a6": "#5c6279", "#6b7288": "#787f95", "#e2833f": "#e3813a", "#4fbf85": "#4ec085", "#8b7cf6": "#472fee", "#4a90d9": "#448dda", "#eceef2": "#15191f", "#ffffff": "#0b0b0b", "#5b6178": "#868ca4", "#f2f3f7": "#10121a", "#262c3c": "#bdc3d5", "#7bc696": "#61bc82", "#1f9d55": "#1e9e55"};
-  var NEW_THEME = "light", DEFAULT_THEME = "dark";
-
-  window.TC = function(c){
-    if(document.documentElement.getAttribute('data-theme') === NEW_THEME){
-      return MAP[String(c).toLowerCase()] || c;
-    }
-    return c;
-  };
-
-  var MOON = '<svg viewBox="0 0 24 24" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.3A8.5 8.5 0 1 1 9.7 3.5a6.8 6.8 0 0 0 10.8 10.8z"/></svg>';
-  var SUN  = '<svg viewBox="0 0 24 24" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.4M12 19.2v2.4M4.2 12H1.8M22.2 12h-2.4M6.5 6.5 4.8 4.8M19.2 19.2l-1.7-1.7M17.5 6.5l1.7-1.7M4.8 19.2l1.7-1.7"/></svg>';
-
-  function apply(t, quiet){
-    document.documentElement.setAttribute('data-theme', t);
-    try{ localStorage.setItem('ui-theme', t); }catch(e){}
-
-    document.querySelectorAll('meta[name="theme-color"]').forEach(function(m){ m.remove(); });
-    var meta = document.createElement('meta');
-    meta.setAttribute('name','theme-color');
-    meta.setAttribute('content', t === 'dark' ? '#10131c' : '#dadeea');
-    document.head.appendChild(meta);
-
-    var msg = (t !== 'dark') ? 'Tukar ke tema gelap' : 'Tukar ke tema terang';
-    document.querySelectorAll('.theme-btn').forEach(function(btn){
-      btn.innerHTML = (t === 'dark' ? SUN : MOON);   /* ikon sahaja, tiada label */
-      btn.setAttribute('title', msg);
-      btn.setAttribute('aria-label', msg);
-    });
-    /* butang yang sama pada skrin gate, tanpa label teks */
-    var gbtn = document.getElementById('gate-theme-toggle');
-    if(gbtn){
-      gbtn.innerHTML = (t === 'dark' ? SUN : MOON);
-      var gmsg = (t !== 'dark') ? 'Tukar ke tema gelap' : 'Tukar ke tema terang';
-      gbtn.setAttribute('title', gmsg);
-      gbtn.setAttribute('aria-label', gmsg);
-    }
-    if(!quiet) redraw();
-  }
-
-  /* carta dilukis semula supaya warnanya ikut tema baharu */
-  function redraw(){
-    /* fungsi lukis berada dalam closure, jadi ia mendaftar sendiri */
-    (window.__redraws || []).forEach(function(fn){ try{ fn(); }catch(e){} });
-    if(typeof render === 'function'){ try{ render(); }catch(e){} }
-  }
-
-  function init(){
-    var saved = null;
-    try{ saved = localStorage.getItem('ui-theme'); }catch(e){}
-    apply(saved === 'dark' || saved === 'light' ? saved : DEFAULT_THEME, true);
-    document.querySelectorAll('.theme-btn, #gate-theme-toggle').forEach(function(b){
-      b.addEventListener('click', function(){
-        var cur = document.documentElement.getAttribute('data-theme');
-        apply(cur === 'dark' ? 'light' : 'dark');
-      });
-    });
-  }
-  if(document.readyState === 'loading')
-    document.addEventListener('DOMContentLoaded', init);
-  else init();
-})();
-</script>
-
-<style id="theme-btn-topright">
-/* togol tema: ikon sahaja, hujung kanan topbar */
-.theme-btn{
-  display:inline-flex; align-items:center; justify-content:center;
-  width:40px; height:40px; min-height:40px; padding:0; flex:0 0 auto;
-  margin-left:auto;
-  border:1px solid var(--panel-border, rgba(255,255,255,.16));
-  background:transparent; color:var(--text-muted, #8192A6);
-  cursor:pointer; border-radius:8px;
-  transition:color .15s, border-color .15s, background .15s;
-}
-.theme-btn svg{width:19px;height:19px;display:block;stroke:currentColor;fill:none}
-.theme-btn:hover{color:#33A754; border-color:#33A754; background:rgba(51,167,84,.08)}
-.theme-btn:focus-visible{outline:1px solid #E0A34A; outline-offset:2px}
-.theme-btn .tt-label{display:none}   /* tiada teks, ikon sahaja */
-@media (max-width:860px){
-  .theme-btn{width:44px; height:44px; min-height:44px}
-}
-</style>
-
-<style id="theme-contrast-fix">
-/* Butang tab dan sempadannya kekal gelap kerana warnanya ditulis tetap.
-   Beri versi terang supaya ia tidak jadi blok hitam atas latar cerah. */
-:root[data-theme="light"] .side-btn{
-  border:1px solid #CBD2E0; color:#1B1F2A; background:#FFFFFF;
-}
-:root[data-theme="light"] .side-btn:hover{ background:#F1F4F9; border-color:#AEB7C9 }
-:root[data-theme="light"] .side-btn.active{
-  background:#E7ECF6; border-color:#7C88A8; color:#141824; font-weight:600;
-}
-:root[data-theme="light"] .list-table-wrap::-webkit-scrollbar-thumb{ background:#C3CAD8 }
-
-/* keadaan hover yang latarnya ditulis tetap gelap */
-:root[data-theme="light"] .back-btn:hover{ background:#EFF2F7; color:#1B1F2A }
-:root[data-theme="light"] .gate-back-link:hover{ background:#EFF2F7; color:#1B1F2A }
-
-/* Butang Print berlatar ungu gelap dalam kedua-dua tema, jadi teks dan
-   ikonnya mesti kekal cerah walaupun --text-light bertukar jadi gelap. */
-:root[data-theme="light"] .pm-btn-primary,
-:root[data-theme="light"] .pm-btn-primary svg{ color:#FFFFFF; stroke:#FFFFFF }
-:root[data-theme="light"] .pm-btn-primary:hover{ background:#463a75 }
-</style>
-
-<style id="theme-btn-order">
-/* Togol tema: kekal dalam kotak topbar, tetapi ditolak ke hujung kanan
-   sebaris dengan penapis. order:99 menjadikannya elemen terakhir tanpa
-   perlu mengubah susunan HTML. */
-.topbar{ flex-wrap:nowrap; align-items:center }
-.topbar-theme{ order:99; margin-left:14px; flex:0 0 auto }
-.topbar .filters{ margin-left:auto }
-
-@media (max-width:1100px){
-  .topbar{ flex-wrap:wrap }
-  .topbar .filters{ margin-left:0 }
-  .topbar-theme{ margin-left:auto }
-}
-</style>
 </head>
 <body>
 
@@ -1200,7 +879,6 @@
 
   <div class="gate-overlay" id="udmGateOverlay" style="display:none;">
   <div class="gbox">
-    <button type="button" class="gate-theme-btn" id="gate-theme-toggle" aria-label="Tukar tema"></button>
     <div class="gleft">
       <a class="gback" href="index.html">
         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
@@ -1210,19 +888,19 @@
       <div class="geyebrow">UDM Project Performance</div>
       <h1>Drafter output<br><em>and route progress</em></h1>
       <p class="gdesc">Upload the latest tracker file and every KPI, chart and filter is rebuilt from it &mdash; or continue with the data already loaded.</p>
-      <ul class="gfeats"><li><span class="gn">01</span><span><b>Runs entirely offline.</b> The file is read inside this browser. Nothing is sent anywhere.</span></li><li><span class="gn">02</span><span><b>Reads your existing format.</b> Tracker_Report_UDM_Project.xlsx, straight from Excel.</span></li><li><span class="gn">03</span><span><b>Built for review meetings.</b> Drafter progress, districts and route distance in one view.</span></li></ul>
+      <ul class="gfeats"><li><span class="gn">01</span><span><b>Runs entirely offline.</b> The file is read inside this browser. Nothing is sent anywhere.</span></li><li><span class="gn">02</span><span><b>Reads your existing format.</b> Tracker_Report_UDM_Project_V1.xlsx, straight from Excel.</span></li><li><span class="gn">03</span><span><b>Built for review meetings.</b> Drafter progress, districts and route distance in one view.</span></li></ul>
       <div class="gby"><span class="gby-lbl">Prepared by</span><span class="gby-name">Zufri Adli</span></div>
     </div>
     <div class="gright">
       <div class="gdrop" id="udmDropZone">
         <svg viewBox="0 0 48 48" stroke-linecap="square"><path d="M24 31V9m0 0l-8 8m8-8l8 8"/><path d="M9 29v10h30V29"/></svg>
-        <div class="big"><span class="d-desk">Drop your Excel file here</span><span class="d-mob">Tap to choose your Excel file</span></div>
+        <div class="big">Drop your Excel file here</div>
         <div class="small">or click to browse &middot; .xlsx</div>
       </div>
       <input type="file" id="udmGateFileInput" accept=".xlsx,.xls" style="display:none;">
       <div class="gacts"><button type="button" class="gbtn" id="udmGateChooseFile">Browse file</button><button type="button" class="gbtn" id="udmGateUseExisting">Use existing data</button></div>
       <div class="gstatus" id="udmGateStatus"></div><div class="gerror" id="udmGateError"></div>
-      <div class="gnote">Data source: Tracker_Report_UDM_Project.xlsx</div>
+      <div class="gnote">Data source: Tracker_Report_UDM_Project_V1.xlsx</div>
     </div>
   </div>
   </div>
@@ -1295,7 +973,6 @@
           <div class="tk-card"><div class="tk-label">Total Distance</div><div class="tk-value" id="ov-sumTotal">0</div></div>
           <div class="tk-card"><div class="tk-label">Completion %</div><div class="tk-value" id="ov-completion">0%</div></div>
           <div class="tk-card"><div class="tk-label">Last Updated</div><div class="tk-value" id="ov-lastUpdated" style="font-size:14px;">-</div></div>
-        <button type="button" class="theme-btn topbar-theme" aria-label="Tukar tema"></button>
         </div>
       </div>
 
@@ -1358,7 +1035,7 @@
         </div>
       </div>
 
-      <footer class="note">Data Source: Tracker_Report_UDM_Project.xlsx Interactive Dashboard | Powered by Zufri Adli.</footer>
+      <footer class="note">Data Source: Tracker_Report_UDM_Project_V1.xlsx Interactive Dashboard | Powered by Zufri Adli.</footer>
     </div>
 
     <!-- ===================== DRAFTER PAGE ===================== -->
@@ -1369,7 +1046,6 @@
           <div class="tk-card"><div class="tk-label">Total Distance</div><div class="tk-value" id="dr-sumTotal">0</div></div>
           <div class="tk-card"><div class="tk-label">Completion %</div><div class="tk-value" id="dr-completion">0%</div></div>
           <div class="tk-card"><div class="tk-label">Last Updated</div><div class="tk-value" id="dr-lastUpdated" style="font-size:14px;">-</div></div>
-        <button type="button" class="theme-btn topbar-theme" aria-label="Tukar tema"></button>
         </div>
       </div>
 
@@ -1433,7 +1109,7 @@
         </div>
       </div>
 
-      <footer class="note">Data Source: Tracker_Report_UDM_Project.xlsx Interactive Dashboard | Powered by Zufri Adli.</footer>
+      <footer class="note">Data Source: Tracker_Report_UDM_Project_V1.xlsx Interactive Dashboard | Powered by Zufri Adli.</footer>
     </div>
 
   </main>
@@ -1486,7 +1162,7 @@
     </div>
   </div>
 
-<script id="raw-data" type="application/json">[["Syafiqa","BALING","Privasat","JKR",2617,2500,"Complete","Complete","2025-01-16","2025-01-28","SEKOLAH KEBANGSAAN ULU TAWAR","2025-01-04"],["Nasuha","BALING","Privasat","JKR",810,1171,"Complete","Complete","2025-01-09","2025-01-21","SEKOLAH JENIS KEBANGSAAN (TAMIL) LDG PELAM","2025-01-04"],["Syafiqa","BALING","Privasat","JKR",730,950,"Complete","Complete","2025-01-12","2025-01-29","SEKOLAH KEBANGSAAN MALAU","2025-01-04"],["Nasuha","BALING","Privasat","JKR",520,507,"Complete","Complete","2025-01-13","2025-01-21","SEKOLAH JENIS KEBANGSAAN (CINA) PENG MIN","2025-01-05"],["Nasuha","BALING","Privasat","JKR",620,612,"Complete","Complete","2025-01-19","2025-01-21","SEKOLAH KEBANGSAAN BINJUL","2025-01-05"],["Syafiqa","BALING","Privasat","JKR",769,769,"Complete","Complete","2025-01-12","2025-01-31","SEKOLAH KEBANGSAAN BINJUL DALAM","2025-01-05"],["Nasuha","BALING","Privasat","MAJLIS",1327,1323,"Complete","Complete","2025-01-19","2025-02-07","SEKOLAH KEBANGSAAN KAMPONG KEDA","2025-02-01"],["Syafiqa","BALING","Privasat","JKR",2123,2123,"Complete","Complete","2025-01-16","2025-01-28","SEKOLAH KEBANGSAAN TELOK TEDURI","2025-01-07"],["Syafiqa","BALING","Privasat","JKR",2652,2650,"Complete","Complete","2025-01-16","2025-02-07","SEKOLAH KEBANGSAAN RAMBONG PULAI","2025-01-14"],["Nasuha","PADANG TERAP","Privasat","JKR",866,833,"Complete","Complete","2025-01-19","2025-01-29","SEKOLAH KEBANGSAAN KAMPONG BELUKAR","2025-01-14"],["Nasuha","PADANG TERAP","Privasat","JKR",5170,5083,"Complete","Complete","2025-01-26","2025-02-03","SEKOLAH KEBANGSAAN LAMDIN","2025-01-14"],["Nasuha","PENDANG","Privasat","JKR/MAJLIS",534,528,"Complete","Complete","2025-01-20","2025-02-07","SEKOLAH KEBANGSAAN BUKIT JENUN","2025-01-20"],["Nasuha","PENDANG","Privasat","JKR",345,333,"Complete","Complete","2025-01-20","2025-01-26","SEKOLAH KEBANGSAAN BUKIT GENTING","2025-01-20"],["Nasuha","PENDANG","Privasat","JKR",713,635,"Complete","Complete","2025-01-20","2025-01-26","SEKOLAH JENIS KEBANGSAAN (TAMIL) LADANG BUKIT JENUN","2025-01-20"],["Nasuha","PENDANG","Privasat","JKR/MAJLIS",1738,1649,"Complete","Complete","2025-01-20","2025-02-07","SEKOLAH JENIS KEBANGSAAN (CINA) JUNUN","2025-01-20"],["Nabihah","YAN","Privasat","JKR",2167,2145,"Complete","Complete","2025-02-02","2025-02-09","SEKOLAH KEBANGSAAN TOK MAT SALLEH","2025-01-23"],["Syafiqa","YAN","Privasat","JKR",2461,2450,"Complete","Complete","2025-02-02","2025-02-12","SEKOLAH KEBANGSAAN DULANG","2025-01-23"],["Nabihah","YAN","Privasat","JKR/MAJLIS",1181,1180,"Complete","Complete","2025-02-02","2025-02-19","SEKOLAH JENIS KEBANGSAAN (CINA) CHUNG HWA","2025-01-23"],["Syafiqa","YAN","Privasat","JKR",81,85,"Complete","Complete","2025-02-02","2025-02-13","SEKOLAH KEBANGSAAN ULU SEDAKA","2025-01-23"],["Nabihah","LANGKAWI","Maxis","JKR/MAJLIS",895,798,"Complete","Complete","2025-02-10","2025-02-25","FTTH TAMAN KENARI BATU ASAH - PPR KUAH LKAWI (LK15)","2025-02-03"],["Nabihah","LANGKAWI","Maxis","JKR/MAJLIS",1110,1007,"Complete","Complete","2025-02-10","2025-02-27","FTTH TAMAN SENTOSA LANGKAWI (LK10)","2025-02-04"],["Syafiqa","LANGKAWI","Maxis","MAJLIS",931,980,"Complete","Complete","2025-02-10","2025-02-19","FTTH TAMAN MEDAN BERJAYA LANGKAWI (LK07)","2025-02-04"],["Nabihah","LANGKAWI","Maxis","MAJLIS",1095,986,"Complete","Complete","2025-02-10","2025-03-04","FTTH TAMAN SIMFONI LANGKAWI (LK08)","2025-02-06"],["Intan","LANGKAWI","Maxis","MAJLIS",695,709,"Complete","Complete","2025-07-02","2025-07-08","TAMAN INTAN (LK12)","2025-02-06"],["Syafiqa","LANGKAWI","TM","MAJLIS",184,200,"Complete","Complete","2025-02-10","2025-02-16","SRR FTTH (ADD) PMT_C006 CHENANG VILLA","2025-02-07"],["Syafiqa","PADANG TERAP","Privasat","JKR",1193,1180,"Complete","Complete","2025-02-19","2025-03-04","SEKOLAH KEBANGSAAN PADANG SANAI","2025-02-13"],["Syafiqa","PADANG TERAP","Privasat","JKR",3174,3200,"Complete","Complete","2025-02-19","2025-03-19","SEKOLAH KEBANGSAAN PADANG TERAP","2025-02-10"],["Nasuha","PADANG TERAP","Privasat","JKR",1426,1428,"Complete","Complete","2025-02-19","2025-03-05","SEKOLAH KEBANGSAAN PERIK","2025-02-16"],["Nasuha","PADANG TERAP","Privasat","JKR",843,830,"Complete","Complete","2025-02-19","2025-03-05","SEKOLAH KEBANGSAAN KUBANG PALAS","2025-02-13"],["Nabihah","PADANG TERAP","Privasat","JKR",2013,2002,"Complete","Complete","2025-02-27","2025-03-10","SEKOLAH KEBANGSAAN DATIN FATIMAH","2025-02-18"],["Nabihah","PADANG TERAP","Privasat","JKR",2756,2748,"Complete","Complete","2025-02-27","2025-03-16","SEKOLAH KEBANGSAAN PEDU","2025-02-23"],["Syafiqa","PADANG TERAP","Privasat","JKR",5164,5070,"Complete","Complete","2025-03-06","2025-03-26","SEKOLAH KEBANGSAAN TANDOP BESAR","2025-02-25"],["Syafiqa","PADANG TERAP","Privasat","JKR",2344,2440,"Complete","Complete","2025-03-18","2025-03-28","SEKOLAH KEBANGSAAN PANGLIMA AWANG","2025-02-25"],["Nabihah","PADANG TERAP","Privasat","JKR",2390,2370,"Complete","Complete","2025-03-18","2025-03-27","SEKOLAH KEBANGSAAN SERI BAKTI","2025-03-11"],["Nabihah","PADANG TERAP","Privasat","JKR",6158,6133,"Complete","Complete","2025-04-09","2025-04-28","SEKOLAH KEBANGSAAN KURONG HITAM","2025-03-20"],["Nabihah","PADANG TERAP","Privasat","JKR",4278,4286,"Complete","Complete","2025-04-09","2025-05-13","SEKOLAH KEBANGSAAN TOH PUAN SHARIFAH HANIFAH","2025-03-13"],["Syafiqa","PADANG TERAP","Privasat","JKR",573,565,"Complete","Complete","2025-04-07","2025-04-21","SEKOLAH KEBANGSAAN BUKIT TEMBAGA","2025-03-05"],["Syafiqa","PADANG TERAP","Privasat","JKR/MAJLIS",1988,1986,"Complete","Complete","2025-04-16","2025-04-29","SEKOLAH KEBANGSAAN NAKA","2025-03-05"],["Syafiqa","POKOK SENA","Privasat","JKR",571,575,"Complete","Complete","2025-04-07","2025-04-13","SEKOLAH KEBANGSAAN KAMPONG BUKIT","2025-03-05"],["Syafiqa","POKOK SENA","Privasat","JKR",2251,2247,"Complete","Complete","2025-04-30","2025-05-08","SEKOLAH KEBANGSAAN BUKIT PAYONG","2025-04-06"],["Syafiqa","POKOK SENA","Privasat","JKR",1978,1977,"Complete","Complete","2025-05-08","2025-05-21","SEKOLAH KEBANGSAAN BUKIT PAK KIAU","2025-03-09"],["Syafiqa","POKOK SENA","Privasat","JKR/MAJLIS",1584,1567,"Complete","Complete","2025-04-30","2025-05-16","SEKOLAH JENIS KEBANGSAAN (CINA) TONG YUH","2025-04-06"],["Nabihah","KUALA MUDA","TIME","MAJLIS",542,2747,"Complete","Complete","2025-03-24","2025-04-08","SDU RESIDENSI PRIMA PUTERI JAYA 2","2025-03-24"],["Nabihah","KUBANG PASU","Privasat","JKR/MAJLIS",825,837,"Complete","Complete","2025-05-08","2025-07-02","SEKOLAH KEBANGSAAN KODIANG","2025-04-10"],["Nasuha","KUBANG PASU","Privasat","JKR/MAJLIS",1757,1787,"Complete","Complete","2025-05-08","2025-05-19","SEKOLAH JENIS KEBANGSAAN (CINA) CHOONG HWA","2025-04-08"],["Nabihah","KUBANG PASU","Privasat","JKR/MAJLIS",1280,1307,"Complete","Complete","2025-05-08","2025-07-01","SEKOLAH KEBANGSAAN TUNKU BENDAHARA","2025-04-08"],["Syafiqa","KUALA MUDA","Privasat","JKR",2141,2057,"Complete","Complete","2025-05-08","2025-05-18","SEKOLAH KEBANGSAAN KAMPUNG KUALA SIN","2025-04-10"],["Nasuha","BALING","Privasat","JKR/MAJLIS",4255,4313,"Complete","Complete","2025-05-08","2025-05-21","SEKOLAH KEBANGSAAN KUALA KETIL","2025-04-14"],["Nabihah","BALING","Privasat","JKR",1060,1105,"Complete","Complete","2025-05-08","2025-07-15","SEKOLAH JENIS KEBANGSAAN (TAMIL) LDG BATU PEKAKA","2025-04-15"],["Nabihah","BALING","Privasat","JKR/MAJLIS",998,1287,"Complete","Complete","2025-05-08","2025-06-16","SEKOLAH MENENGAH KEBANGSAAN TANJONG PUTERI","2025-04-16"],["Nabihah","BALING","Privasat","JKR/MAJLIS",375,380,"Complete","Complete","2025-05-08","2025-05-25","SEKOLAH JENIS KEBANGSAAN (CINA) KUALA KETIL","2025-04-16"],["Nabihah","BALING","Privasat","JKR/MAJLIS",1090,1167,"Complete","Complete","2025-05-08","2025-06-03","SEKOLAH JENIS KEBANGSAAN (TAMIL) LDG KIM SENG","2025-04-16"],["Nasuha","BALING","Privasat","JKR",2970,2900,"Complete","Complete","2025-05-08","2025-05-19","SEKOLAH KEBANGSAAN MOHD ARIFF ABDULLAH","2025-04-16"],["Syafiqa","KUALA MUDA","Privasat","MAJLIS",1618,1527,"Complete","Complete","2025-05-08","2025-05-24","SEKOLAH JENIS KEBANGSAAN (CINA) FUH SUN","2025-04-28"],["Syafiqa","KUALA MUDA","Privasat","JKR/MAJLIS",1799,1833,"Complete","Complete","2025-05-08","2025-05-28","SEKOLAH JENIS KEBANGSAAN (CINA) JENIANG","2025-04-29"],["Nabihah","KUALA MUDA","Privasat","JKR/MAJLIS",964,934,"Complete","Complete","2025-05-08","2025-05-27","SEKOLAH KEBANGSAAN JENIANG (PUSAT)","2025-04-29"],["Syafiqa","KUALA MUDA","Privasat","JKR/MAJLIS",2308,2351,"Complete","Complete","2025-05-08","2025-06-03","SEKOLAH MENENGAH KEBANGSAAN BUKIT SELAMBAU","2025-04-30"],["Nasuha","BALING","TM","JKR",712,662,"Complete","Complete","2025-05-06","2025-05-08","USP MC2021 FTTH (BL) KAMPUNG TERABAK","2025-05-05"],["Nasuha","BALING","TM","JKR",1780,2904,"Complete","Complete","2025-05-07","2025-05-17","USP MC2021 FTTH (KUP) KAMPUNG PAJAK HAJI YUNUS","2025-05-07"],["Nasuha","BALING","TM","JKR",1100,1280,"Complete","Complete","2025-05-07","2025-05-18","USP MC2021 FTTH (BL) KAMPUNG LUBOK BADAK","2025-05-07"],["Nasuha","BALING","TM","JKR",1460,1418,"Complete","Complete","2025-05-27","2025-06-02","USP MC2021 FTTH (BL) KAMPUNG TANJUNG PARI","2025-05-19"],["Nasuha","BALING","TM","JKR",407,378,"Complete","Complete","2025-05-27","2025-06-01","USP MC2021 FTTH PDG C022 KAMPUNG PADANG DURIAN","2025-05-19"],["Nabihah","KUALA MUDA","TIME","JKR/MAJLIS",13726,13547,"Complete","Complete","2025-07-08","2025-07-31","SDU TAMAN RIA JAYA FASA 2","2025-05-27"],["Nasuha","PADANG TERAP","CELCOMDIGI","JKR/MAJLIS",350,309,"Complete","Complete","2025-06-11","2025-07-07","K00875 - KG BENDANG PADANG TERAP","2025-05-27"],["Nasuha","PADANG TERAP","CELCOMDIGI","JKR",80,74,"Complete","Complete","2025-06-11","2025-07-06","K00467 - KOLEJ MARA KUALA NERANG","2025-05-27"],["Syafiqa","PADANG TERAP","CELCOMDIGI","JKR",150,141,"Complete","Complete","2025-06-11","2025-06-21","K00121 - PDG TERAP","2025-05-27"],["Syafiqa","POKOK SENA","CELCOMDIGI","JKR",885,890,"Complete","Complete","2025-06-11","2025-06-24","K00326 - KG BUKIT","2025-05-27"],["Syafiqa","KUALA MUDA","CELCOMDIGI","JKR",110,108,"Complete","Complete","2025-06-11","2025-06-25","K00432 - JLN JENIANG","2025-05-28"],["Nasuha","BALING","CELCOMDIGI","JKR",3450,3428,"Complete","Complete","2025-07-10","2025-07-17","K00023 - CB SERAKO","2025-05-29"],["Nasuha","BALING","CELCOMDIGI","JKR",30,30,"Complete","Complete","2025-06-11","2025-07-06","K00689 - CHAROK BEMBAN","2025-05-28"],["Intan","KULIM","CELCOMDIGI","JKR",80,80,"Complete","Complete","2025-07-13","2025-07-15","K00796 - CB KG SG SALEH","2025-05-29"],["Syafiqa","PENDANG","CELCOMDIGI","JKR",9340,9256,"Complete","Complete","2025-07-10","2025-07-27","K00694 - KUBUR PANJANG & K00396 - KG CINA, PENDANG","2025-06-11"],["Syafiqa","SIK","PROTIMUR","MAJLIS",96,224,"Complete","Complete","2025-06-11","2025-06-12","BUKIT BADAK BANDAR SIK","2025-06-10"],["Nabihah","KUBANG PASU","CELCOMDIGI","JKR",2930,2888,"Complete","Complete","2025-10-19","2025-10-29","K01058 - KG PADANG PANJANG","2025-06-12"],["Nasuha","KUBANG PASU","CELCOMDIGI","JKR",4059,3974,"Complete","Complete","2025-10-21","2025-10-27","K01057 - KG SG KECIK","2025-06-17"],["Syafiqa","BALING","TM","JKR",600,621,"Complete","Complete","2025-06-26","2025-07-01","USP MC2021 FTTH KUP_C019M KAMPUNG MERBAU","2025-06-18"],["Syafiqa","BALING","TM","JKR",680,731,"Complete","Complete","2025-06-26","2025-07-03","USP MC2021 FTTH (BL) KAMPUNG WENG","2025-06-18"],["Syafiqa","SIK","TM","JKR",1700,2268,"Complete","Complete","2025-06-26","2025-07-21","USP MC2021 FTTH (JG) KAMPUNG BATU 8","2025-06-19"],["Nasuha","SIK","TM","JKR",350,432,"Complete","Complete","2025-06-26","2025-07-03","USP MC2021 FTTH (JG) KAMPUNG BETONG","2025-06-24"],["Nasuha","SIK","TM","JKR",400,469,"Complete","Complete","2025-06-26","2025-07-03","USP MC2021 FTTH (JG) KAMPUNG BEGIA","2025-06-24"],["Syafiqa","SIK","TM","JKR",1000,1158,"Complete","Complete","2025-06-26","2025-07-17","USP MC2021 FTTH (JG_C006) KAMPUNG DUSUN PIT","2025-06-24"],["Nasuha","KUALA MUDA","TM","MAJLIS",500,484,"Complete","Complete","2025-06-26","2025-07-04","SRR FTTH (ADD) SP_C042 BDR SERI ASTANA VILLA NATURA FASA 1","2025-06-25"],["Nasuha","KUALA MUDA","CELCOMDIGI","JKR",170,169,"Complete","Complete","2025-07-30","2025-08-13","BUKIT TOK ACHEH - PAYA KELADI","2025-06-25"],["Nasuha","PENDANG","TM","MAJLIS",770,775,"Complete","Complete","2025-06-26","2025-07-04","SRR FTTH ADD SAP_C001 TAMAN BAYAN JALAN TOKAI SIMPANG EMPAT","2025-06-26"],["Nabihah","BALING","TM","JKR",2460,2472,"Complete","Complete","2025-07-21","2025-08-28","USP MC2021 FTTH (BL) KAMPUNG KETENGA","2025-07-01"],["Intan","KULIM","TM","JKR",1140,1148,"Complete","Complete","2025-07-21","2025-07-28","NRP FTTH KMH C_026 MNET SOLUTIONS PADANG MEHA","2025-07-02"],["Intan","KULIM","TIME","MAJLIS",2595,2447,"Complete","Complete","2025-09-13","2025-09-23","SDU RES - TAMAN PKNK","2025-07-03"],["Intan","POKOK SENA","Privasat","JKR",530,537,"Complete","Complete","2025-07-21","2025-08-18","SEKOLAH KEBANGSAAN BUKIT TAMPOI","2025-07-07"],["Intan","PADANG TERAP","Privasat","JKR",1180,1198,"Complete","Complete","2025-07-21","2025-07-27","SEKOLAH KEBANGSAAN BUKIT HIJAU","2025-07-08"],["Nasuha","BALING","PKNK","MAJLIS",115,124,"Complete","Complete","2025-07-30","2025-08-06","KAWASAN PERINDUSTRIAN KUALA KETIL (FASA 2) BANDAR KUALA KETIL","2025-07-07"],["Nasuha","KULIM","Privasat","JKR/MAJLIS",1505,1552,"Complete","Complete","2025-07-24","2025-07-31","SEKOLAH MENENGAH KEBANGSAAN SERDANG BARU","2025-07-14"],["Nasuha","KULIM","Privasat","JKR/MAJLIS",1300,1338,"Complete","Complete","2025-07-24","2025-07-31","SEKOLAH KEBANGSAAN MERBAU PULAS","2025-07-14"],["Syafiqa","KUALA MUDA","Privasat","MAJLIS",1150,1186,"Complete","Complete","2025-07-30","2025-08-17","SEKOLAH JENIS KEBANGSAAN (CINA) POI CHEE","2025-07-15"],["Syafiqa","KUBANG PASU","Privasat","JKR/MAJLIS",1245,1288,"Complete","Complete","2025-07-30","2025-08-17","SEKOLAH JENIS KEBANGSAAN (CINA) YUH MIN","2025-07-14"],["Nabihah","KUALA MUDA","TIME","MAJLIS",5392,5188,"Complete","Complete","2025-09-13","2025-09-26","SDU TAMAN PEKAN BARU","2025-07-21"],["Nabihah","KUALA MUDA","TIME","JKR/MAJLIS",2925,3001,"Complete","Complete","2025-07-24","2025-08-10","SPUR BUKIT BANYAN","2025-07-23"],["Syafiqa","KUALA MUDA","Privasat","JKR/MAJLIS",2730,2790,"Complete","Complete","2025-08-19","2025-08-25","SEKOLAH KEBANGSAAN AMAN JAYA","2025-07-29"],["Intan","KULIM","TM","JKR",101,101,"Complete","Complete","2025-08-11","2025-08-12","SRR FTTH (ADD) KMH_CXXX KAMPUNG KEMUNTING","2025-08-12"],["Syafiqa","PADANG TERAP","TM","JKR",2815,2846,"Complete","Complete","2025-09-01","2025-09-18","USP MC2021 FTTH KKN C018 KG PADANG SETOL A&B","2025-08-13"],["Nasuha","KUALA MUDA","Privasat","MAJLIS",2260,3144,"Complete","Complete","2025-08-19","2025-09-02","SEKOLAH JENIS KEBANGSAAN (TAMIL) HARVARD BHG 1","2025-08-13"],["Nasuha","KUALA MUDA","Privasat","JKR",1200,1349,"Complete","Complete","2025-08-19","2025-09-02","SEKOLAH KEBANGSAAN HARVARD","2025-08-13"],["Intan","KUALA MUDA","Privasat","JKR/MAJLIS",2004,1941,"Complete","Complete","2025-08-24","2025-09-04","SEKOLAH KEBANGSAAN SEMELING","2025-08-24"],["Syafiqa","KUALA MUDA","Privasat","JKR/MAJLIS",1400,1416,"Complete","Complete","2025-08-26","2025-09-04","SEKOLAH JENIS KEBANGSAAN (CINA) CHING CHONG","2025-08-24"],["Intan","KUALA MUDA","Privasat","JKR",193,214,"Complete","Complete","2025-08-19","2025-08-24","SEKOLAH KEBANGSAAN HAJI SULAIMAN","2025-08-19"],["Nabihah","PADANG TERAP","TM","JKR",406,403,"Complete","Complete","2025-08-19","2025-08-24","USP MC2021 FTTH LBM C007 KG SUNGAI KAP JLN NAMI","2025-08-19"],["Nasuha","PENDANG","CELCOMDIGI","JKR",200,299,"Complete","Complete","2025-09-21","2025-09-24","JALAN PENDANG BUKIT RAYA","2025-08-25"],["Nasuha","PADANG TERAP","TM","JKR",890,904,"Complete","Complete","2025-09-02","2025-09-04","USP MC2021 FTTH PDG C010 KG WATPAYA MAT INSUN","2025-08-25"],["Nasuha","KUALA MUDA","TIME","MAJLIS",576,359,"Complete","Complete","2025-09-25","2025-10-02","SDU AMANJAYA SHOPLOTS","2025-08-28"],["Intan","KUALA MUDA","TIME","MAJLIS",2600,2934,"Complete","Complete","2025-09-23","2025-10-02","SDU TAMAN MEWAH JAYA","2025-08-31"],["Syafiqa","KUALA MUDA","TIME","MAJLIS",5374,5155,"Complete","Complete","2025-09-20","2025-10-05","SDU TAMAN DELIMA FASA 2","2025-08-31"],["Nabihah","PENDANG","TM","JKR",6300,6300,"Complete","Complete","2025-10-05","2025-10-19","USP CB2021 KG RAJA & BUKIT MAT INSUN","2025-09-11"],["Nasuha","KOTA SETAR","TM","MAJLIS",405,407,"Complete","Complete","2025-09-11","2025-09-18","SRR FTTH (ADD) ASS_C019 TAMAN SERI PAGI","2025-09-08"],["Nasuha","KUALA MUDA","DEVELOPER","MAJLIS",180,157,"Complete","Complete","2025-09-11","2025-09-18","PERODUA JOHAN BEST","2025-09-10"],["Nasuha","PADANG TERAP","TM","JKR",810,825,"Complete","Complete","2025-10-13","2025-10-17","KG TANJUNG PIRING - PDG TERAP","2025-09-29"],["Nasuha","SIK","TM","JKR",1660,1657,"Complete","Complete","2025-10-13","2025-10-17","KG TANJUNG PIRING - SIK","2025-09-29"],["Syafiqa","KOTA SETAR","Allo","JKR/MAJLIS",7590,7180,"Complete","Complete","2025-10-06","2025-10-22","PMU KSSM  KOTA SETAR","2025-09-29"],["Nasuha","KUBANG PASU","CELCOMDIGI","JKR",250,270,"Complete","Complete","2025-10-06","2025-10-07","JLN KELUBI DALAM JITRA","2025-09-29"],["Intan","YAN","ALLO","JKR",11240,11416,"Complete","Complete","2025-10-08","2025-12-14","PMU KSSM YAN","2025-10-15"],["Nabihah","YAN","ALLO","JKR",11240,10675,"Complete","Complete","2025-10-08","2025-12-14","PMU KSSM YAN","2025-10-15"],["Intan","KOTA SETAR","TM","MAJLIS",324,310,"Complete","Complete","2025-10-22","2025-10-30","RWOA BREAKDOW SUSUR MASUK LOTUS STARGATE","2025-10-20"],["Intan","PADANG TERAP","TM","MAJLIS",30,12,"Complete","Complete","2025-10-22","2025-11-02","SMPG KAMPUNG RAMBUTAN KUALA NERANG","2025-10-20"],["Syafiqa","PENDANG","TM","JKR",4700,4770,"Complete","Complete","2025-11-13","2025-11-23","TM USP MC2021 TMN TAWAKAL (PENDANG)","2025-10-31"],["Intan","KOTA SETAR","TM","MAJLIS",345,281,"Complete","Complete","2025-10-22","2025-11-05","SRR FTTH PKS_C021 TMN PUTERI POKOK SENA","2025-10-16"],["Nasuha","PENDANG","TM","JKR",2760,3037,"Complete","Complete","2025-11-03","2025-11-08","USP MC2021 FTTH (PDG) KG BAHAGIA / KG GETAH / KG BUKIT BUBUS / KG KERKAU/ KG BUKIT PALAS","2025-10-22"],["Nasuha","KUBANG PASU","TM","MAJLIS",325,321,"Complete","Complete","2025-10-28","2025-11-02","SRR FTTH (ADD) PAA_C005 TAMAN PINANG JAYA FASA BARU","2025-10-26"],["Nabihah","KOTA SETAR","TM","MAJLIS",148,170,"Complete","Complete","2025-11-10","2025-11-16","SRR FTTH ADD AS_C087 TMN CERIA JALAN HUTAN KAMPUNG","2025-10-26"],["Intan","KOTA SETAR","TM","MAJLIS",172,192,"Complete","Complete","2025-11-10","2025-11-16","SRR FTTH ADD KKD_C006 TMN BAHTERA JALAN KUALA KEDAH","2025-10-26"],["Nabihah","KOTA SETAR","TM","MAJLIS",482,525,"Complete","Complete","2025-11-13","2025-11-19","SRR FTTH (ADD) SAP_C004 TMN SIMPANG PERJALANAN LAWANG 18","2025-10-26"],["Nasuha","KULIM","TM","JKR",1875,1878,"Complete","Complete","2025-12-10","2025-12-13","SRR FTTH (ADD) MHG_C008 Kg Sungai Batu","2025-11-08"],["Nasuha","KULIM","TM","JKR/MAJLIS",390,364,"Complete","Complete","2025-11-18","2025-11-20","TMNA/252125_SRR FTTH PB_C025 (TIE-DP) Mahligai Seri Lavender","2025-11-08"],["Nasuha","KUBANG PASU","TM","MAJLIS",650,579,"Complete","Complete","2025-11-20","2025-11-23","SRR FTTH (ADD) PAA_C012 Taman Sri Nilam","2025-11-08"],["Nasuha","KUBANG PASU","TM","MAJLIS",460,275,"Complete","Complete","2025-11-23","2025-11-29","SRR FTTH (ADD) JI_C023 Taman Mutiara Residence","2025-11-08"],["Intan","POKOK SENA","Maxis","JKR",125,105,"Complete","Complete","2025-11-13","2025-11-18","PSNA - KEBL","2025-11-12"],["Syafiqa","PADANG TERAP","Maxis","JKR",1832,1820,"Complete","Complete","2025-11-23","2025-11-27","KNG5 - NERA","2025-11-12"],["Nasuha","KUALA MUDA","Time","JKR/MAJLIS",1320,1162,"Complete","Complete","2025-11-25","2025-12-02","Site SDU Bukit Banyan 2 Aspera","2025-11-12"],["Syafiqa","KUALA MUDA","Time","MAJLIS",3827,4538,"Complete","Complete","2025-11-27","2025-12-14","Site SDU Taman Sutera Idaman","2025-11-17"],["Nasuha","KUALA MUDA","Time","JKR/MAJLIS",250,250,"Complete","Complete","2025-12-03","2025-12-05","Site 833 Majlis Perbandaran Sungai Petani, Kedah (GRBQK)","2025-11-23"],["Nasuha","KUALA MUDA","Time","JKR/MAJLIS",160,153,"Complete","Complete","2025-12-03","2025-12-06","Site 442 UOB Sungai Petani, Kedah (WJUYK)","2025-11-23"],["Intan","KUALA MUDA","CELCOMDIGI","MAJLIS",110,105,"Complete","Complete","2025-12-18","2025-12-22","K00146_BKTOKACEH to K00151_PINANG TUNGGAL","2025-11-23"],["Nasuha","PADANG TERAP","TM","JKR",1270,1245,"Complete","Complete","2025-12-14","2025-12-17","TMKA/250256 - USP MC2021 FTTH (PDG) Taman Tawakal - Padang Terap","2025-11-23"],["Nabihah","BALING","CELCOMDIGI","JKR",1950,1650,"Complete","Complete","2025-12-16","2025-12-27","K00421_WENG -K01078_Kg Charok Puteh, Baling","2025-11-27"],["Nasuha","KUALA MUDA","TIME","MAJLIS",400,306,"Complete","Complete","2025-12-06","2025-12-10","SDU AMANJAYA SHOPLOTS ( Add On site No 108)","2025-11-27"],["Nabihah","YAN","Allo","JKR",740,740,"Complete","Complete","2025-12-03","2025-12-14","PMU KSSM YAN (Add on No 118)","2025-12-03"],["Intan","KUBANG PASU","TIME","JKR/MAJLIS",220,201,"Complete","Complete","2025-12-16","2025-12-18","Site UUM Surau Al Muttaqin Taman Universiti","2025-12-15"],["Syafiqa","PENDANG","Maxis","JKR",640,670,"Complete","Complete","2025-12-18","2025-12-27","HOPG - HWEE","2025-12-17"],["Syafiqa","KUALA MUDA","CELCOMDIGI","JKR",7200,7232,"Complete","Complete","2025-12-30","2026-01-20","JUNCTION TAMAN ARKID TO JUNCTION TIKAM BATU","2025-12-23"],["Intan","KOTA SETAR","Maxis","JKR",110,104,"Complete","Complete","2026-01-05","2026-01-07","MGOH Alor Setar, Kedah","2026-01-04"],["Nabihah","KOTA SETAR","Maxis","JKR",170,169,"Complete","Complete","2026-01-05","2026-01-08","GGUS Alor Setar Kedah","2026-01-04"],["Nabihah","KUALA MUDA","Maxis","JKR",150,136,"Complete","Complete","2026-01-07","2026-01-11","SRAT Sungai Petani, Kedah","2026-01-06"],["Intan","KUALA MUDA","Maxis","MAJLIS",1120,1118,"Complete","Complete","2026-01-08","2026-01-12","BMTR Sungai Petani, Kedah","2026-01-08"],["Nabihah","KUALA MUDA","Maxis","JKR",20,28,"Complete","Complete","2026-01-12","2026-01-18","CGLE Sungai Petani, Kedah - JKR","2026-01-12"],["Nabihah","KUALA MUDA","Maxis","MAJLIS",625,620,"Complete","Complete","2026-01-12","2026-01-18","CGLE Sungai Petani, Kedah - PBT","2026-01-12"],["Intan","KUALA MUDA","Maxis","JKR",550,540,"Complete","Complete","2026-01-13","2026-01-18","PMBT Sungai Petani, Kedah","2026-01-12"],["Nabihah","KUALA MUDA","Maxis","JKR",385,383,"Complete","Complete","2026-01-20","2026-02-04","MSAH Sungai Petani, Kedah","2026-01-14"],["Nabihah","KUBANG PASU","Maxis","JKR",485,295,"Complete","Complete","2026-01-14","2026-01-27","TPYP Ayer Hitam, Kedah","2026-01-12"],["Intan","KUALA MUDA","TM","JKR",360,356,"Complete","Complete","2026-01-19","2026-01-22","KPM Schoolnet FTTH BZ_CXXX Sekolah Kebangsaan Aman Jaya","2026-01-14"],["Nasuha","BALING","CELCOMDIGI","JKR",602,424,"Complete","Complete","2026-01-21","2026-01-25","CB_SERAKO Pindaan","2026-01-18"],["Intan","KUBANG PASU","TM","MAJLIS",475,504,"Complete","Complete","2026-01-22","2026-02-05","SRR FTTH (ADD) CN_C012 Taman Semarak Api Fasa 2","2026-01-20"],["Syafiqa","KUBANG PASU","TM","MAJLIS",353,310,"Complete","Complete","2026-01-26","2026-02-05","SRR FTTH (ADD) CN_CXXX Taman Merbau Indah","2026-01-20"],["Syafiqa","KUBANG PASU","DEVELOPER","JKR",20,40,"Complete","Complete","2026-02-02","2026-02-05","Loji Rawatan Air Pelubang, Kubang Pasu, Kedah Darul Aman","2026-01-20"],["Nasuha","KUBANG PASU","CELCOMDIGI","JKR",990,980,"Complete","Complete","2026-02-02","2026-02-08","K01057 - KG SG KECIK PINDAAN","2026-01-20"],["Syafiqa","KOTA SETAR","TM","JKR",50,75,"Complete","Complete","2026-02-02","2026-02-08","RWOR CWS AS Jalan Kilang Tebu, Bandar Alor Setar, Kedah","2026-01-22"],["Intan","BALING","TM","JKR",620,738,"Complete","Complete","2026-02-05","2026-02-24","SRR FTTH (ADD) BL_C018 KG SG LIMAU BALING","2026-01-28"],["Nabihah","KUBANG PASU","CELCOMDIGI","JKR",1160,1142,"Complete","Complete","2026-02-05","2026-03-02","Jalan PKNK Utama, Bukit Kayu Hitam","2026-01-27"],["Intan","KUALA MUDA","TIME","MAJLIS",5376,4439,"Complete","Complete","2026-02-23","2026-04-07","Site SDU Bandar Seri Astana Fasa C","2026-02-15"],["Nabihah","KUALA MUDA","TIME","MAJLIS",5376,4439,"Complete","Complete","2026-02-23","2026-04-07","Site SDU Bandar Seri Astana Fasa C 2","2026-02-15"],["Syafiqa","KOTA SETAR","Maxis","MAJLIS",42,50,"Complete","Complete","2026-03-02","2026-03-08","TMTI Alor Setar, Kedah","2026-02-28"],["Syafiqa","KUALA MUDA","Maxis","JKR",760,760,"Complete","Complete","2026-03-01","2026-03-10","SMEL Bedong, Kedah","2026-02-28"],["Intan","YAN","CELCOMDIGI","MAJLIS",100,253,"Complete","Complete","2026-03-05","2026-03-12","Guar Chempedak Alor Setar - Sg Petani - PBT","2026-02-28"],["Nabihah","KOTA SETAR","CELCOMDIGI","JKR",250,227,"Complete","Complete","2026-03-03","2026-03-11","Jalan Kuala Kedah - Kuala Kedah Alor Setar - JKR","2026-02-28"],["Nasuha","KUALA MUDA","Maxis","MAJLIS",3798,3489,"Complete","Complete","2026-03-12","2026-03-19","TZG9_Taman Bintang Maya (Titan)","2026-03-08"],["Syafiqa","KUALA MUDA","Maxis","MAJLIS",5120,5581,"Complete","Complete","2026-03-12","2026-03-19","TZR9_Villa Nurul (Titan)","2026-03-05"],["Syafiqa","KUALA MUDA","Maxis","JKR",55,55,"Complete","Complete","2026-03-11","2026-03-28","TTWK Sungai Petani, Kedah","2026-03-08"],["Intan","BALING","TM","JKR",3800,3592,"Complete","Complete","2026-04-07","2026-05-07","Schoolnet FTTH KX-CXXX Sekolah Jenis Kebangsaan (Tamil) Ldg Kuala Ketil","2026-03-12"],["Nasuha","KUALA MUDA","CELCOMDIGI","JKR/MAJLIS",775,762,"Complete","Complete","2026-04-29","2026-05-11","JT4564 Junction SMT Technologies Bakar Arang (4121E)-4621A Caymon Shopping","2026-03-16"],["Syafiqa","SIK","TM","JKR",250,250,"Complete","Complete","2026-03-31","2026-04-09","SRR FTTH SIK_CXXX Kampung Sena, Kampung Tanjung","2026-03-18"],["Nabihah","KULIM","Allo","JKR",3289,3276,"Complete","Complete","2026-04-07","2026-06-25","PMU GUTHRIE, Daerah Kulim / Bandar Baharu area MAHANG Pindaan","2026-03-18"],["Nasuha","KULIM","CELCOMDIGI","JKR/MAJLIS",423,310,"Complete","Complete","2026-04-27","2026-04-28","20-0423BD-Taman Kempas Indah(REL)(4456D)-Taman Desa Impian (4689A)-PBT","2026-04-12"],["Syafiqa","KUALA MUDA","Maxis","MAJLIS",8152,8095,"Complete","Complete","2026-04-27","2026-05-12","TZN9 Bandar Puteri Jaya","2026-04-21"],["Syafiqa","KUALA MUDA","Maxis","MAJLIS",2520,2040,"Complete","Complete","2026-04-21","2026-04-26","BPJ1-BPJ3 Bandar Puteri Jaya, Sungai Petani","2026-04-20"],["Intan","BALING","TM","MAJLIS",3000,2644,"Complete","Complete","2026-05-09","2026-06-08","SRR FTTH(ADD) KX_CXXX GF Taman Bestari Permai Kuala Ketil","2026-04-21"],["Intan","KUALA MUDA","TIME","MAJLIS",2193,2232,"Complete","Complete","2026-07-12","2026-07-21","SDU Taman Emas Suria","2026-04-28"],["Intan","KUALA MUDA","TIME","JKR/MAJLIS",1860,1857,"Complete","Complete","2026-06-09","2026-05-19","SDU SP Saujana","2026-04-28"],["Nasuha","KUBANG PASU","TM","JKR",275,245,"Complete","Complete","2026-06-01","2026-06-09","RWOA CWA FOC JI Pembaikan Infra TM C034 Simpang Empat Malau","2026-04-30"],["Syafiqa","KUALA MUDA","Maxis","JKR/MAJLIS",5825,5650,"Complete","Complete","2026-05-13","2026-06-03","TZ79-Taman Seruling","2026-05-11"],["Adam","KUALA MUDA","TIME","JKR",480,494,"Complete","Complete","2026-06-09","2026-06-15","Site Umobile Bukit Selambau","2026-05-12"],["Nasuha","KOTA SETAR","Maxis","JKR",262,260,"Complete","Complete","2026-05-13","2026-05-18","PDSI-BONG","2026-05-12"],["Intan","KUALA MUDA","TIME","JKR",2880,2681,"Complete","Complete","2026-06-22","2026-07-12","SDU Taman Ria Jaya Fasa 3","2026-05-18"],["Nasuha","KUALA MUDA","MAXIS","MAJLIS",272,1031,"Complete","Complete","2026-05-19","2026-05-25","TZZ9-Taman Ria Jaya","2026-05-18"],["Syafiqa","KOTA SETAR","TM","JKR",330,190,"Complete","Complete","2026-06-01","2026-06-08","UM5G FOC AS NID NGBH-KMCR","2026-05-26"],["Syafiqa","KUALA MUDA","TIME","JKR/MAJLIS",10043,9993,"Complete","Complete","2026-06-09","2026-08-05","SDU Taman Arked","2026-05-31"],["Intan","BALING","TM","JKR",260,129,"Complete","Complete","2026-06-08","2026-06-09","USP MC2021 FTTH(BL) Kampung Tok Golok Bongor, Jalan Weng","2026-05-26"],["Syafiqa","KUALA MUDA","TM","JKR",860,880,"Complete","Complete","2026-06-01","2026-06-09","UM5G FOC KKM_FXX-XX NGBH-KRPK","2026-05-26"],["Adam","KULIM","DEVELOPER","MAJLIS",70,102,"Complete","Complete","2026-06-22","2026-06-24","Jalan Makmur 2/7, Bandar Lunas - JCBina Engineering Sdn Bhd","2026-06-08"],["Nasuha","KULIM","TIME","JKR",390,317,"Complete","Complete","2026-06-09","2026-06-14","Site Kedah EVE Industrial Park","2026-06-08"],["Nasuha","KULIM","Maxis","JKR",75,57,"Complete","Complete","2026-06-09","2026-06-18","TICA-KHTC Jalan Hi-Tech 2","2026-06-08"],["Nabihah","KUALA MUDA","TIME","MAJLIS",2559,2818,"Complete","Complete","2026-07-19","2026-07-31","SDU TAMAN DELIMA","2026-06-16"],["Syafiqa","KUALA MUDA","Maxis","MAJLIS",4580,5100,"Complete","Complete","2026-07-08","2026-07-21","TZC9-Taman Yarra Park","2026-06-30"],["Nasuha","KUALA MUDA","Maxis","MAJLIS",1770,1565,"Complete","Complete","2026-07-12","2026-07-14","TZS9-Villa Natura","2026-06-28"],["Nasuha","SIK","TM","JKR",475,536,"Complete","Complete","2026-07-01","2026-07-08","USP MC2021 FTTH LBM C006 Kampung Tanjung Piring Pindaan","2026-06-22"],["Nasuha","KULIM","TM","JKR",773,773,"Complete","Complete","2026-07-06","2026-07-14","SRR FTTH (ADD) MHG_C008 Kg Sungai Batu Pindaan","2026-07-12"],["Nabihah","KUALA MUDA","Maxis","JKR/MAJLIS",2590,2431,"Complete","Complete","2026-07-12","2026-07-17","TZ29- Taman Tuanku Haminah","2026-07-07"],["Intan","KULIM","TIME","JKR",360,309,"Complete","Complete","2026-07-21","2026-07-26","Site Sungai Karangan Restoration","2026-07-14"],["Nabihah","KUALA MUDA","TIME","MAJLIS",11680,0,"Incomplete","Complete","2026-08-09",null,"SDU ZON KENANGA AMBANGAN HEIGHTS FASA 1","2026-08-06"],["Intan","KULIM","DEVELOPER","JKR",126,0,"Incomplete","Complete","2026-08-03",null,"Penyediaan Infrastruktur Utiliti Telekomunikasi - Infrastraits Sdn Bhd","2026-08-03"],["TBC","KULIM","TM","MAJLIS",936,0,"Unassigned Project","Complete",null,null,"SRR 2026 GF FTTH SR_C006 Taman Aman Perdana Serdang, Kedah","2026-08-06"],["Nasuha","KULIM","TM","",0,0,"Incomplete","Complete","2026-08-09",null,"SRR FTTH (ADD) MHG_C008 Kg Sungai Batu Pindaan (2)","2026-08-06"],["TBC","BALING","TM","JKR",550,0,"Awaiting Team Site","Assigned Awaiting site",null,null,"SRR FTTH (ADD) KUP_CXXX KAMPUNG BUKIT TINGGI",null]]</script>
+<script id="raw-data" type="application/json">[["Syafiqa","BALING","Privasat","JKR",2617,2500,"Complete","Complete","2025-01-16","2025-01-28","SEKOLAH KEBANGSAAN ULU TAWAR","2025-01-04","Proceed"],["Nasuha","BALING","Privasat","JKR",810,1171,"Complete","Complete","2025-01-09","2025-01-21","SEKOLAH JENIS KEBANGSAAN (TAMIL) LDG PELAM","2025-01-04","Proceed"],["Syafiqa","BALING","Privasat","JKR",730,950,"Complete","Complete","2025-01-12","2025-01-29","SEKOLAH KEBANGSAAN MALAU","2025-01-04","Proceed"],["Nasuha","BALING","Privasat","JKR",520,507,"Complete","Complete","2025-01-13","2025-01-21","SEKOLAH JENIS KEBANGSAAN (CINA) PENG MIN","2025-01-05","Proceed"],["Nasuha","BALING","Privasat","JKR",620,612,"Complete","Complete","2025-01-19","2025-01-21","SEKOLAH KEBANGSAAN BINJUL","2025-01-05","Proceed"],["Syafiqa","BALING","Privasat","JKR",769,769,"Complete","Complete","2025-01-12","2025-01-31","SEKOLAH KEBANGSAAN BINJUL DALAM","2025-01-05","Proceed"],["Nasuha","BALING","Privasat","MAJLIS",1327,1323,"Complete","Complete","2025-01-19","2025-02-07","SEKOLAH KEBANGSAAN KAMPONG KEDA","2025-02-01","Proceed"],["Syafiqa","BALING","Privasat","JKR",2123,2123,"Complete","Complete","2025-01-16","2025-01-28","SEKOLAH KEBANGSAAN TELOK TEDURI","2025-01-07","Proceed"],["Syafiqa","BALING","Privasat","JKR",2652,2650,"Complete","Complete","2025-01-16","2025-02-07","SEKOLAH KEBANGSAAN RAMBONG PULAI","2025-01-14","Proceed"],["Nasuha","PADANG TERAP","Privasat","JKR",866,833,"Complete","Complete","2025-01-19","2025-01-29","SEKOLAH KEBANGSAAN KAMPONG BELUKAR","2025-01-14","Proceed"],["Nasuha","PADANG TERAP","Privasat","JKR",5170,5083,"Complete","Complete","2025-01-26","2025-02-03","SEKOLAH KEBANGSAAN LAMDIN","2025-01-14","Proceed"],["Nasuha","PENDANG","Privasat","JKR/MAJLIS",534,528,"Complete","Complete","2025-01-20","2025-02-07","SEKOLAH KEBANGSAAN BUKIT JENUN","2025-01-20","Proceed"],["Nasuha","PENDANG","Privasat","JKR",345,333,"Complete","Complete","2025-01-20","2025-01-26","SEKOLAH KEBANGSAAN BUKIT GENTING","2025-01-20","Proceed"],["Nasuha","PENDANG","Privasat","JKR",713,635,"Complete","Complete","2025-01-20","2025-01-26","SEKOLAH JENIS KEBANGSAAN (TAMIL) LADANG BUKIT JENUN","2025-01-20","Proceed"],["Nasuha","PENDANG","Privasat","JKR/MAJLIS",1738,1649,"Complete","Complete","2025-01-20","2025-02-07","SEKOLAH JENIS KEBANGSAAN (CINA) JUNUN","2025-01-20","Proceed"],["Nabihah","YAN","Privasat","JKR",2167,2145,"Complete","Complete","2025-02-02","2025-02-09","SEKOLAH KEBANGSAAN TOK MAT SALLEH","2025-01-23","Proceed"],["Syafiqa","YAN","Privasat","JKR",2461,2450,"Complete","Complete","2025-02-02","2025-02-12","SEKOLAH KEBANGSAAN DULANG","2025-01-23","Proceed"],["Nabihah","YAN","Privasat","JKR/MAJLIS",1181,1180,"Complete","Complete","2025-02-02","2025-02-19","SEKOLAH JENIS KEBANGSAAN (CINA) CHUNG HWA","2025-01-23","Proceed"],["Syafiqa","YAN","Privasat","JKR",81,85,"Complete","Complete","2025-02-02","2025-02-13","SEKOLAH KEBANGSAAN ULU SEDAKA","2025-01-23","Proceed"],["Nabihah","LANGKAWI","Maxis","JKR/MAJLIS",895,798,"Complete","Complete","2025-02-10","2025-02-25","FTTH TAMAN KENARI BATU ASAH - PPR KUAH LKAWI (LK15)","2025-02-03","Proceed"],["Nabihah","LANGKAWI","Maxis","JKR/MAJLIS",1110,1007,"Complete","Complete","2025-02-10","2025-02-27","FTTH TAMAN SENTOSA LANGKAWI (LK10)","2025-02-04","Proceed"],["Syafiqa","LANGKAWI","Maxis","MAJLIS",931,980,"Complete","Complete","2025-02-10","2025-02-19","FTTH TAMAN MEDAN BERJAYA LANGKAWI (LK07)","2025-02-04","Proceed"],["Nabihah","LANGKAWI","Maxis","MAJLIS",1095,986,"Complete","Complete","2025-02-10","2025-03-04","FTTH TAMAN SIMFONI LANGKAWI (LK08)","2025-02-06","Proceed"],["Intan","LANGKAWI","Maxis","MAJLIS",695,709,"Complete","Complete","2025-07-02","2025-07-08","TAMAN INTAN (LK12)","2025-02-06","Proceed"],["Syafiqa","LANGKAWI","TM","MAJLIS",184,200,"Complete","Complete","2025-02-10","2025-02-16","SRR FTTH (ADD) PMT_C006 CHENANG VILLA","2025-02-07","Proceed"],["Syafiqa","PADANG TERAP","Privasat","JKR",1193,1180,"Complete","Complete","2025-02-19","2025-03-04","SEKOLAH KEBANGSAAN PADANG SANAI","2025-02-13","Proceed"],["Syafiqa","PADANG TERAP","Privasat","JKR",3174,3200,"Complete","Complete","2025-02-19","2025-03-19","SEKOLAH KEBANGSAAN PADANG TERAP","2025-02-10","Proceed"],["Nasuha","PADANG TERAP","Privasat","JKR",1426,1428,"Complete","Complete","2025-02-19","2025-03-05","SEKOLAH KEBANGSAAN PERIK","2025-02-16","Proceed"],["Nasuha","PADANG TERAP","Privasat","JKR",843,830,"Complete","Complete","2025-02-19","2025-03-05","SEKOLAH KEBANGSAAN KUBANG PALAS","2025-02-13","Proceed"],["Nabihah","PADANG TERAP","Privasat","JKR",2013,2002,"Complete","Complete","2025-02-27","2025-03-10","SEKOLAH KEBANGSAAN DATIN FATIMAH","2025-02-18","Proceed"],["Nabihah","PADANG TERAP","Privasat","JKR",2756,2748,"Complete","Complete","2025-02-27","2025-03-16","SEKOLAH KEBANGSAAN PEDU","2025-02-23","Proceed"],["Syafiqa","PADANG TERAP","Privasat","JKR",5164,5070,"Complete","Complete","2025-03-06","2025-03-26","SEKOLAH KEBANGSAAN TANDOP BESAR","2025-02-25","Proceed"],["Syafiqa","PADANG TERAP","Privasat","JKR",2344,2440,"Complete","Complete","2025-03-18","2025-03-28","SEKOLAH KEBANGSAAN PANGLIMA AWANG","2025-02-25","Proceed"],["Nabihah","PADANG TERAP","Privasat","JKR",2390,2370,"Complete","Complete","2025-03-18","2025-03-27","SEKOLAH KEBANGSAAN SERI BAKTI","2025-03-11","Proceed"],["Nabihah","PADANG TERAP","Privasat","JKR",6158,6133,"Complete","Complete","2025-04-09","2025-04-28","SEKOLAH KEBANGSAAN KURONG HITAM","2025-03-20","Proceed"],["Nabihah","PADANG TERAP","Privasat","JKR",4278,4286,"Complete","Complete","2025-04-09","2025-05-13","SEKOLAH KEBANGSAAN TOH PUAN SHARIFAH HANIFAH","2025-03-13","Proceed"],["Syafiqa","PADANG TERAP","Privasat","JKR",573,565,"Complete","Complete","2025-04-07","2025-04-21","SEKOLAH KEBANGSAAN BUKIT TEMBAGA","2025-03-05","Proceed"],["Syafiqa","PADANG TERAP","Privasat","JKR/MAJLIS",1988,1986,"Complete","Complete","2025-04-16","2025-04-29","SEKOLAH KEBANGSAAN NAKA","2025-03-05","Proceed"],["Syafiqa","POKOK SENA","Privasat","JKR",571,575,"Complete","Complete","2025-04-07","2025-04-13","SEKOLAH KEBANGSAAN KAMPONG BUKIT","2025-03-05","Proceed"],["Syafiqa","POKOK SENA","Privasat","JKR",2251,2247,"Complete","Complete","2025-04-30","2025-05-08","SEKOLAH KEBANGSAAN BUKIT PAYONG","2025-04-06","Proceed"],["Syafiqa","POKOK SENA","Privasat","JKR",1978,1977,"Complete","Complete","2025-05-08","2025-05-21","SEKOLAH KEBANGSAAN BUKIT PAK KIAU","2025-03-09","Proceed"],["Syafiqa","POKOK SENA","Privasat","JKR/MAJLIS",1584,1567,"Complete","Complete","2025-04-30","2025-05-16","SEKOLAH JENIS KEBANGSAAN (CINA) TONG YUH","2025-04-06","Proceed"],["Nabihah","KUALA MUDA","Time","MAJLIS",542,2747,"Complete","Complete","2025-03-24","2025-04-08","SDU RESIDENSI PRIMA PUTERI JAYA 2","2025-03-24","Proceed"],["Nabihah","KUBANG PASU","Privasat","JKR/MAJLIS",825,837,"Complete","Complete","2025-05-08","2025-07-02","SEKOLAH KEBANGSAAN KODIANG","2025-04-10","Proceed"],["Nasuha","KUBANG PASU","Privasat","JKR/MAJLIS",1757,1787,"Complete","Complete","2025-05-08","2025-05-19","SEKOLAH JENIS KEBANGSAAN (CINA) CHOONG HWA","2025-04-08","Proceed"],["Nabihah","KUBANG PASU","Privasat","JKR/MAJLIS",1280,1307,"Complete","Complete","2025-05-08","2025-07-01","SEKOLAH KEBANGSAAN TUNKU BENDAHARA","2025-04-08","Proceed"],["Syafiqa","KUALA MUDA","Privasat","JKR",2141,2057,"Complete","Complete","2025-05-08","2025-05-18","SEKOLAH KEBANGSAAN KAMPUNG KUALA SIN","2025-04-10","Proceed"],["Nasuha","BALING","Privasat","JKR/MAJLIS",4255,4313,"Complete","Complete","2025-05-08","2025-05-21","SEKOLAH KEBANGSAAN KUALA KETIL","2025-04-14","Proceed"],["Nabihah","BALING","Privasat","JKR",1060,1105,"Complete","Complete","2025-05-08","2025-07-15","SEKOLAH JENIS KEBANGSAAN (TAMIL) LDG BATU PEKAKA","2025-04-15","Proceed"],["Nabihah","BALING","Privasat","JKR/MAJLIS",998,1287,"Complete","Complete","2025-05-08","2025-06-16","SEKOLAH MENENGAH KEBANGSAAN TANJONG PUTERI","2025-04-16","Proceed"],["Nabihah","BALING","Privasat","JKR/MAJLIS",375,380,"Complete","Complete","2025-05-08","2025-05-25","SEKOLAH JENIS KEBANGSAAN (CINA) KUALA KETIL","2025-04-16","Proceed"],["Nabihah","BALING","Privasat","JKR/MAJLIS",1090,1167,"Complete","Complete","2025-05-08","2025-06-03","SEKOLAH JENIS KEBANGSAAN (TAMIL) LDG KIM SENG","2025-04-16","Proceed"],["Nasuha","BALING","Privasat","JKR",2970,2900,"Complete","Complete","2025-05-08","2025-05-19","SEKOLAH KEBANGSAAN MOHD ARIFF ABDULLAH","2025-04-16","Proceed"],["Syafiqa","KUALA MUDA","Privasat","MAJLIS",1618,1527,"Complete","Complete","2025-05-08","2025-05-24","SEKOLAH JENIS KEBANGSAAN (CINA) FUH SUN","2025-04-28","Proceed"],["Syafiqa","KUALA MUDA","Privasat","JKR/MAJLIS",1799,1833,"Complete","Complete","2025-05-08","2025-05-28","SEKOLAH JENIS KEBANGSAAN (CINA) JENIANG","2025-04-29","Proceed"],["Nabihah","KUALA MUDA","Privasat","JKR/MAJLIS",964,934,"Complete","Complete","2025-05-08","2025-05-27","SEKOLAH KEBANGSAAN JENIANG (PUSAT)","2025-04-29","Proceed"],["Syafiqa","KUALA MUDA","Privasat","JKR/MAJLIS",2308,2351,"Complete","Complete","2025-05-08","2025-06-03","SEKOLAH MENENGAH KEBANGSAAN BUKIT SELAMBAU","2025-04-30","Proceed"],["Nasuha","BALING","TM","JKR",712,662,"Complete","Complete","2025-05-06","2025-05-08","USP MC2021 FTTH (BL) KAMPUNG TERABAK","2025-05-05","Proceed"],["Nasuha","BALING","TM","JKR",1780,2904,"Complete","Complete","2025-05-07","2025-05-17","USP MC2021 FTTH (KUP) KAMPUNG PAJAK HAJI YUNUS","2025-05-07","Proceed"],["Nasuha","BALING","TM","JKR",1100,1280,"Complete","Complete","2025-05-07","2025-05-18","USP MC2021 FTTH (BL) KAMPUNG LUBOK BADAK","2025-05-07","Proceed"],["Nasuha","BALING","TM","JKR",1460,1418,"Complete","Complete","2025-05-27","2025-06-02","USP MC2021 FTTH (BL) KAMPUNG TANJUNG PARI","2025-05-19","Proceed"],["Nasuha","BALING","TM","JKR",407,378,"Complete","Complete","2025-05-27","2025-06-01","USP MC2021 FTTH PDG C022 KAMPUNG PADANG DURIAN","2025-05-19","Proceed"],["Nabihah","KUALA MUDA","Time","JKR/MAJLIS",13726,13547,"Complete","Complete","2025-07-08","2025-07-31","SDU TAMAN RIA JAYA FASA 2","2025-05-27","Proceed"],["Nasuha","PADANG TERAP","CelcomDigi","JKR/MAJLIS",350,309,"Complete","Complete","2025-06-11","2025-07-07","K00875 - KG BENDANG PADANG TERAP","2025-05-27","Proceed"],["Nasuha","PADANG TERAP","CelcomDigi","JKR",80,74,"Complete","Complete","2025-06-11","2025-07-06","K00467 - KOLEJ MARA KUALA NERANG","2025-05-27","Proceed"],["Syafiqa","PADANG TERAP","CelcomDigi","JKR",150,141,"Complete","Complete","2025-06-11","2025-06-21","K00121 - PDG TERAP","2025-05-27","Proceed"],["Syafiqa","POKOK SENA","CelcomDigi","JKR",885,890,"Complete","Complete","2025-06-11","2025-06-24","K00326 - KG BUKIT","2025-05-27","Proceed"],["Syafiqa","KUALA MUDA","CelcomDigi","JKR",110,108,"Complete","Complete","2025-06-11","2025-06-25","K00432 - JLN JENIANG","2025-05-28","Proceed"],["Nasuha","BALING","CelcomDigi","JKR",3450,3428,"Complete","Complete","2025-07-10","2025-07-17","K00023 - CB SERAKO","2025-05-29","Proceed"],["Nasuha","BALING","CelcomDigi","JKR",30,30,"Complete","Complete","2025-06-11","2025-07-06","K00689 - CHAROK BEMBAN","2025-05-28","Proceed"],["Intan","KULIM","CelcomDigi","JKR",80,80,"Complete","Complete","2025-07-13","2025-07-15","K00796 - CB KG SG SALEH","2025-05-29","Proceed"],["Syafiqa","PENDANG","CelcomDigi","JKR",9340,9256,"Complete","Complete","2025-07-10","2025-07-27","K00694 - KUBUR PANJANG & K00396 - KG CINA, PENDANG","2025-06-11","Proceed"],["Syafiqa","SIK","Protimur","MAJLIS",96,224,"Complete","Complete","2025-06-11","2025-06-12","BUKIT BADAK BANDAR SIK","2025-06-10","Proceed"],["Nabihah","KUBANG PASU","CelcomDigi","JKR",2930,2888,"Complete","Complete","2025-10-19","2025-10-29","K01058 - KG PADANG PANJANG","2025-06-12","Proceed"],["Nasuha","KUBANG PASU","CelcomDigi","JKR",4059,3974,"Complete","Complete","2025-10-21","2025-10-27","K01057 - KG SG KECIK","2025-06-17","Proceed"],["Syafiqa","BALING","TM","JKR",600,621,"Complete","Complete","2025-06-26","2025-07-01","USP MC2021 FTTH KUP_C019M KAMPUNG MERBAU","2025-06-18","Proceed"],["Syafiqa","BALING","TM","JKR",680,731,"Complete","Complete","2025-06-26","2025-07-03","USP MC2021 FTTH (BL) KAMPUNG WENG","2025-06-18","Proceed"],["Syafiqa","SIK","TM","JKR",1700,2268,"Complete","Complete","2025-06-26","2025-07-21","USP MC2021 FTTH (JG) KAMPUNG BATU 8","2025-06-19","Proceed"],["Nasuha","SIK","TM","JKR",350,432,"Complete","Complete","2025-06-26","2025-07-03","USP MC2021 FTTH (JG) KAMPUNG BETONG","2025-06-24","Proceed"],["Nasuha","SIK","TM","JKR",400,469,"Complete","Complete","2025-06-26","2025-07-03","USP MC2021 FTTH (JG) KAMPUNG BEGIA","2025-06-24","Proceed"],["Syafiqa","SIK","TM","JKR",1000,1158,"Complete","Complete","2025-06-26","2025-07-17","USP MC2021 FTTH (JG_C006) KAMPUNG DUSUN PIT","2025-06-24","Proceed"],["Nasuha","KUALA MUDA","TM","MAJLIS",500,484,"Complete","Complete","2025-06-26","2025-07-04","SRR FTTH (ADD) SP_C042 BDR SERI ASTANA VILLA NATURA FASA 1","2025-06-25","Proceed"],["Nasuha","KUALA MUDA","CelcomDigi","JKR",170,169,"Complete","Complete","2025-07-30","2025-08-13","BUKIT TOK ACHEH - PAYA KELADI","2025-06-25","Proceed"],["Nasuha","PENDANG","TM","MAJLIS",770,775,"Complete","Complete","2025-06-26","2025-07-04","SRR FTTH ADD SAP_C001 TAMAN BAYAN JALAN TOKAI SIMPANG EMPAT","2025-06-26","Proceed"],["Nabihah","BALING","TM","JKR",2460,2472,"Complete","Complete","2025-07-21","2025-08-28","USP MC2021 FTTH (BL) KAMPUNG KETENGA","2025-07-01","Proceed"],["Intan","KULIM","TM","JKR",1140,1148,"Complete","Complete","2025-07-21","2025-07-28","NRP FTTH KMH C_026 MNET SOLUTIONS PADANG MEHA","2025-07-02","Proceed"],["Intan","KULIM","Time","MAJLIS",2595,2447,"Complete","Complete","2025-09-13","2025-09-23","SDU RES - TAMAN PKNK","2025-07-03","Proceed"],["Intan","POKOK SENA","Privasat","JKR",530,537,"Complete","Complete","2025-07-21","2025-08-18","SEKOLAH KEBANGSAAN BUKIT TAMPOI","2025-07-07","Proceed"],["Intan","PADANG TERAP","Privasat","JKR",1180,1198,"Complete","Complete","2025-07-21","2025-07-27","SEKOLAH KEBANGSAAN BUKIT HIJAU","2025-07-08","Proceed"],["Nasuha","BALING","PKNK","MAJLIS",115,124,"Complete","Complete","2025-07-30","2025-08-06","KAWASAN PERINDUSTRIAN KUALA KETIL (FASA 2) BANDAR KUALA KETIL","2025-07-07","Proceed"],["Nasuha","KULIM","Privasat","JKR/MAJLIS",1505,1552,"Complete","Complete","2025-07-24","2025-07-31","SEKOLAH MENENGAH KEBANGSAAN SERDANG BARU","2025-07-14","Proceed"],["Nasuha","KULIM","Privasat","JKR/MAJLIS",1300,1338,"Complete","Complete","2025-07-24","2025-07-31","SEKOLAH KEBANGSAAN MERBAU PULAS","2025-07-14","Proceed"],["Syafiqa","KUALA MUDA","Privasat","MAJLIS",1150,1186,"Complete","Complete","2025-07-30","2025-08-17","SEKOLAH JENIS KEBANGSAAN (CINA) POI CHEE","2025-07-15","Proceed"],["Syafiqa","KUBANG PASU","Privasat","JKR/MAJLIS",1245,1288,"Complete","Complete","2025-07-30","2025-08-17","SEKOLAH JENIS KEBANGSAAN (CINA) YUH MIN","2025-07-14","Proceed"],["Nabihah","KUALA MUDA","Time","MAJLIS",5392,5188,"Complete","Complete","2025-09-13","2025-09-26","SDU TAMAN PEKAN BARU","2025-07-21","Proceed"],["Nabihah","KUALA MUDA","Time","JKR/MAJLIS",2925,3001,"Complete","Complete","2025-07-24","2025-08-10","SPUR BUKIT BANYAN","2025-07-23","Proceed"],["Syafiqa","KUALA MUDA","Privasat","JKR/MAJLIS",2730,2790,"Complete","Complete","2025-08-19","2025-08-25","SEKOLAH KEBANGSAAN AMAN JAYA","2025-07-29","Proceed"],["Intan","KULIM","TM","JKR",101,101,"Complete","Complete","2025-08-11","2025-08-12","SRR FTTH (ADD) KMH_CXXX KAMPUNG KEMUNTING","2025-08-12","Proceed"],["Syafiqa","PADANG TERAP","TM","JKR",2815,2846,"Complete","Complete","2025-09-01","2025-09-18","USP MC2021 FTTH KKN C018 KG PADANG SETOL A&B","2025-08-13","Proceed"],["Nasuha","KUALA MUDA","Privasat","JKR",2260,3144,"Complete","Complete","2025-08-19","2025-09-02","SEKOLAH JENIS KEBANGSAAN (TAMIL) HARVARD BHG 1","2025-08-13","Proceed"],["Nasuha","KUALA MUDA","Privasat","MAJLIS",1200,1349,"Complete","Complete","2025-08-19","2025-09-02","SEKOLAH KEBANGSAAN HARVARD","2025-08-13","Proceed"],["Intan","KUALA MUDA","Privasat","JKR/MAJLIS",2004,1941,"Complete","Complete","2025-08-24","2025-09-04","SEKOLAH KEBANGSAAN SEMELING","2025-08-24","Proceed"],["Syafiqa","KUALA MUDA","Privasat","JKR/MAJLIS",1400,1416,"Complete","Complete","2025-08-26","2025-09-04","SEKOLAH JENIS KEBANGSAAN (CINA) CHING CHONG","2025-08-24","Proceed"],["Intan","KUALA MUDA","Privasat","JKR",193,214,"Complete","Complete","2025-08-19","2025-08-24","SEKOLAH KEBANGSAAN HAJI SULAIMAN","2025-08-19","Proceed"],["Nabihah","PADANG TERAP","TM","JKR",406,403,"Complete","Complete","2025-08-19","2025-08-24","USP MC2021 FTTH LBM C007 KG SUNGAI KAP JLN NAMI","2025-08-19","Proceed"],["Nasuha","PENDANG","CelcomDigi","JKR",200,299,"Complete","Complete","2025-09-21","2025-09-24","JALAN PENDANG BUKIT RAYA","2025-08-25","Proceed"],["Nasuha","PADANG TERAP","TM","JKR",890,904,"Complete","Complete","2025-09-02","2025-09-04","USP MC2021 FTTH PDG C010 KG WATPAYA MAT INSUN","2025-08-25","Proceed"],["Nasuha","KUALA MUDA","Time","MAJLIS",576,359,"Complete","Complete","2025-09-25","2025-10-02","SDU AMANJAYA SHOPLOTS","2025-08-28","Proceed"],["Intan","KUALA MUDA","Time","MAJLIS",2600,2934,"Complete","Complete","2025-09-23","2025-10-02","SDU TAMAN MEWAH JAYA","2025-08-31","Proceed"],["Syafiqa","KUALA MUDA","Time","MAJLIS",5374,5155,"Complete","Complete","2025-09-20","2025-10-05","SDU TAMAN DELIMA FASA 2","2025-08-31","Proceed"],["Nabihah","PENDANG","TM","JKR",6300,6300,"Complete","Complete","2025-10-05","2025-10-19","USP CB2021 KG RAJA & BUKIT MAT INSUN","2025-09-11","Proceed"],["Nasuha","KOTA SETAR","TM","MAJLIS",405,407,"Complete","Complete","2025-09-11","2025-09-18","SRR FTTH (ADD) ASS_C019 TAMAN SERI PAGI","2025-09-08","Proceed"],["Nasuha","KUALA MUDA","Developer","MAJLIS",180,157,"Complete","Complete","2025-09-11","2025-09-18","PERODUA JOHAN BEST","2025-09-10","Proceed"],["Nasuha","PADANG TERAP","TM","JKR",810,825,"Complete","Complete","2025-10-13","2025-10-17","KG TANJUNG PIRING - PDG TERAP","2025-09-29","Proceed"],["Nasuha","SIK","TM","JKR",1660,1657,"Complete","Complete","2025-10-13","2025-10-17","KG TANJUNG PIRING - SIK","2025-09-29","Proceed"],["Syafiqa","KOTA SETAR","Allo","JKR/MAJLIS",7590,7180,"Complete","Complete","2025-10-06","2025-10-22","PMU KSSM  KOTA SETAR","2025-09-29","Proceed"],["Nasuha","KUBANG PASU","CelcomDigi","JKR",250,270,"Complete","Complete","2025-10-06","2025-10-07","JLN KELUBI DALAM JITRA","2025-09-29","Proceed"],["Intan","YAN","Allo","JKR",22480,22091,"Complete","Complete","2025-10-08","2025-12-14","PMU KSSM YAN","2025-10-15","Proceed"],["Intan","KOTA SETAR","TM","MAJLIS",324,310,"Complete","Complete","2025-10-22","2025-10-30","RWOA BREAKDOW SUSUR MASUK LOTUS STARGATE","2025-10-20","Proceed"],["Intan","PADANG TERAP","TM","MAJLIS",30,12,"Complete","Complete","2025-10-22","2025-11-02","SMPG KAMPUNG RAMBUTAN KUALA NERANG","2025-10-20","Proceed"],["Syafiqa","PENDANG","TM","JKR",4700,4770,"Complete","Complete","2025-11-13","2025-11-23","TM USP MC2021 TMN TAWAKAL (PENDANG)","2025-10-31","Proceed"],["Intan","KOTA SETAR","TM","MAJLIS",345,281,"Complete","Complete","2025-10-22","2025-11-05","SRR FTTH PKS_C021 TMN PUTERI POKOK SENA","2025-10-16","Proceed"],["Nasuha","PENDANG","TM","JKR",2760,3037,"Complete","Complete","2025-11-03","2025-11-08","USP MC2021 FTTH (PDG) KG BAHAGIA / KG GETAH / KG BUKIT BUBUS / KG KERKAU/ KG BUKIT PALAS","2025-10-22","Proceed"],["Nasuha","KUBANG PASU","TM","MAJLIS",325,321,"Complete","Complete","2025-10-28","2025-11-02","SRR FTTH (ADD) PAA_C005 TAMAN PINANG JAYA FASA BARU","2025-10-26","Proceed"],["Nabihah","KOTA SETAR","TM","MAJLIS",148,170,"Complete","Complete","2025-11-10","2025-11-16","SRR FTTH ADD AS_C087 TMN CERIA JALAN HUTAN KAMPUNG","2025-10-26","Proceed"],["Intan","KOTA SETAR","TM","MAJLIS",172,192,"Complete","Complete","2025-11-10","2025-11-16","SRR FTTH ADD KKD_C006 TMN BAHTERA JALAN KUALA KEDAH","2025-10-26","Proceed"],["Nabihah","KOTA SETAR","TM","MAJLIS",482,525,"Complete","Complete","2025-11-13","2025-11-19","SRR FTTH (ADD) SAP_C004 TMN SIMPANG PERJALANAN LAWANG 18","2025-10-26","Proceed"],["Nasuha","KULIM","TM","JKR",1875,1878,"Complete","Complete","2025-12-10","2025-12-13","SRR FTTH (ADD) MHG_C008 Kg Sungai Batu","2025-11-08","Proceed"],["Nasuha","KULIM","TM","JKR/MAJLIS",390,364,"Complete","Complete","2025-11-18","2025-11-20","TMNA/252125_SRR FTTH PB_C025 (TIE-DP) Mahligai Seri Lavender","2025-11-08","Proceed"],["Nasuha","KUBANG PASU","TM","MAJLIS",650,579,"Complete","Complete","2025-11-20","2025-11-23","SRR FTTH (ADD) PAA_C012 Taman Sri Nilam","2025-11-08","Proceed"],["Nasuha","KUBANG PASU","TM","MAJLIS",460,275,"Complete","Complete","2025-11-23","2025-11-29","SRR FTTH (ADD) JI_C023 Taman Mutiara Residence","2025-11-08","Proceed"],["Intan","POKOK SENA","Maxis","JKR",125,105,"Complete","Complete","2025-11-13","2025-11-18","PSNA - KEBL","2025-11-12","Proceed"],["Syafiqa","PADANG TERAP","Maxis","JKR",1832,1820,"Complete","Complete","2025-11-23","2025-11-27","KNG5 - NERA","2025-11-12","Proceed"],["Nasuha","KUALA MUDA","Time","JKR/MAJLIS",1320,1162,"Complete","Complete","2025-11-25","2025-12-02","Site SDU Bukit Banyan 2 Aspera","2025-11-12","Proceed"],["Syafiqa","KUALA MUDA","Time","MAJLIS",3827,4538,"Complete","Complete","2025-11-27","2025-12-14","Site SDU Taman Sutera Idaman","2025-11-17","Proceed"],["Nasuha","KUALA MUDA","Time","JKR/MAJLIS",250,250,"Complete","Complete","2025-12-03","2025-12-05","Site 833 Majlis Perbandaran Sungai Petani, Kedah (GRBQK)","2025-11-23","Proceed"],["Nasuha","KUALA MUDA","Time","JKR/MAJLIS",160,153,"Complete","Complete","2025-12-03","2025-12-06","Site 442 UOB Sungai Petani, Kedah (WJUYK)","2025-11-23","Proceed"],["Intan","KUALA MUDA","CelcomDigi","MAJLIS",110,105,"Complete","Complete","2025-12-18","2025-12-22","K00146_BKTOKACEH to K00151_PINANG TUNGGAL","2025-11-23","Proceed"],["Nasuha","PADANG TERAP","TM","JKR",1270,1245,"Complete","Complete","2025-12-14","2025-12-17","TMKA/250256 - USP MC2021 FTTH (PDG) Taman Tawakal - Padang Terap","2025-11-23","Proceed"],["Nabihah","BALING","CelcomDigi","JKR",1950,1650,"Complete","Complete","2025-12-16","2025-12-27","K00421_WENG -K01078_Kg Charok Puteh, Baling","2025-11-27","Proceed"],["Nasuha","KUALA MUDA","Time","MAJLIS",400,306,"Complete","Complete","2025-12-06","2025-12-10","SDU AMANJAYA SHOPLOTS ( Add On site No 108)","2025-11-27","Proceed"],["Nabihah","YAN","Allo","JKR",740,740,"Complete","Complete","2025-12-03","2025-12-14","PMU KSSM YAN (Add on No 118)","2025-12-03","Proceed"],["Intan","KUBANG PASU","Time","JKR/MAJLIS",220,201,"Complete","Complete","2025-12-16","2025-12-18","Site UUM Surau Al Muttaqin Taman Universiti","2025-12-15","Proceed"],["Syafiqa","PENDANG","Maxis","JKR",640,670,"Complete","Complete","2025-12-18","2025-12-27","HOPG - HWEE","2025-12-17","Proceed"],["Syafiqa","KUALA MUDA","CelcomDigi","JKR",7200,7232,"Complete","Complete","2025-12-30","2026-01-20","JUNCTION TAMAN ARKID TO JUNCTION TIKAM BATU","2025-12-23","Proceed"],["Intan","KOTA SETAR","Maxis","JKR",110,104,"Complete","Complete","2026-01-05","2026-01-07","MGOH Alor Setar, Kedah","2026-01-04","Proceed"],["Nabihah","KOTA SETAR","Maxis","JKR",170,169,"Complete","Complete","2026-01-05","2026-01-08","GGUS Alor Setar Kedah","2026-01-04","Proceed"],["Nabihah","KUALA MUDA","Maxis","JKR",150,136,"Complete","Complete","2026-01-07","2026-01-11","SRAT Sungai Petani, Kedah","2026-01-06","Proceed"],["Intan","KUALA MUDA","Maxis","MAJLIS",1120,1118,"Complete","Complete","2026-01-08","2026-01-12","BMTR Sungai Petani, Kedah","2026-01-08","Proceed"],["Nabihah","KUALA MUDA","Maxis","JKR",20,28,"Complete","Complete","2026-01-12","2026-01-18","CGLE Sungai Petani, Kedah - JKR","2026-01-12","Proceed"],["Nabihah","KUALA MUDA","Maxis","MAJLIS",625,620,"Complete","Complete","2026-01-12","2026-01-18","CGLE Sungai Petani, Kedah - PBT","2026-01-12","Proceed"],["Intan","KUALA MUDA","Maxis","JKR",550,540,"Complete","Complete","2026-01-13","2026-01-18","PMBT Sungai Petani, Kedah","2026-01-12","Proceed"],["Nabihah","KUALA MUDA","Maxis","JKR",385,383,"Complete","Complete","2026-01-20","2026-02-04","MSAH Sungai Petani, Kedah","2026-01-14","Proceed"],["Nabihah","KUBANG PASU","Maxis","JKR",485,295,"Complete","Complete","2026-01-14","2026-01-27","TPYP Ayer Hitam, Kedah","2026-01-12","Proceed"],["Intan","KUALA MUDA","TM","JKR",360,356,"Complete","Complete","2026-01-19","2026-01-22","KPM Schoolnet FTTH BZ_CXXX Sekolah Kebangsaan Aman Jaya","2026-01-14","Proceed"],["Nasuha","BALING","CelcomDigi","JKR/MAJLIS",602,424,"Complete","Complete","2026-01-21","2026-01-25","CB_SERAKO Pindaan","2026-01-18","Proceed"],["Intan","KUBANG PASU","TM","MAJLIS",475,504,"Complete","Complete","2026-01-22","2026-02-05","SRR FTTH (ADD) CN_C012 Taman Semarak Api Fasa 2","2026-01-20","Proceed"],["Syafiqa","KUBANG PASU","TM","MAJLIS",353,310,"Complete","Complete","2026-01-26","2026-02-05","SRR FTTH (ADD) CN_CXXX Taman Merbau Indah","2026-01-20","Proceed"],["Syafiqa","KUBANG PASU","Developer","JKR",20,40,"Complete","Complete","2026-02-02","2026-02-05","Loji Rawatan Air Pelubang, Kubang Pasu, Kedah Darul Aman","2026-01-20","Proceed"],["Nasuha","KUBANG PASU","CelcomDigi","JKR",990,980,"Complete","Complete","2026-02-02","2026-02-08","K01057 - KG SG KECIK PINDAAN","2026-01-20","Proceed"],["Syafiqa","KOTA SETAR","TM","JKR",50,75,"Complete","Complete","2026-02-02","2026-02-08","RWOR CWS AS Jalan Kilang Tebu, Bandar Alor Setar, Kedah","2026-01-22","Proceed"],["Intan","BALING","TM","JKR",620,738,"Complete","Complete","2026-02-05","2026-02-24","SRR FTTH (ADD) BL_C018 KG SG LIMAU BALING","2026-01-28","Proceed"],["Nabihah","KUBANG PASU","CelcomDigi","JKR",1160,1142,"Complete","Complete","2026-02-05","2026-03-02","Jalan PKNK Utama, Bukit Kayu Hitam","2026-01-27","Proceed"],["Intan","KUALA MUDA","Time","MAJLIS",10752,10752,"Complete","Complete","2026-02-23","2026-04-07","Site SDU Bandar Seri Astana Fasa C","2026-02-15","Proceed"],["Syafiqa","KOTA SETAR","Maxis","MAJLIS",42,50,"Complete","Complete","2026-03-02","2026-03-08","TMTI Alor Setar, Kedah","2026-02-28","Proceed"],["Syafiqa","KUALA MUDA","Maxis","JKR",760,760,"Complete","Complete","2026-03-01","2026-03-10","SMEL Bedong, Kedah","2026-02-28","Proceed"],["Intan","YAN","CelcomDigi","MAJLIS",100,253,"Complete","Complete","2026-03-05","2026-03-12","Guar Chempedak Alor Setar - Sg Petani - PBT","2026-02-28","Proceed"],["Nabihah","KOTA SETAR","CelcomDigi","JKR",250,227,"Complete","Complete","2026-03-03","2026-03-11","Jalan Kuala Kedah - Kuala Kedah Alor Setar - JKR","2026-02-28","Proceed"],["Nasuha","KUALA MUDA","Maxis","MAJLIS",3798,3489,"Complete","Complete","2026-03-12","2026-03-19","TZG9_Taman Bintang Maya (Titan)","2026-03-08","Proceed"],["Syafiqa","KUALA MUDA","Maxis","MAJLIS",5120,5581,"Complete","Complete","2026-03-12","2026-03-19","TZR9_Villa Nurul (Titan)","2026-03-05","Proceed"],["Syafiqa","KUALA MUDA","Maxis","JKR",55,55,"Complete","Complete","2026-03-11","2026-03-28","TTWK Sungai Petani, Kedah","2026-03-08","Proceed"],["Intan","BALING","TM","JKR",3800,3592,"Complete","Complete","2026-04-07","2026-05-07","Schoolnet FTTH KX-CXXX Sekolah Jenis Kebangsaan (Tamil) Ldg Kuala Ketil","2026-03-12","Proceed"],["Nasuha","KUALA MUDA","CelcomDigi","JKR/MAJLIS",775,762,"Complete","Complete","2026-04-29","2026-05-11","JT4564 Junction SMT Technologies Bakar Arang (4121E)-4621A Caymon Shopping","2026-03-16","Proceed"],["Syafiqa","SIK","TM","JKR",250,250,"Complete","Complete","2026-03-31","2026-04-09","SRR FTTH SIK_CXXX Kampung Sena, Kampung Tanjung","2026-03-18","Proceed"],["Nabihah","KULIM","Allo","JKR",3289,3276,"Complete","Complete","2026-04-07","2026-06-25","PMU GUTHRIE, Daerah Kulim / Bandar Baharu area MAHANG Pindaan","2026-03-18","Proceed"],["Nasuha","KULIM","CelcomDigi","JKR/MAJLIS",423,310,"Complete","Complete","2026-04-27","2026-04-28","20-0423BD-Taman Kempas Indah(REL)(4456D)-Taman Desa Impian (4689A)-PBT","2026-04-12","Proceed"],["Syafiqa","KUALA MUDA","Maxis","MAJLIS",8152,8095,"Complete","Complete","2026-04-27","2026-05-12","TZN9 Bandar Puteri Jaya","2026-04-21","Proceed"],["Syafiqa","KUALA MUDA","Maxis","MAJLIS",2520,2040,"Complete","Complete","2026-04-21","2026-04-26","BPJ1-BPJ3 Bandar Puteri Jaya, Sungai Petani","2026-04-20","Proceed"],["Intan","BALING","TM","MAJLIS",3000,2644,"Complete","Complete","2026-05-09","2026-06-08","SRR FTTH(ADD) KX_CXXX GF Taman Bestari Permai Kuala Ketil","2026-04-21","Proceed"],["Intan","KUALA MUDA","Time","MAJLIS",2193,2232,"Complete","Complete","2026-07-12","2026-07-21","SDU Taman Emas Suria","2026-04-28","Proceed"],["Intan","KUALA MUDA","Time","JKR/MAJLIS",1860,1857,"Complete","Complete","2026-06-09","2026-05-19","SDU SP Saujana","2026-04-28","Proceed"],["Nasuha","KUBANG PASU","TM","JKR",275,245,"Complete","Complete","2026-06-01","2026-06-09","RWOA CWA FOC JI Pembaikan Infra TM C034 Simpang Empat Malau","2026-04-30","Proceed"],["Syafiqa","KUALA MUDA","Maxis","JKR/MAJLIS",5825,5650,"Complete","Complete","2026-05-13","2026-06-03","TZ79-Taman Seruling","2026-05-11","Proceed"],["Adam","KUALA MUDA","Time","JKR",480,494,"Complete","Complete","2026-06-09","2026-06-15","Site Umobile Bukit Selambau","2026-05-12","Proceed"],["Nasuha","KOTA SETAR","Maxis","JKR",262,260,"Complete","Complete","2026-05-13","2026-05-18","PDSI-BONG","2026-05-12","Proceed"],["Intan","KUALA MUDA","Time","JKR",2880,2681,"Complete","Complete","2026-06-22","2026-07-12","SDU Taman Ria Jaya Fasa 3","2026-05-18","Proceed"],["Nasuha","KUALA MUDA","Maxis","MAJLIS",272,1031,"Complete","Complete","2026-05-19","2026-05-25","TZZ9-Taman Ria Jaya","2026-05-18","Proceed"],["Syafiqa","KOTA SETAR","TM","MAJLIS",330,190,"Complete","Complete","2026-06-01","2026-06-08","UM5G FOC AS NID NGBH-KMCR","2026-05-26","Proceed"],["Syafiqa","KUALA MUDA","Time","JKR/MAJLIS",10043,9993,"Complete","Complete","2026-06-09","2026-08-05","SDU Taman Arked","2026-05-31","Proceed"],["Intan","BALING","TM","JKR",260,129,"Complete","Complete","2026-06-08","2026-06-09","USP MC2021 FTTH(BL) Kampung Tok Golok Bongor, Jalan Weng","2026-05-26","Proceed"],["Syafiqa","KUALA MUDA","TM","JKR",860,880,"Complete","Complete","2026-06-01","2026-06-09","UM5G FOC KKM_FXX-XX NGBH-KRPK","2026-05-26","Proceed"],["Adam","KULIM","Developer","MAJLIS",70,102,"Complete","Complete","2026-06-22","2026-06-24","Jalan Makmur 2/7, Bandar Lunas - JCBina Engineering Sdn Bhd","2026-06-08","Proceed"],["Nasuha","KULIM","Time","JKR",390,317,"Complete","Complete","2026-06-09","2026-06-14","Site Kedah EVE Industrial Park","2026-06-08","Proceed"],["Nasuha","KULIM","Maxis","PBT",75,57,"Complete","Complete","2026-06-09","2026-06-18","TICA-KHTC Jalan Hi-Tech 2","2026-06-08","Proceed"],["Nabihah","KUALA MUDA","Time","MAJLIS",2559,2818,"Complete","Complete","2026-07-19","2026-07-31","SDU TAMAN DELIMA","2026-06-16","Proceed"],["Syafiqa","KUALA MUDA","Maxis","MAJLIS",4580,5100,"Complete","Complete","2026-07-08","2026-07-21","TZC9-Taman Yarra Park","2026-06-30","Proceed"],["Nasuha","KUALA MUDA","Maxis","MAJLIS",1770,1565,"Complete","Complete","2026-07-12","2026-07-14","TZS9-Villa Natura","2026-06-28","Proceed"],["Nasuha","SIK","TM","JKR",475,536,"Complete","Complete","2026-07-01","2026-07-08","USP MC2021 FTTH LBM C006 Kampung Tanjung Piring Pindaan","2026-06-22","Proceed"],["Nasuha","KULIM","TM","JKR",773,773,"Complete","Complete","2026-07-06","2026-07-14","SRR FTTH (ADD) MHG_C008 Kg Sungai Batu Pindaan","2026-07-12","Proceed"],["Nabihah","KUALA MUDA","Maxis","JKR/MAJLIS",2590,2431,"Complete","Complete","2026-07-12","2026-07-17","TZ29- Taman Tuanku Haminah","2026-07-07","Proceed"],["Intan","KULIM","Time","JKR",360,309,"Complete","Complete","2026-07-21","2026-07-26","Site Sungai Karangan Restoration","2026-07-14","Proceed"],["Nabihah","KUALA MUDA","Time","MAJLIS",12495,12495,"Incomplete","Complete","2026-08-09",null,"SDU ZON KENANGA AMBANGAN HEIGHTS FASA 1","2026-07-31","Pending Drawing"],["Intan","KULIM","Developer","JKR",126,141,"Complete","Complete","2026-08-03","2026-08-11","Penyediaan Infrastruktur Utiliti Telekomunikasi - Infrastraits Sdn Bhd","2026-08-03","Proceed"],["Intan","KULIM","TM","MAJLIS",936,1034,"Complete","Complete","2026-08-11","2026-08-19","SRR 2026 GF FTTH SR_C006 Taman Aman Perdana Serdang, Kedah","2026-08-06","Proceed"],["Nasuha","KULIM","TM","JKR",196,0,"Incomplete","Complete","2026-08-09",null,"SRR FTTH (ADD) MHG_C008 Kg Sungai Batu Pindaan (2)","2026-08-06","Pending Drawing"],["Syafiqa","BALING","TM","JKR",550,550,"Complete","Complete","2026-08-12","2026-08-20","SRR FTTH (ADD) KUP_CXXX KAMPUNG BUKIT TINGGI","2026-08-10","Proceed"],["Intan","KUALA MUDA","Time","JKR/MAJLIS",1407,1453,"Complete","Complete","2026-08-19","2026-08-27","SDU TAMAN SRI WANG 2","2026-08-18","Pending Amendment"],["Syafiqa","KOTA SETAR","","MAJLIS",844,0,"Complete","Complete","2026-08-26","2026-09-01","SRR FTTH GF ASS_C020 Kota Makmur 4 Taman Tunku Mohamad Jiwa","2026-08-24","Pending Amendment"],["Intan","KOTA SETAR","","MAJLIS",1100,0,"Unassigned Project","Complete",null,null,"SRR 2026 GF FTTH SAP_CXXX Taman Cassia 2","2026-08-24","Pending Assign"],["TBC","KUALA MUDA","","JKR/MAJLIS",17104,0,"Awaiting Team Site","Assigned Awaiting site",null,null,"PMU INTN Phase 2 Daerah Kuala Muda",null,"Pending Team Site"],["Intan","KUALA MUDA","","JKR/MAJLIS",390,0,"Incomplete","Complete","2026-08-27",null,"Site Sungai Petani Node (CLAWK)","2026-08-26","Pending Drawing"]]</script>
 <script>
 (function(){
   'use strict';
@@ -1495,8 +1171,17 @@ function runUdmDashboard(initialData){
   // Row: [drafter, district, telco, pbm, totalTP, totalActual, status, statusUDM, dateReceived(iso|null), dateCompletedDrafter(iso|null), projectName, dateCompletedOnSiteUDM(iso|null)]
   var RAW = initialData;
 
+  /* Rolled-up status drives every count; the list shows the tracker's own wording
+     when it is more specific (e.g. "Pending Amendment" inside Complete). */
+  var STATUS_ROLLUP_TEXT = {'PROCEED':1};
+  function statusLabel(r){
+    var raw = r[12];
+    if(raw && !STATUS_ROLLUP_TEXT[String(raw).toUpperCase()]) return raw;
+    return r[6] || '-';
+  }
+
   var DRAFTER_COLORS = {
-    'Adam':TC('#d9b25c'),'Intan':TC('#c9a0dc'),'Nabihah':TC('#74a8d8'),'Nasuha':TC('#d97490'),'Syafiqa':TC('#7bc696'),'Tbc':TC('#5b6178')
+    'Adam':'#d9b25c','Intan':'#c9a0dc','Nabihah':'#74a8d8','Nasuha':'#d97490','Syafiqa':'#7bc696','Tbc':'#5b6178'
   };
   var DRAFTER_ORDER = ['Adam','Intan','Nabihah','Nasuha','Syafiqa'];
 
@@ -1536,8 +1221,8 @@ function runUdmDashboard(initialData){
     for(var t=0; t<=ticks; t++){
       var gx = leftLabelW + (chartW * t/ticks);
       var gv = maxVal * t/ticks;
-      gridHtml += '<line x1="'+gx.toFixed(1)+'" y1="'+topPad+'" x2="'+gx.toFixed(1)+'" y2="'+(totalH-topPad)+'" stroke="'+TC('#262c3c')+'" stroke-width="1"/>';
-      gridHtml += '<text x="'+gx.toFixed(1)+'" y="'+(totalH-2)+'" font-size="10.5" fill="'+TC('#6b7288')+'" text-anchor="'+(t===0?'start':(t===ticks?'end':'middle'))+'">'+escapeHtml(axisLabelFn(gv))+'</text>';
+      gridHtml += '<line x1="'+gx.toFixed(1)+'" y1="'+topPad+'" x2="'+gx.toFixed(1)+'" y2="'+(totalH-topPad)+'" stroke="#262c3c" stroke-width="1"/>';
+      gridHtml += '<text x="'+gx.toFixed(1)+'" y="'+(totalH-2)+'" font-size="10.5" fill="#6b7288" text-anchor="'+(t===0?'start':(t===ticks?'end':'middle'))+'">'+escapeHtml(axisLabelFn(gv))+'</text>';
     }
 
     var barFontSize = Math.max(10.5, Math.min(13, rowH*0.4));
@@ -1557,9 +1242,9 @@ function runUdmDashboard(initialData){
       var opacity = (hasSelection && !selected) ? '0.38' : '1';
       var groupStyle = opts.onClick ? 'cursor:pointer;' : '';
       barsHtml += '<g class="bar-item" data-idx="'+i+'" style="'+groupStyle+'" opacity="'+opacity+'">' +
-        '<text x="'+(leftLabelW-10)+'" y="'+(barY+barH/2)+'" font-size="'+barFontSize.toFixed(1)+'" fill="'+TC('#c7cadb')+'" text-anchor="end" dominant-baseline="middle">'+escapeHtml(d.label)+'</text>' +
-        '<rect x="'+leftLabelW+'" y="'+barY.toFixed(1)+'" width="'+Math.max(w,1).toFixed(1)+'" height="'+barH.toFixed(1)+'" rx="2" fill="'+color+'"'+(selected?' stroke="'+TC('#fff')+'" stroke-width="1.5"':'')+'></rect>' +
-        '<text x="'+(leftLabelW + w + 8)+'" y="'+(barY+barH/2)+'" font-size="'+(barFontSize+0.5).toFixed(1)+'" font-weight="600" fill="'+TC('#f2f3f7')+'" dominant-baseline="middle">'+escapeHtml(valueLabelFn(d.val))+'</text>' +
+        '<text x="'+(leftLabelW-10)+'" y="'+(barY+barH/2)+'" font-size="'+barFontSize.toFixed(1)+'" fill="#c7cadb" text-anchor="end" dominant-baseline="middle">'+escapeHtml(d.label)+'</text>' +
+        '<rect x="'+leftLabelW+'" y="'+barY.toFixed(1)+'" width="'+Math.max(w,1).toFixed(1)+'" height="'+barH.toFixed(1)+'" rx="2" fill="'+color+'"'+(selected?' stroke="#fff" stroke-width="1.5"':'')+'></rect>' +
+        '<text x="'+(leftLabelW + w + 8)+'" y="'+(barY+barH/2)+'" font-size="'+(barFontSize+0.5).toFixed(1)+'" font-weight="600" fill="#f2f3f7" dominant-baseline="middle">'+escapeHtml(valueLabelFn(d.val))+'</text>' +
         (opts.onClick ? '<rect x="0" y="'+y+'" width="'+totalW+'" height="'+rowH+'" fill="transparent"></rect>' : '') +
         '</g>';
     });
@@ -1627,13 +1312,13 @@ function runUdmDashboard(initialData){
     items.forEach(function(d){
       var pct = ((d.val/total)*100).toFixed(1);
       legendHtml += '<circle cx="'+legendX+'" cy="'+legendY+'" r="6" fill="'+colorFn(d)+'"/>' +
-        '<text x="'+(legendX+14)+'" y="'+(legendY+5)+'" font-size="13.5" fill="'+TC('#dfe1e8')+'">'+escapeHtml(d.label)+'</text>' +
-        '<text x="'+(legendX+14)+'" y="'+(legendY+22)+'" font-size="11.5" fill="'+TC('#8a90a6')+'">'+escapeHtml(valueLabelFn(d.val))+' ('+pct+'%)</text>';
+        '<text x="'+(legendX+14)+'" y="'+(legendY+5)+'" font-size="13.5" fill="#dfe1e8">'+escapeHtml(d.label)+'</text>' +
+        '<text x="'+(legendX+14)+'" y="'+(legendY+22)+'" font-size="11.5" fill="#8a90a6">'+escapeHtml(valueLabelFn(d.val))+' ('+pct+'%)</text>';
       legendY += legendSpacing;
     });
 
-    var centerLabel = '<text x="'+cx+'" y="'+(cy-6)+'" font-size="12.5" fill="'+TC('#8a90a6')+'" text-anchor="middle">Total</text>' +
-      '<text x="'+cx+'" y="'+(cy+16)+'" font-size="16" fill="'+TC('#eceef3')+'" text-anchor="middle" font-weight="700">'+escapeHtml(valueLabelFn(total))+'</text>';
+    var centerLabel = '<text x="'+cx+'" y="'+(cy-6)+'" font-size="12.5" fill="#8a90a6" text-anchor="middle">Total</text>' +
+      '<text x="'+cx+'" y="'+(cy+16)+'" font-size="16" fill="#eceef3" text-anchor="middle" font-weight="700">'+escapeHtml(valueLabelFn(total))+'</text>';
 
     container.innerHTML = '<svg viewBox="0 0 '+totalW+' '+totalH+'" width="100%" height="'+totalH+'" xmlns="http://www.w3.org/2000/svg">' +
       slicesHtml + centerLabel + legendHtml + '</svg>';
@@ -1659,8 +1344,8 @@ function runUdmDashboard(initialData){
     for(var t=0;t<=ticks;t++){
       var gy = topPad + plotH - (plotH*t/ticks);
       var gv = niceMax*t/ticks;
-      gridHtml += '<line x1="'+leftPad+'" y1="'+gy.toFixed(1)+'" x2="'+(leftPad+plotW)+'" y2="'+gy.toFixed(1)+'" stroke="'+TC('#262c3c')+'" stroke-width="1"/>';
-      gridHtml += '<text x="'+(leftPad-8)+'" y="'+(gy+3).toFixed(1)+'" font-size="11" fill="'+TC('#8a90a6')+'" text-anchor="end">'+escapeHtml(valueLabelFn(gv))+'</text>';
+      gridHtml += '<line x1="'+leftPad+'" y1="'+gy.toFixed(1)+'" x2="'+(leftPad+plotW)+'" y2="'+gy.toFixed(1)+'" stroke="#262c3c" stroke-width="1"/>';
+      gridHtml += '<text x="'+(leftPad-8)+'" y="'+(gy+3).toFixed(1)+'" font-size="11" fill="#8a90a6" text-anchor="end">'+escapeHtml(valueLabelFn(gv))+'</text>';
     }
 
     var n = items.length;
@@ -1682,18 +1367,18 @@ function runUdmDashboard(initialData){
       var groupStyle = opts.onClick ? 'cursor:pointer;' : '';
       barsHtml += '<g class="col-item" data-idx="'+i+'" style="'+groupStyle+'">' +
         '<rect x="'+(leftPad+slot*i).toFixed(1)+'" y="'+topPad+'" width="'+slot.toFixed(1)+'" height="'+plotH+'" fill="transparent"></rect>' +
-        '<rect x="'+barX.toFixed(1)+'" y="'+barY.toFixed(1)+'" width="'+barW.toFixed(1)+'" height="'+barH.toFixed(1)+'" fill="'+barColor+'" opacity="'+opacity+'"'+(selected?' stroke="'+TC('#fff')+'" stroke-width="1.5"':'')+'><title>'+escapeHtml(d.label)+': '+escapeHtml(valueLabelFn(d.val))+'</title></rect>' +
+        '<rect x="'+barX.toFixed(1)+'" y="'+barY.toFixed(1)+'" width="'+barW.toFixed(1)+'" height="'+barH.toFixed(1)+'" fill="'+barColor+'" opacity="'+opacity+'"'+(selected?' stroke="#fff" stroke-width="1.5"':'')+'><title>'+escapeHtml(d.label)+': '+escapeHtml(valueLabelFn(d.val))+'</title></rect>' +
         '</g>';
       if(d.val>0){
-        labelsHtml += '<text x="'+cx.toFixed(1)+'" y="'+(barY-8).toFixed(1)+'" font-size="11.5" font-weight="600" fill="'+TC('#eceef3')+'" text-anchor="middle">'+escapeHtml(valueLabelFn(d.val))+'</text>';
+        labelsHtml += '<text x="'+cx.toFixed(1)+'" y="'+(barY-8).toFixed(1)+'" font-size="11.5" font-weight="600" fill="#eceef3" text-anchor="middle">'+escapeHtml(valueLabelFn(d.val))+'</text>';
       }
       var showLabel = (n<=20) || (i % Math.ceil(n/20) === 0);
       if(showLabel){
-        labelsHtml += '<text x="'+cx.toFixed(1)+'" y="'+(topPad+plotH+16)+'" font-size="10" fill="'+TC('#8a90a6')+'" text-anchor="middle">'+escapeHtml(d.label)+'</text>';
+        labelsHtml += '<text x="'+cx.toFixed(1)+'" y="'+(topPad+plotH+16)+'" font-size="10" fill="#8a90a6" text-anchor="middle">'+escapeHtml(d.label)+'</text>';
       }
     });
-    lineHtml = '<polyline points="'+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' ')+'" fill="none" stroke="'+TC('#eceef3')+'" stroke-width="1.6" style="pointer-events:none;"/>';
-    pts.forEach(function(p){ lineHtml += '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="2.4" fill="'+TC('#eceef3')+'" style="pointer-events:none;"/>'; });
+    lineHtml = '<polyline points="'+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' ')+'" fill="none" stroke="#eceef3" stroke-width="1.6" style="pointer-events:none;"/>';
+    pts.forEach(function(p){ lineHtml += '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="2.4" fill="#eceef3" style="pointer-events:none;"/>'; });
 
     container.innerHTML = '<svg viewBox="0 0 '+totalW+' '+totalH+'" width="100%" height="'+totalH+'" xmlns="http://www.w3.org/2000/svg">' +
       gridHtml + barsHtml + lineHtml + labelsHtml + '</svg>';
@@ -1727,8 +1412,8 @@ function runUdmDashboard(initialData){
     for(var t=0;t<=ticks;t++){
       var gy = topPad + plotH - (plotH*t/ticks);
       var gv = niceMax*t/ticks;
-      gridHtml += '<line x1="'+leftPad+'" y1="'+gy.toFixed(1)+'" x2="'+(leftPad+plotW)+'" y2="'+gy.toFixed(1)+'" stroke="'+TC('#262c3c')+'" stroke-width="1"/>';
-      gridHtml += '<text x="'+(leftPad-8)+'" y="'+(gy+3).toFixed(1)+'" font-size="10.5" fill="'+TC('#8a90a6')+'" text-anchor="end">'+escapeHtml((gv>=1000?(gv/1000).toFixed(0)+'K':fmtInt(gv)))+'</text>';
+      gridHtml += '<line x1="'+leftPad+'" y1="'+gy.toFixed(1)+'" x2="'+(leftPad+plotW)+'" y2="'+gy.toFixed(1)+'" stroke="#262c3c" stroke-width="1"/>';
+      gridHtml += '<text x="'+(leftPad-8)+'" y="'+(gy+3).toFixed(1)+'" font-size="10.5" fill="#8a90a6" text-anchor="end">'+escapeHtml((gv>=1000?(gv/1000).toFixed(0)+'K':fmtInt(gv)))+'</text>';
     }
 
     var n = months.length;
@@ -1738,7 +1423,7 @@ function runUdmDashboard(initialData){
       var x = leftPad + slot*i;
       var showLabel = (n<=20) || (i % Math.ceil(n/16) === 0) || i===n-1;
       if(showLabel){
-        xAxisHtml += '<text x="'+x.toFixed(1)+'" y="'+(topPad+plotH+16)+'" font-size="9" fill="'+TC('#8a90a6')+'" text-anchor="middle">'+escapeHtml(m.label)+'</text>';
+        xAxisHtml += '<text x="'+x.toFixed(1)+'" y="'+(topPad+plotH+16)+'" font-size="9" fill="#8a90a6" text-anchor="middle">'+escapeHtml(m.label)+'</text>';
       }
     });
 
@@ -1765,7 +1450,7 @@ function runUdmDashboard(initialData){
           linesHtml += '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.6" fill="'+s.color+'" opacity="0" class="ml-series" data-si="'+si+'" style="'+cursor+'"><title>'+escapeHtml(tip)+'</title></circle>' +
             '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="2.4" fill="'+s.color+'" opacity="'+lineOpacity+'" style="pointer-events:none;"><title>'+escapeHtml(tip)+'</title></circle>';
           var labelY = p[1] - 7 - (si % 3) * 10;
-          labelsHtml += '<text x="'+p[0].toFixed(1)+'" y="'+labelY.toFixed(1)+'" font-size="9.5" font-weight="600" fill="'+TC('#ffffff')+'" opacity="'+lineOpacity+'" text-anchor="middle" style="pointer-events:none;">'+escapeHtml(fmtInt(s.values[i]))+'</text>';
+          labelsHtml += '<text x="'+p[0].toFixed(1)+'" y="'+labelY.toFixed(1)+'" font-size="9.5" font-weight="600" fill="#ffffff" opacity="'+lineOpacity+'" text-anchor="middle" style="pointer-events:none;">'+escapeHtml(fmtInt(s.values[i]))+'</text>';
         }
       });
     });
@@ -1968,7 +1653,7 @@ function runUdmDashboard(initialData){
     kpiModalTitle.textContent = title + ' (' + rows.length + ')';
     kpiModalHeadRow.innerHTML = '<th style="width:36px;">No.</th>' + columns.map(function(c){ return '<th>'+escapeHtml(c.label)+'</th>'; }).join('');
     if(rows.length === 0){
-      kpiModalBody.innerHTML = '<tr><td colspan="'+(columns.length+1)+'" style="text-align:center; color:#666; padding:18px;">Tiada rekod.</td></tr>';
+      kpiModalBody.innerHTML = '<tr><td colspan="'+(columns.length+1)+'" style="text-align:center; color:#666; padding:18px;">No records.</td></tr>';
     } else {
       kpiModalBody.innerHTML = rows.map(function(r,i){
         return '<tr><td style="color:#7d8399;">'+(i+1)+'</td>'+columns.map(function(c){ return '<td>'+c.render(r)+'</td>'; }).join('')+'</tr>';
@@ -2023,8 +1708,8 @@ function runUdmDashboard(initialData){
     var row = currentDetailRow;
     var statusVal = row[7] || row[6] || '-';
     var statusIsGood = statusVal === 'Complete';
-    var statusColor = statusIsGood ? TC('#1f9d55') : TC('#c9522f');
-    var statusBg = statusIsGood ? TC('#e7f6ec') : TC('#fdece4');
+    var statusColor = statusIsGood ? '#1f9d55' : '#c9522f';
+    var statusBg = statusIsGood ? '#e7f6ec' : '#fdece4';
 
     var locationFields = [
       {label:'District', value: row[1] || '-'},
@@ -2131,7 +1816,7 @@ function runUdmDashboard(initialData){
       '<div class="section-title">Distance Progress</div>'+
       '<div class="progress-box">'+
         '<div class="progress-row"><div class="progress-label">Total TP</div><div class="progress-track"><div class="progress-fill" style="width:'+tpPct+'%; background:#8b93a8;"></div></div><div class="progress-val">'+escapeHtml(fmtDist(tp))+'</div></div>'+
-        '<div class="progress-row"><div class="progress-label">Total Actual</div><div class="progress-track"><div class="progress-fill" style="width:'+actPct+'%; background:'+(statusIsGood?TC('#2f9e58'):TC('#e2833f'))+';"></div></div><div class="progress-val">'+escapeHtml(fmtDist(actual))+'</div></div>'+
+        '<div class="progress-row"><div class="progress-label">Total Actual</div><div class="progress-track"><div class="progress-fill" style="width:'+actPct+'%; background:'+(statusIsGood?'#2f9e58':'#e2833f')+';"></div></div><div class="progress-val">'+escapeHtml(fmtDist(actual))+'</div></div>'+
       '</div>'+
 
       '<div class="signoff">'+
@@ -2273,8 +1958,6 @@ function runUdmDashboard(initialData){
         else { arrow.textContent = ''; }
       });
     }
-    /* daftar supaya togol tema boleh melukis semula carta ini */
-    window.__redraws = window.__redraws || []; window.__redraws.push(draw);
 
     var curShown = [];
     body.addEventListener('click', function(e){
@@ -2484,7 +2167,7 @@ function runUdmDashboard(initialData){
       });
       var districtArr = Object.keys(byDistrict).map(function(d){return {label:d, val:byDistrict[d]};})
         .filter(function(d){return d.val>0;}).sort(function(a,b){return b.val-a.val;});
-      renderHBarSVG(document.getElementById('ov-chartDistrict'), districtArr, function(){return TC('#4ecdc4');}, function(v){return fmtDist(v);}, function(v){return fmtDist(v);}, {
+      renderHBarSVG(document.getElementById('ov-chartDistrict'), districtArr, function(){return '#4ecdc4';}, function(v){return fmtDist(v);}, function(v){return fmtDist(v);}, {
         onClick: function(d){
           ovDistrictSel.value = (ovDistrictSel.value === d.label) ? 'All' : d.label;
           render();
@@ -2498,16 +2181,16 @@ function runUdmDashboard(initialData){
         var s = r[7] || 'Unknown';
         byStatus[s] = (byStatus[s]||0) + r[4];
       });
-      var statusColors = {'Complete':TC('#4fbf85'),'Assigned Awaiting site':TC('#e2833f')};
+      var statusColors = {'Complete':'#4fbf85','Assigned Awaiting site':'#e2833f'};
       var statusArr = Object.keys(byStatus).map(function(s){return {label:s, val:byStatus[s]};})
         .filter(function(d){return d.val>0;}).sort(function(a,b){return b.val-a.val;});
-      renderDonutSVG(document.getElementById('ov-chartStatusUDM'), statusArr, function(d){return statusColors[d.label]||TC('#4a90d9');}, function(v){return fmtDist(v);});
+      renderDonutSVG(document.getElementById('ov-chartStatusUDM'), statusArr, function(d){return statusColors[d.label]||'#4a90d9';}, function(v){return fmtDist(v);});
 
       // Monthly distance (Date Completed On Site (UDM) -> Total TP)
       var months = buildMonthRange(RAW, 11);
       var monthlyVals = fillMonthSeries(rows, 11, function(r){return r[4];}, months);
       var monthItems = months.map(function(mo,i){return {label: monthLabel(mo.y,mo.m).slice(0,3)+(mo.m===1?(' '+mo.y):''), val: monthlyVals[i], y:mo.y, m:mo.m};});
-      renderColumnChart(document.getElementById('ov-chartMonthly'), monthItems, TC('#4fbf85'), function(v){return fmtInt(v);}, {
+      renderColumnChart(document.getElementById('ov-chartMonthly'), monthItems, '#4fbf85', function(v){return fmtInt(v);}, {
         onClick: function(d){
           var ym = ('0'+d.m).slice(-2);
           if(ovYearMonth.isExactlySelected(String(d.y), ym)){ ovYearMonth.setYearMonth(null, null); }
@@ -2521,7 +2204,7 @@ function runUdmDashboard(initialData){
       var projMonths = buildMonthRange(RAW, 11);
       var projCounts = fillMonthSeries(rows, 11, function(){return 1;}, projMonths);
       var projItems = projMonths.map(function(mo,i){return {label: monthLabel(mo.y,mo.m).slice(0,3)+(mo.m===1?(' '+mo.y):''), val: projCounts[i], y:mo.y, m:mo.m};});
-      renderColumnChart(document.getElementById('ov-chartProjMonthly'), projItems, TC('#8b7cf6'), function(v){return fmtInt(v);}, {
+      renderColumnChart(document.getElementById('ov-chartProjMonthly'), projItems, '#8b7cf6', function(v){return fmtInt(v);}, {
         onClick: function(d){
           var ym = ('0'+d.m).slice(-2);
           if(ovYearMonth.isExactlySelected(String(d.y), ym)){ ovYearMonth.setYearMonth(null, null); }
@@ -2533,8 +2216,6 @@ function runUdmDashboard(initialData){
 
       ovList.update(rows);
     }
-    /* daftar supaya togol tema boleh melukis semula carta ini */
-    window.__redraws = window.__redraws || []; window.__redraws.push(render);
 
     var ovKpiColumns = [
       {label:'Project Name', render:function(r){return escapeHtml(r[10]);}},
@@ -2610,9 +2291,9 @@ function runUdmDashboard(initialData){
         {key:'district', label:'District', getVal:function(r){return r[1];}, render:function(r){return escapeHtml(r[1]);}},
         {key:'drafter', label:'Drafter', getVal:function(r){return r[0];}, render:function(r){return escapeHtml(r[0]);}},
         {key:'distance', label:'Distance (TP)', getVal:function(r){return r[4];}, render:function(r){return fmtDist(r[4]);}},
-        {key:'status', label:'Status', getVal:function(r){return r[6];}, render:function(r){
+        {key:'status', label:'Status', getVal:function(r){return statusLabel(r);}, render:function(r){
           var cls = r[6]==='Complete' ? 'complete' : (r[6]==='Incomplete' ? 'pending' : 'other');
-          return '<span class="status-pill '+cls+'">'+escapeHtml(r[6]||'-')+'</span>';
+          return '<span class="status-pill '+cls+'">'+escapeHtml(statusLabel(r))+'</span>';
         }}
       ]
     });
@@ -2658,7 +2339,7 @@ function runUdmDashboard(initialData){
       });
       var distArr = DRAFTER_ORDER.map(function(d){return {label:d, val:(byDrafter[d]?byDrafter[d].dist:0)};})
         .filter(function(d){return d.val>0;}).sort(function(a,b){return b.val-a.val;});
-      renderHBarSVG(document.getElementById('dr-chartDistance'), distArr, function(d){return DRAFTER_COLORS[d.label]||TC('#888');}, function(v){return fmtDist(v);}, function(v){return fmtDist(v);}, {
+      renderHBarSVG(document.getElementById('dr-chartDistance'), distArr, function(d){return DRAFTER_COLORS[d.label]||'#888';}, function(v){return fmtDist(v);}, function(v){return fmtDist(v);}, {
         onClick: function(d){ toggleDrafter(d.label); render(); },
         isSelected: function(d){ return selectedDrafters.has(d.label); }
       });
@@ -2673,7 +2354,7 @@ function runUdmDashboard(initialData){
       });
       var compArr = DRAFTER_ORDER.map(function(d){return {label:d, val:(byDrafter[d]?byDrafter[d].completed:0)};})
         .filter(function(d){return d.val>0;}).sort(function(a,b){return b.val-a.val;});
-      renderHBarSVG(document.getElementById('dr-chartCompleted'), compArr, function(d){return DRAFTER_COLORS[d.label]||TC('#888');}, function(v){return fmtInt(v);}, function(v){return fmtInt(v);}, {
+      renderHBarSVG(document.getElementById('dr-chartCompleted'), compArr, function(d){return DRAFTER_COLORS[d.label]||'#888';}, function(v){return fmtInt(v);}, function(v){return fmtInt(v);}, {
         onClick: function(d){ toggleDrafter(d.label); render(); },
         isSelected: function(d){ return selectedDrafters.has(d.label); }
       });
@@ -2682,7 +2363,7 @@ function runUdmDashboard(initialData){
       var months = buildMonthRange(RAW, 9);
       var monthlyVals = fillMonthSeries(rows, 9, function(r){return r[5];}, months);
       var monthItems = months.map(function(mo,i){return {label: monthLabel(mo.y,mo.m).slice(0,3)+(mo.m===1?(' '+mo.y):''), val: monthlyVals[i], y:mo.y, m:mo.m};});
-      renderColumnChart(document.getElementById('dr-chartMonthly'), monthItems, TC('#e05c6e'), function(v){return fmtInt(v);}, {
+      renderColumnChart(document.getElementById('dr-chartMonthly'), monthItems, '#e05c6e', function(v){return fmtInt(v);}, {
         onClick: function(d){
           var ym = ('0'+d.m).slice(-2);
           if(drCompletedYM.isExactlySelected(String(d.y), ym)){ drCompletedYM.setYearMonth(null, null); }
@@ -2706,15 +2387,13 @@ function runUdmDashboard(initialData){
 
       drList.update(rows);
     }
-    /* daftar supaya togol tema boleh melukis semula carta ini */
-    window.__redraws = window.__redraws || []; window.__redraws.push(render);
 
     var drKpiColumns = [
       {label:'Project Name', render:function(r){return escapeHtml(r[10]);}},
       {label:'District', render:function(r){return escapeHtml(r[1]);}},
       {label:'Drafter', render:function(r){return escapeHtml(r[0]);}},
       {label:'Distance (TP)', render:function(r){return fmtDist(r[4]);}},
-      {label:'Status', render:function(r){return escapeHtml(r[6]||'-');}}
+      {label:'Status', render:function(r){return escapeHtml(statusLabel(r));}}
     ];
     document.getElementById('dr-kpiProgress-box').addEventListener('click', function(){
       var rows = filteredRows().filter(function(r){return r[6]==='Incomplete';});
@@ -2816,44 +2495,129 @@ function runUdmDashboard(initialData){
     return null;
   }
 
+  var DRAFTER_CANON = {'SYAFIQA':'Syafiqa','SYAFIQAH':'Syafiqa','NASUHA':'Nasuha',
+    'NABIHAH':'Nabihah','NABIHA':'Nabihah','INTAN':'Intan','ADAM':'Adam'};
   function normDrafter(v){
     if(v===null || v===undefined) return 'TBC';
     var s = String(v).trim();
     if(s === '') return 'TBC';
     if(s.toUpperCase() === 'TBC') return 'TBC';
-    return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+    /* a few cells name two drafters ("Intan/Nabiha"); the first one owns the row
+       so that colours and per-drafter charts stay valid */
+    s = s.split(/[\/&,]| and /i)[0].trim();
+    var up = s.toUpperCase();
+    return DRAFTER_CANON[up] || (s.charAt(0).toUpperCase() + s.slice(1).toLowerCase());
+  }
+
+  /* Telco is not carried on the UDM PROGRESS sheet, so it is looked up from the
+     "Progress" sheet by school name. Casing there is inconsistent, so it is
+     normalised to a single spelling per telco. */
+  var TELCO_CANON = {'PRIVASAT':'Privasat','TM':'TM','MAXIS':'Maxis','CELCOMDIGI':'CelcomDigi',
+    'CELCOM DIGI':'CelcomDigi','TIME':'Time','ALLO':'Allo','DEVELOPER':'Developer',
+    'PROTIMUR':'Protimur','PKNK':'PKNK'};
+  function canonTelco(v){
+    if(v===null || v===undefined) return '';
+    var s = String(v).trim();
+    if(s === '') return '';
+    var up = s.toUpperCase().replace(/\s+/g,' ');
+    return TELCO_CANON[up] || (s.charAt(0).toUpperCase() + s.slice(1).toLowerCase());
+  }
+
+  /* Status & Progress -> the four buckets the dashboard reports on. */
+  var STATUS_MAP = {'PROCEED':'Complete','PENDING ASSIGN':'Unassigned Project',
+    'PENDING TEAM SITE':'Awaiting Team Site','PENDING DRAWING':'Incomplete',
+    'PENDING AMENDMENT':'Complete'};   /* drawing is out for amendment: counted as done */
+  function mapStatus(v){
+    if(v===null || v===undefined) return '';
+    var up = String(v).trim().toUpperCase().replace(/\s+/g,' ');
+    if(up === '') return '';
+    return STATUS_MAP[up] || String(v).trim();
+  }
+  function mapStatusUdm(v){
+    if(v===null || v===undefined) return '';
+    var up = String(v).trim().toUpperCase();
+    if(up === 'COMPLETED') return 'Complete';
+    if(up === 'PENDING')   return 'Assigned Awaiting site';
+    return String(v).trim();
+  }
+
+  /* Find the header row by looking for the "School Name" label, so the parser
+     survives small changes to the number of banner rows above it. */
+  function findHeaderRow(rows, label){
+    for(var i=0; i<Math.min(rows.length, 12); i++){
+      var r = rows[i] || [];
+      for(var j=0; j<r.length; j++){
+        if(r[j] && String(r[j]).trim().toLowerCase() === label) return i;
+      }
+    }
+    return -1;
+  }
+
+  function buildTelcoLookup(wb){
+    var map = {};
+    if(wb.SheetNames.indexOf('Progress') === -1) return map;
+    var rows = XLSX.utils.sheet_to_json(wb.Sheets['Progress'], {header:1, raw:true, defval:null});
+    var hdr = findHeaderRow(rows, 'site name');
+    if(hdr < 0) return map;
+    for(var i=hdr+1; i<rows.length; i++){
+      var r = rows[i];
+      if(!r || !r[2]) continue;
+      var key = String(r[2]).trim().toUpperCase().replace(/\s+/g,' ');
+      if(key && !map[key]) map[key] = canonTelco(r[1]);
+    }
+    return map;
   }
 
   function parseUdmWorkbook(arrayBuffer){
     var wb = XLSX.read(arrayBuffer, {type:'array', cellDates:true});
-    var sheetName = wb.SheetNames.indexOf('TRACKER') !== -1 ? 'TRACKER' : wb.SheetNames[0];
+    var sheetName = wb.SheetNames.indexOf('UDM PROGRESS') !== -1 ? 'UDM PROGRESS'
+                  : (wb.SheetNames.indexOf('TRACKER') !== -1 ? 'TRACKER' : wb.SheetNames[0]);
     var ws = wb.Sheets[sheetName];
     var rows = XLSX.utils.sheet_to_json(ws, {header:1, raw:true, defval:null});
 
+    var hdr = findHeaderRow(rows, 'school name');
+    var first = hdr >= 0 ? hdr + 2 : 4;   /* one sub-header row sits under the main header */
+    var telcoOf = buildTelcoLookup(wb);
+
     var out = [];
     var skipped = 0;
-    for(var i=1; i<rows.length; i++){
+    var noTelco = 0;
+    for(var i=first; i<rows.length; i++){
       var r = rows[i];
       try{
-        if(!r || r[0]===null || r[0]===undefined || r[0]==='') continue;
-        var drafter = normDrafter(r[3]);
-        var projectName = (r[4]!==null && r[4]!==undefined && String(r[4]).trim()!=='') ? String(r[4]).trim() : 'Unnamed Project';
-        var district = (r[5]!==null && r[5]!==undefined && String(r[5]).trim()!=='') ? String(r[5]).trim() : 'Unknown';
-        var telco = (r[2]!==null && r[2]!==undefined) ? String(r[2]).trim() : '';
-        var pbm = (r[6]!==null && r[6]!==undefined) ? String(r[6]).trim() : '';
-        var totalTP = Number(r[9]) || 0;
-        var totalActual = Number(r[14]) || 0;
-        var status = (r[26]!==null && r[26]!==undefined) ? String(r[26]).trim() : '';
-        var statusUdm = (r[27]!==null && r[27]!==undefined) ? String(r[27]).trim() : '';
-        var dateReceived = toIsoDate(r[19]);
-        var dateCompleted = toIsoDate(r[23]);
-        var dateCompletedOnSiteUdm = toIsoDate(r[18]);
-        out.push([drafter, district, telco, pbm, totalTP, totalActual, status, statusUdm, dateReceived, dateCompleted, projectName, dateCompletedOnSiteUdm]);
+        if(!r) continue;
+        var projectName = (r[2]!==null && r[2]!==undefined && String(r[2]).trim()!=='') ? String(r[2]).trim() : '';
+        if(projectName === '') continue;              /* blank or continuation row */
+        if(projectName.toLowerCase() === 'school name') continue;
+
+        var drafter  = normDrafter(r[18]);
+        var district = (r[3]!==null && r[3]!==undefined && String(r[3]).trim()!=='')
+                       ? String(r[3]).trim().replace(/\s+/g,' ') : 'Unknown';
+        var pbm      = (r[4]!==null && r[4]!==undefined) ? String(r[4]).trim() : '';
+        var telco    = telcoOf[projectName.toUpperCase().replace(/\s+/g,' ')] || '';
+        if(!telco) noTelco++;
+
+        var totalTP     = Number(r[7])  || 0;
+        /* "Distance by Drafter" (col 16) is the measured figure and is filled far more
+           consistently than "Actual Distance Final (DWG)" (col 27), which is still blank
+           on 31 rows. Fall back to the DWG figure only where col 16 is empty. */
+        var totalActual = Number(r[16]) || Number(r[27]) || 0;
+        var status      = mapStatus(r[31]);
+        var statusUdm   = mapStatusUdm(r[8]);
+        var dateReceived            = toIsoDate(r[28]);
+        var dateCompleted           = toIsoDate(r[29]);
+        var dateCompletedOnSiteUdm  = toIsoDate(r[10]);
+
+        /* r[12] keeps the tracker's own wording so lists can show "Pending Amendment"
+           while the rollup in r[6] still counts it as Complete */
+        var rawStatus = (r[31]===null || r[31]===undefined) ? '' : String(r[31]).trim();
+        out.push([drafter, district, telco, pbm, totalTP, totalActual, status, statusUdm,
+                  dateReceived, dateCompleted, projectName, dateCompletedOnSiteUdm, rawStatus]);
       } catch(e){
         skipped++;
       }
     }
-    return {data: out, skipped: skipped, sheetUsed: sheetName};
+    return {data: out, skipped: skipped, sheetUsed: sheetName, noTelco: noTelco};
   }
 
   function handleFile(file){
@@ -2871,7 +2635,7 @@ function runUdmDashboard(initialData){
       try{
         var result = parseUdmWorkbook(e.target.result);
         if(result.data.length === 0){
-          gateError.textContent = 'No valid records were found in this file. Please make sure the "TRACKER" sheet format matches the original template.';
+          gateError.textContent = 'No valid records were found in this file. Please make sure the "UDM PROGRESS" sheet format matches the tracker template.';
           gateError.style.display = 'block';
           gateStatus.textContent = '';
           return;
@@ -2981,6 +2745,5 @@ function runUdmDashboard(initialData){
   document.addEventListener('drop', function(e){ e.preventDefault(); });
 })();
 </script>
-
 </body>
 </html>
