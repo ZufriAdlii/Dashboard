@@ -456,6 +456,16 @@ tbody tr.rowlink:focus-visible{outline:2px solid var(--amber);outline-offset:-2p
 .dslicers{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
           border:1px solid var(--line);border-top:0}
 .dslicer{padding:20px 22px;min-width:0;background:var(--surface)}
+/* date tree ialah alat siasatan — dilipat secara lalai supaya Telco dan Status
+   kekal di bahagian atas sidebar tanpa perlu scroll */
+.dslicer .slicer-head{cursor:pointer}
+.dslicer .slicer-head h3::after{content:'\2212';float:none;margin-left:8px;color:var(--faint);font-family:var(--mono)}
+.dslicer.folded .slicer-head h3::after{content:'\002B'}
+.dslicer.folded .dtree,
+.dslicer.folded .dtree-sub{display:none}
+.dslicer.folded .clr{display:none}
+.dslicer.has .slicer-head h3{color:var(--amber)}
+
 .dtree{max-height:250px;overflow-y:auto;border:1px solid var(--line);background:var(--well);padding:5px}
 .dtree::-webkit-scrollbar{width:8px}
 .dtree::-webkit-scrollbar-track{background:transparent}
@@ -498,6 +508,18 @@ tbody tr.rowlink:focus-visible{outline:2px solid var(--amber);outline-offset:-2p
   .tabs::-webkit-scrollbar{display:none}
   .tab{padding:12px 14px;letter-spacing:.1em;white-space:nowrap}
 }
+
+/* ---------- mod pilih baris ---------- */
+#selmode.on{background:var(--amber);color:var(--on-accent);border-color:var(--amber)}
+body.selmode tbody tr.rowlink{cursor:pointer}
+body.selmode #tbody tr.rowlink td:first-child{position:relative;padding-left:30px}
+body.selmode #tbody tr.rowlink td:first-child::before{
+  content:'';position:absolute;left:9px;top:50%;transform:translateY(-50%);
+  width:13px;height:13px;border:1px solid var(--line-2);background:var(--surface)}
+body.selmode #tbody tr.sel td:first-child::before{
+  background:var(--amber);border-color:var(--amber)}
+body.selmode #tbody tr.sel td{background:var(--amber-soft)}
+body.selmode #tbody tr.sel td:first-child{box-shadow:inset 3px 0 0 var(--amber)}
 
 /* ---------- controls ---------- */
 .controls{background:var(--surface);border:1px solid var(--line);margin-top:22px;padding:16px 22px;
@@ -704,23 +726,22 @@ td.num,td.dt{font-family:var(--mono);font-size:12.5px;white-space:nowrap;font-va
 .days{font-family:var(--mono);font-size:11px;color:var(--amber)}
 .days.frozen{color:var(--sky)}
 .tot-all{color:var(--faint);letter-spacing:.06em}
+.caprow td{background:var(--amber-soft) !important;color:#F0D3A6;text-align:center;
+           font-family:var(--mono);font-size:12px;letter-spacing:.06em;padding:16px !important}
 .foot b{color:var(--ink);font-weight:400;font-size:12px}
 .mfoot b{color:var(--ink);font-weight:400;font-size:12px}
 .foot{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;
       padding:14px 22px;background:var(--surface);border:1px solid var(--line);border-top:0;
       font-family:var(--mono);font-size:11.5px;color:var(--faint);letter-spacing:.06em}
 .empty{padding:56px 16px;text-align:center;color:var(--faint);font-family:var(--display);font-size:17px}
-.byline{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:flex-end;
-         padding-bottom:20px;margin-bottom:20px;border-bottom:1px solid var(--line)}
+.byline{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:flex-end}
 .by-lbl{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.22em;
         text-transform:uppercase;color:var(--amber);margin-bottom:6px}
 .by-name{font-family:var(--display);font-size:26px;letter-spacing:-.01em;color:var(--ink);line-height:1.1}
 .by-meta{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--faint);
          text-align:right;line-height:1.9}
 @media (max-width:700px){.by-meta{text-align:left}}
-footer.credit{margin-top:32px;padding-top:20px;border-top:1px solid var(--line);
-              font-family:var(--mono);font-size:11.5px;color:var(--faint);line-height:2}
-footer.credit b{color:var(--dim);font-weight:400}
+footer.credit{margin-top:32px;padding-top:20px;border-top:1px solid var(--line)}
 
 @media (max-width:1000px){
   .dslicers{grid-template-columns:1fr}
@@ -735,34 +756,171 @@ footer.credit b{color:var(--dim);font-weight:400}
   .gatebox{padding:32px 26px}
 }
 @media print{
-  @page{size:A4 landscape;margin:11mm}
+  @page{size:A4 portrait;margin:12mm}
+  @page rec{size:A4 portrait;margin:14mm}
+  body.pm-detail{page:rec}
+
+  /* Kertas lebih sempit daripada 760px, jadi peraturan mudah alih tercetus dan
+     jadual bertukar jadi kad — semua sel data hilang. Pulihkan mod jadual. */
+  table{display:table !important}
+  thead{display:table-header-group !important}
+  tbody{display:table-row-group !important}
+  tr{display:table-row !important}
+  th,td{display:table-cell !important}
+  tbody td.cardcell{display:none !important}
 
   /* sidebar fixed dan offsetnya mesti dibatalkan, kalau tidak kandungan terpotong */
   body{background:#fff;padding-left:0 !important}
   .wrap{max-width:none;padding:0}
 
   /* alat kawalan tiada makna di atas kertas */
-  .filterwrap,.tabs,.controls,.mfilter,.sb-open,.sb-head,
+  .filterwrap,.tabs,.controls,.mfilter,.sb-open,.sb-head,.mast,.back-btn,
   #gate,#detail,.toast,#hint,.filepill,#theme,.kpi .hint,.panel-hint,
   .chip,.dsel,.iconbtn{display:none !important}
 
-  /* semua tab dicetak, satu paparan satu halaman */
-  .view{display:block !important}
-  .view + .view{break-before:page}
+  .slicers,.dslicers{display:none !important}
+
+  /* cetak "semua" bermaksud senarai sahaja — KPI, rekonsiliasi, telco dan PBM tidak dicetak */
+  .view{display:none !important}
+  #v-rec{display:block !important}
+  .kpis,.recon,.grid,.panel{display:none !important}
 
   /* jadual mesti mengalir penuh, bukan tetingkap berskrol */
-  .tablewrap{max-height:none !important;overflow:visible !important}
+  .tablewrap{max-height:none !important;overflow:visible !important;border:0 !important;background:none !important}
   thead th{position:static !important}
-  tr,.panel,.kpi,.recon,.tbar{break-inside:avoid}
+  tr{break-inside:avoid}
 
-  /* kad KPI ialah butang — tanpa ini semuanya hilang masa cetak */
-  .kpi{cursor:default}
-  #print-head{display:block}
+  /* jadual senarai: padat, kepala gelap berulang tiap halaman, baris berjalur */
+  #v-rec table{font-size:8px;table-layout:auto;width:100%}
+  /* satu keluarga font untuk teks, satu untuk nombor — bukan tiga campur aduk */
+  #v-rec tbody td{font-family:var(--body)}
+  #v-rec .proj{font-family:var(--body);font-size:8px;min-width:0;max-width:none;
+        font-weight:600;color:#101B29}
+  #v-rec .num,#v-rec .dt{font-family:var(--mono);font-size:7.5px;color:#101B29;
+        white-space:nowrap;font-variant-numeric:tabular-nums}
+  /* sel kosong jangan dibaca sebagai data */
+  #v-rec tbody td.none,#v-rec tbody td:empty{color:#C3CCD6}
+  /* tarikh dan kiraan lebih senang dibanding bila dijajar kanan */
+  #v-rec .num,#v-rec .dt{text-align:right}
+  #v-rec thead th.num,#v-rec thead th.dt{text-align:right}
+  #v-rec thead th{background:#0F141C !important;color:#EDF1F6 !important;
+        font-family:var(--mono);font-size:6.5px;letter-spacing:.09em;text-transform:uppercase;
+        font-weight:500;padding:6px 5px;border:0;white-space:nowrap;
+        -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #v-rec thead th .ar{display:none}
+  #v-rec tbody td{padding:4px 5px;border:0;border-bottom:1px solid #E3E9EF;
+        background:none !important;position:static !important;vertical-align:top;line-height:1.3}
+  #v-rec tbody tr:nth-child(even) td{background:#FAFCFD !important;
+        -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  /* satu warna teks untuk semua sel; hierarki datang dari saiz dan berat sahaja */
+  #v-rec tbody td,#v-rec tbody td *:not(.tag){color:#101B29}
+  #v-rec td.rno{font-family:var(--mono);font-size:7px;color:#8192A6;text-align:right}
+  /* span .days ialah 11px amber pada skrin — samakan dengan lajur nombor lain */
+  #v-rec .days,#v-rec .days.frozen{font-family:var(--mono);font-size:7.5px;color:#101B29}
+  #v-rec td.none,#v-rec td:empty{color:#C3CCD6}
+  /* garis amber nipis memisahkan kepala daripada data */
+  #v-rec thead{border-bottom:2px solid #E8A33D}
+  /* lencana jadi teks berwarna — jimat dakwat dan lebar */
+  #v-rec .tag{background:none !important;border:0 !important;padding:0 !important;
+        font-family:var(--mono);font-size:6.5px;letter-spacing:.04em}
+
+  /* kredit ialah kaki dokumen, bukan seksyen — kekal pada halaman yang sama */
+  footer.credit{break-before:avoid;margin-top:18px;padding-top:11px;
+        border-top:1px solid #DCE3EB}
+  footer.credit .by-lbl{font-size:7.5px;color:#8192A6;margin-bottom:3px}
+  footer.credit .by-name{font-size:14px;color:#101B29}
+  footer.credit .by-meta{font-size:8px;color:#8192A6;line-height:1.7}
+
+  /* cetak pilihan sahaja: baris yang tidak dipilih digugurkan */
+  body.printsel .foot{display:none !important}
+  body.printsel #tbody tr:not(.sel){display:none !important}
+  .foot{font-family:var(--mono);font-size:8px;letter-spacing:.08em;color:#8192A6;
+        padding:9px 0 0;margin:0}
+  .foot #hint{display:none}
+  body.printsel #tbody tr.sel td:first-child{padding-left:5px;box-shadow:none}
+  body.printsel #tbody tr.sel td{background:none !important}
+
+  #print-head{display:block !important}
+  .pbrand{-webkit-print-color-adjust:exact;print-color-adjust:exact;break-inside:avoid}
+  .pbrand,.ptitle,.pmeta{break-after:avoid}
+  .pstats{break-inside:avoid;break-after:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-rule,.pr-t th,.pr-flag,.pr-note{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-sec{break-after:avoid}
+
+  /* modal berada di dalam .wrap, jadi kita sembunyikan adik-beradiknya, bukan .wrap */
+  body.print-modal .wrap > *:not(#modal){display:none !important}
+  body.print-modal #detail{display:none !important}
+  body.print-modal .veil,
+  body.print-modal .mact{display:none !important}
+  body.print-modal .mfoot span + span{display:none}
+  body.print-modal .mfoot{padding:12px 0 0;border-top:1px solid #C9D3DE;
+        font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#101B29}
+
+  /* rekod tunggal dicetak sebagai helaian sendiri, bukan modal yang diregangkan */
+  body.pm-detail #print-head{display:none !important}
+  body.pm-detail #print-record{display:block !important}
+
+  body.pm-list #modal{display:block !important;position:static;padding:0;inset:auto}
+  body.print-modal .mbox{width:auto;max-width:none;max-height:none;border:0;box-shadow:none}
+  body.print-modal .mbody{max-height:none;overflow:visible;padding:0}
+  body.print-modal .mhead{display:none !important}
 }
 
-#print-head{display:none;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--line);
-            font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--faint);line-height:1.9}
-#print-head b{color:var(--ink);font-weight:500}
+#print-head{display:none}
+.pbrand{display:flex;justify-content:space-between;align-items:center;gap:20px;
+        background:#0F141C;color:#EDF1F6;padding:14px 20px}
+.pbrand .pb-name{font-family:var(--display);font-size:17px;font-weight:500;letter-spacing:-.01em;line-height:1.2}
+.pbrand .pb-kick,.pbrand .pb-cap{font-family:var(--mono);font-size:8.5px;letter-spacing:.22em;
+        text-transform:uppercase;color:#8192A6;margin-top:4px}
+.pbrand .pb-right{text-align:right}
+.pbrand .pb-cap{margin:0 0 3px}
+.pbrand .pb-n{font-family:var(--mono);font-size:19px;color:#E8A33D;line-height:1}
+.ptitle{font-family:var(--display);font-size:23px;font-weight:500;letter-spacing:-.02em;
+        margin:18px 0 5px;color:#101B29;line-height:1.2}
+.pmeta{font-family:var(--mono);font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;
+       color:#5C6E82;line-height:1.8;margin-bottom:14px;padding-bottom:12px;
+       border-bottom:1px solid #DCE3EB}
+.pmeta b{color:#B07A16;font-weight:500}
+.pstats{display:flex;flex-wrap:wrap;gap:0;margin:0 0 16px;border:1px solid #DCE3EB}
+.pstat{flex:1;min-width:110px;padding:9px 12px;border-right:1px solid #DCE3EB}
+.pstat:last-child{border-right:0}
+.pstat .ps-k{font-family:var(--mono);font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;
+             color:#8192A6;margin-bottom:3px}
+.pstat .ps-v{font-family:var(--display);font-size:17px;color:#101B29;line-height:1}
+.pstat.warn .ps-v{color:#B0541A}
+.pstat.crit .ps-v{color:#A32C1A}
+.pstat.ok .ps-v{color:#1C6B3F}
+
+/* ---------- helaian rekod tunggal (cetak sahaja) ---------- */
+#print-record{display:none;color:#101B29}
+.pr-head{display:flex;justify-content:space-between;align-items:flex-start;gap:26px;padding-bottom:13px}
+.pr-name{font-family:var(--display);font-size:19px;font-weight:600;letter-spacing:.03em}
+.pr-kick{font-size:11px;color:#5C6E82;margin-top:3px}
+.pr-right{text-align:right;font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;
+          text-transform:uppercase;color:#8192A6;line-height:1.7}
+.pr-right b{display:block;font-size:11px;letter-spacing:.04em;color:#101B29;font-weight:600;
+            text-transform:none;margin-bottom:7px}
+.pr-rule{height:2px;background:#E8A33D;margin-bottom:24px}
+.pr-title{font-family:var(--display);font-size:24px;font-weight:600;letter-spacing:-.01em;margin:0}
+.pr-sub{font-size:12px;color:#5C6E82;margin:6px 0 26px}
+.pr-block{margin-bottom:20px;break-inside:avoid}
+.pr-sec{font-family:var(--mono);font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;
+        color:#C77C0C;margin:0 0 8px}
+.pr-t{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
+.pr-t th{background:#F4F7FA;color:#5C6E82;font-family:var(--mono);font-size:8px;letter-spacing:.12em;
+         text-transform:uppercase;font-weight:500;text-align:left;padding:7px 10px;border:1px solid #DCE3EB}
+.pr-t td{padding:9px 10px;border:1px solid #DCE3EB;vertical-align:top;word-wrap:break-word}
+.pr-t td.mono{font-family:var(--mono);font-size:10.5px}
+.pr-t td.none{color:#9AA8B8;font-style:italic}
+.pr-kv td:first-child{color:#5C6E82;width:34%}
+.pr-flag{display:inline-block;padding:2px 9px;font-family:var(--mono);font-size:9px;letter-spacing:.08em;
+         background:#E7F4EC;color:#1C6B3F}
+.pr-flag.bad{background:#FBE9E7;color:#A32C1A}
+.pr-flag.idle{background:#F0F2F5;color:#5C6E82}
+.pr-note{display:flex;justify-content:space-between;align-items:center;gap:16px;
+         padding:15px 17px;background:#FDF6EC;border:1px solid #EFD9B4;font-size:12px}
+.pr-foot{margin-top:30px;padding-top:10px;border-top:1px solid #DCE3EB;display:flex;
+         justify-content:space-between;font-size:9px;color:#8192A6}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -821,6 +979,9 @@ footer.credit b{color:var(--dim);font-weight:400}
     </div>
   </div>
 </div>
+
+<div id="print-head" aria-hidden="true"></div>
+<div id="print-record" aria-hidden="true"></div>
 
 <div class="wrap">
 
@@ -885,22 +1046,22 @@ footer.credit b{color:var(--dim);font-weight:400}
 </section>
 
 <section class="dslicers">
-  <div class="dslicer">
+  <div class="dslicer folded">
     <div class="slicer-head"><h3>Permit expiry date</h3><button class="clr" data-clr="dte">Clear</button></div>
     <div class="dtree" id="dt-te"></div>
     <div class="dtree-sub">Year &rsaquo; month &rsaquo; day &mdash; multi-select</div>
   </div>
-  <div class="dslicer">
+  <div class="dslicer folded">
     <div class="slicer-head"><h3>Extension expiry date</h3><button class="clr" data-clr="dtl">Clear</button></div>
     <div class="dtree" id="dt-tl"></div>
     <div class="dtree-sub">Empty = no extension applied for</div>
   </div>
-  <div class="dslicer">
+  <div class="dslicer folded">
     <div class="slicer-head"><h3>CPC work start order</h3><button class="clr" data-clr="dmc">Clear</button></div>
     <div class="dtree" id="dt-mc"></div>
     <div class="dtree-sub">Empty = order not yet issued</div>
   </div>
-  <div class="dslicer">
+  <div class="dslicer folded">
     <div class="slicer-head"><h3>CPC approval date</h3><button class="clr" data-clr="dkc">Clear</button></div>
     <div class="dtree" id="dt-kc"></div>
     <div class="dtree-sub">Empty = approval not yet recorded</div>
@@ -917,11 +1078,10 @@ footer.credit b{color:var(--dim);font-weight:400}
   <button class="ghost" id="undo" disabled title="Undo the last filter change">Undo</button>
   <button class="ghost" id="reset">Reset</button>
   <button class="ghost" id="share">Copy link</button>
+  <button class="ghost" id="selmode">Select</button>
   <button class="ghost" id="print">Print</button>
   <button id="csv">Download CSV</button>
 </div>
-
-<div id="print-head"></div>
 
 <nav class="tabs" id="tabs" role="tablist" aria-label="Dashboard views">
   <button role="tab" class="tab on" data-view="sum"  aria-selected="true">Summary</button>
@@ -944,25 +1104,20 @@ footer.credit b{color:var(--dim);font-weight:400}
   <div class="recon-bar" id="rc-bar"></div>
   <div class="recon-key" id="rc-key"></div>
 </section>
+
+<div class="panel">
+  <h2>Records needing review</h2>
+  <p class="note">Inconsistencies in the file that may be hiding real cases. Click a row to see the sites.</p>
+  <ul class="checks" id="checks"></ul>
+</div>
 </div>
 
 <div class="view" id="v-brk" role="tabpanel">
 <div class="grid" style="grid-template-columns:1fr">
   <div class="panel">
     <h2>Status by telco</h2>
-    <p class="note">Each bar is the permit record count for that telco. Click a bar to filter the table below.</p>
+    <p class="note">Each bar is the permit record count for that telco. Colours follow the reconciliation key in Summary. Click a bar to filter the table.</p>
     <div id="telcobars"></div>
-    <div class="legend">
-      <span><i class="s-crit"></i>1&ndash;2 years</span>
-      <span><i class="s-e90"></i>0&ndash;90 days</span>
-      <span><i class="s-exp"></i>91&ndash;180 days</span>
-      <span><i class="s-e365"></i>181&ndash;365 days</span>
-      <span><i class="s-e2y"></i>Over 2 years</span>
-      <span><i class="s-act"></i>Still active</span>
-      <span><i class="s-sub"></i>CPC submitted</span>
-      <span><i class="s-cpc"></i>CPC complete</span>
-      <span><i class="s-nd"></i>WP still in progress</span>
-    </div>
   </div>
 </div>
 
@@ -1003,6 +1158,7 @@ footer.credit b{color:var(--dim);font-weight:400}
       </div>
       <div class="mact">
         <button class="ghost" id="dt-copy">Copy details</button>
+        <button class="ghost" id="dt-print">Print</button>
         <button class="mclose" data-dclose>Close</button>
       </div>
     </div>
@@ -1027,6 +1183,7 @@ footer.credit b{color:var(--dim);font-weight:400}
       <div class="mact">
         <button class="ghost" id="mo-filter">Filter the table below</button>
         <button class="ghost" id="mo-csv">CSV</button>
+        <button class="ghost" id="mo-print">Print</button>
         <button class="mclose" data-close>Close</button>
       </div>
     </div>
@@ -1049,11 +1206,6 @@ footer.credit b{color:var(--dim);font-weight:400}
     <div class="by-meta">CPC Tracker &middot; Work Permit &amp; CPC Monitoring<br>
       <span id="m-src2"></span></div>
   </div>
-  Permit expiry is based on <b>Tarikh Tamat Lanjutan Permit</b> if present, otherwise <b>Tarikh Tamat Permit</b>.
-  Records marked DROP are excluded from overdue counts. Records dropped on
-  both WP Status and CPC Status are counted once only.
-  <span id="m-drop"></span><br>
-  The &ldquo;Site Summary&rdquo; sheet in the source file records <span id="m-manual"></span> &mdash; the automatic count here may differ slightly because it is recalculated as of today.
 </footer>
 
 </div>
@@ -1402,16 +1554,10 @@ telcos = [...new Set(DATA.rows.map(r=>r.t))];
 document.getElementById('m-rows').textContent = fmt(DATA.rows.length);
 document.getElementById('m-telco').textContent = telcos.length;
 document.getElementById('m-date').textContent = TODAY.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
-document.getElementById('m-manual').textContent = DATA.summary.length
-  ? DATA.summary.map(s=>s.t+' '+s.n).join(', ') + ' (total ' + fmt(DATA.summary.reduce((a,b)=>a+b.n,0)) + ' sites)'
-  : 'no summary sheet in this file';
 document.getElementById('pill-name').textContent = DATA.src;
 document.getElementById('m-src2').textContent =
   'Data source: ' + DATA.src + ' · dijana ' +
   TODAY.toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
-const dkn = k => DATA.rows.filter(r=>r.dk===k).length;
-document.getElementById('m-drop').textContent =
-  `Drop breakdown for the whole file: ${dkn('w')} WP-only drops, ${dkn('c')} CPC-only drops, ${dkn('b')} both.`;
 }
 
 /* ---- filter state ---- */
@@ -1449,7 +1595,7 @@ function pass(r, skip){
   }
   if(F.pbm && r.b!==F.pbm) return false;
   if(F.q && !(r.p.toLowerCase().includes(F.q) || r.b.toLowerCase().includes(F.q)
-              || String(r.uid) === F.q)) return false;
+              || String(r.uid) === F.q || String(r.no) === F.q)) return false;
   return true;
 }
 
@@ -1716,10 +1862,11 @@ function moSorted(){
   const order = {e2y:0,crit:1,e365:2,mid:3,exp:4,sub:5,nd:6,act:7,cpc:8,drop:9};
   const swOrder = {YES:0, NO:1, DROP:2};
   return MO.rows.slice().sort((a,b)=>{
+    if(moSortK==='no') return (a.uid - b.uid) * moSortDir;
     let x=a[moSortK], y=b[moSortK];
     if(moSortK==='state'){ x=order[x]; y=order[y]; }
     else if(moSortK==='sw'){ x=swOrder[x] ?? 3; y=swOrder[y] ?? 3; }
-    else if(moSortK==='uid'){ x=+x||0; y=+y||0; }
+    else if(moSortK==='uid'||moSortK==='no'){ x=+x||0; y=+y||0; }
     if(x===null||x===undefined||x==='') return 1;
     if(y===null||y===undefined||y==='') return -1;
     if(typeof x==='number') return (x-y)*moSortDir;
@@ -1811,7 +1958,7 @@ document.getElementById('mo-filter').addEventListener('click',()=>{
 });
 document.getElementById('mo-csv').addEventListener('click',()=>{
   if(!MO) return;
-  const head = ['No','No in sheet','Telco','Project Name','PBM Involved','WP Work Start','Permit Approval',
+  const head = ['Row','Bil','Telco','Project Name','PBM Involved','WP Work Start','Permit Approval',
                 'WP Status','Permit Expiry','Extension Expiry','Expiry Age (days)','CPC Work Start','CPC Approval','CPC Status','Status'];
   const esc = v => '"'+String(v??'').replace(/"/g,'""')+'"';
   const body = moSorted().map(r=>[r.uid,r.no,r.t,r.p,r.b,r.mw||'',r.kp||'',r.sw,r.te||'',r.tl||'',
@@ -1960,7 +2107,7 @@ document.querySelector('.slicers').addEventListener('click',e=>{
 });
 
 const COLS = [
-  {k:'uid', h:'No',          cls:'num'},
+  {k:'no', h:'Bil',          cls:'num'},
   {k:'t',  h:'Telco',        cls:''},
   {k:'p',  h:'Project name',  cls:'proj'},
   {k:'b',  h:'PBM involved', cls:''},
@@ -1972,13 +2119,16 @@ const COLS = [
   {k:'kc', h:'CPC approval',  cls:'dt'},
   {k:'state',h:'Status',     cls:''}
 ];
-let sortK='days', sortDir=-1;
+/* jadual render sehingga had ini; lebihannya dinyatakan dengan jelas di hujung jadual */
+const ROWCAP = 1500;
+let sortK='no', sortDir=1;
 
 /* Sel jadual dijana daripada COLS supaya tajuk dan sel tidak boleh tersasar lagi.
    cell5 membenarkan popup menggantikan kandungan lajur "umur tamat". */
 function cellHTML(r, c, cell5){
   switch(c.k){
     case 'uid':   return `<td class="rno">${r.uid}</td>`;
+    case 'no':    return `<td class="rno">${r.no || '—'}</td>`;
     case 't':     return `<td>${r.t}</td>`;
     case 'p':     return `<td class="proj">${r.p}</td>`;
     case 'b':     return `<td>${r.b}</td>`;
@@ -2008,9 +2158,14 @@ function current(){
   let out = DATA.rows.filter(r=>pass(r,null));
   const order = {e2y:0,crit:1,e365:2,mid:3,exp:4,nd:5,act:6,cpc:7,drop:8};
   out.sort((a,b)=>{
+    /* Bil berulang setiap telco, jadi tanpa pengasing telco senarai jadi
+       semua "1" bertimbun, kemudian semua "2". Telco jadi kunci utama. */
+    /* "Bil" bermaksud susunan tracker: ikut turutan sheet, kemudian turutan baris.
+       uid diberi mengikut susunan baca fail, jadi ia salinan tepat susunan itu. */
+    if(sortK==='no') return (a.uid - b.uid) * sortDir;
     let x=a[sortK], y=b[sortK];
     if(sortK==='state'){ x=order[x]; y=order[y]; }
-    else if(sortK==='uid'){ x=+x||0; y=+y||0; }
+    else if(sortK==='uid'||sortK==='no'){ x=+x||0; y=+y||0; }
     if(x===null||x===undefined||x==='') return 1;
     if(y===null||y===undefined||y==='') return -1;
     if(typeof x==='number') return (x-y)*sortDir;
@@ -2082,7 +2237,7 @@ function render(){
   });
   const tb = document.getElementById('tbody');
   document.getElementById('empty').style.display = rows.length?'none':'block';
-  const view = rows.slice(0,600);
+  const view = rows.slice(0,ROWCAP);
   tb.innerHTML = view.map(r=>`<tr class="rowlink" data-uid="${r.uid}" tabindex="0">
     <td class="cardcell" aria-hidden="true">
       <div class="c-top"><span class="c-no">${r.uid}</span><span class="c-telco">${r.t}</span>
@@ -2099,7 +2254,9 @@ function render(){
       </dl>
     </td>
     ${rowCells(r)}
-  </tr>`).join('');
+  </tr>`).join('') + (rows.length > ROWCAP ? `<tr class="caprow"><td colspan="${COLS.length+1}">
+      ${fmt(rows.length - ROWCAP)} more records match these filters but are not shown.
+      Narrow the filters or download the CSV for the full set.</td></tr>` : '');
   writeHash();
   const an = activeCount();
   document.getElementById('mfilter-n').textContent = an ? an : '';
@@ -2109,10 +2266,13 @@ function render(){
     ? `Filter: <b>${CHECKS[F.check].t}</b> <span class="tot-all">(click that row again, or press Undo, to clear)</span>`
     : 'Click a column heading to sort &middot; click a row for details';
   document.getElementById('tab-rec-n').textContent = fmt(rows.length);
+  if(typeof syncDateFolds === 'function') syncDateFolds();
+  if(typeof paintSel === 'function') paintSel();
+  if(typeof preparePrint === 'function') preparePrint();
   document.getElementById('count').innerHTML =
     `Showing <b>${fmt(view.length)}</b> of <b>${fmt(rows.length)}</b> matching records` +
     (rows.length !== DATA.rows.length ? ` <span class="tot-all">/ ${fmt(DATA.rows.length)} total</span>` : '') +
-    (rows.length>600?' <span class="tot-all">(first 600 only — filter further or download the CSV)</span>':'');
+    (rows.length>ROWCAP?` <span class="tot-all">(showing first ${fmt(ROWCAP)})</span>`:'');
   document.getElementById('thead').querySelectorAll('th').forEach(th=>{
     th.querySelector('.ar').textContent = th.dataset.k===sortK?(sortDir>0?'▲':'▼'):'↕';
   });
@@ -2148,11 +2308,11 @@ document.getElementById('reset').addEventListener('click',()=>{
   F.telco.clear(); F.wp.clear(); F.cpc.clear(); F.st.clear();
   F.dte.clear(); F.dtl.clear(); F.dmc.clear(); F.dkc.clear();
   F.state=''; F.pbm=''; F.q=''; F.check=null;
-  sortK='days'; sortDir=-1; render();
+  sortK='no'; sortDir=1; render();
 });
 document.getElementById('csv').addEventListener('click',()=>{
   const rows = current();
-  const head = ['No','No in sheet','Telco','Project Name','PBM Involved','WP Work Start','Permit Approval',
+  const head = ['Row','Bil','Telco','Project Name','PBM Involved','WP Work Start','Permit Approval',
                 'WP Status','Permit Expiry','Extension Expiry','Effective Date','Expiry Age (days)','CPC Work Start','CPC Approval','CPC Status','Status'];
   const esc = v => '"'+String(v??'').replace(/"/g,'""')+'"';
   const body = rows.map(r=>[r.uid,r.no,r.t,r.p,r.b,r.mw||'',r.kp||'',r.sw,r.te||'',r.tl||'',r.eff||'',
@@ -2177,7 +2337,7 @@ function buildQuery(){
   if(F.state) q.set('s',F.state);
   if(F.pbm)   q.set('p',F.pbm);
   if(F.q)     q.set('q',F.q);
-  if(sortK!=='days' || sortDir!==-1) q.set('o', sortK+':'+sortDir);
+  if(sortK!=='no' || sortDir!==1) q.set('o', sortK+':'+sortDir);
   if(theme === 'light') q.set('th','l');
   if(DATA && DATA.src) q.set('f', DATA.src);
   return q.toString();
@@ -2214,7 +2374,7 @@ function applyHash(q){
   const el = document.getElementById('q'); if(el) el.value = F.q;
   if(selP) selP.value = F.pbm;
   const o = q.get('o');
-  if(o){ const [k,d] = o.split(':'); sortK = k; sortDir = +d || -1; }
+  if(o){ const [k,d] = o.split(':'); sortK = k; sortDir = +d || 1; }
   setTheme(q.get('th') === 'l' ? 'light' : 'dark', true);
   /* buka cabang tahun/bulan yang dipilih supaya kelihatan */
   HKEYS.slice(3).forEach(([k,dim])=>{
@@ -2232,6 +2392,52 @@ function noteSharedFile(q){
     note.classList.remove('show');
   }
 }
+
+/* ---- date tree: lipat / buka ---- */
+document.querySelectorAll('.dslicer .slicer-head').forEach(h=>{
+  h.addEventListener('click', e=>{
+    if(e.target.closest('.clr')) return;      /* butang Clear bukan togol */
+    h.closest('.dslicer').classList.toggle('folded');
+  });
+});
+/* tapisan tarikh yang aktif tak boleh tersembunyi — buka sendiri dan tandakan */
+function syncDateFolds(){
+  [['dte','dt-te'],['dtl','dt-tl'],['dmc','dt-mc'],['dkc','dt-kc']].forEach(([key,id])=>{
+    const box = document.getElementById(id); if(!box) return;
+    const sl = box.closest('.dslicer');
+    const on = F[key].size > 0;
+    sl.classList.toggle('has', on);
+    if(on) sl.classList.remove('folded');
+  });
+}
+
+/* ---- mod pilih baris ----
+   Lajur kotak pilihan hanya muncul bila diminta, supaya jadual harian kekal bersih
+   dan tiada pilihan tersembunyi yang tercetak tanpa disedari. */
+const SEL = new Set();
+let selMode = false;
+
+function selCount(){
+  let n = 0;
+  document.querySelectorAll('#tbody tr.rowlink').forEach(tr=>{ if(SEL.has(tr.dataset.uid)) n++; });
+  return n;
+}
+function paintSel(){
+  document.querySelectorAll('#tbody tr.rowlink').forEach(tr=>{
+    tr.classList.toggle('sel', SEL.has(tr.dataset.uid));
+  });
+  const n = selCount();
+  document.getElementById('print').textContent = (selMode && n) ? `Print selected (${n})` : 'Print';
+}
+function setSelMode(on){
+  selMode = on;
+  document.body.classList.toggle('selmode', on);
+  document.getElementById('selmode').classList.toggle('on', on);
+  document.getElementById('selmode').textContent = on ? 'Done' : 'Select';
+  if(!on) SEL.clear();          /* keluar mod = pilihan dikosongkan, tiada baki tersembunyi */
+  paintSel();
+}
+document.getElementById('selmode').addEventListener('click', ()=>setSelMode(!selMode));
 
 /* ---- cetak ---- */
 function filterSummary(){
@@ -2253,27 +2459,190 @@ function filterSummary(){
   return p;
 }
 
-function preparePrint(){
+/* Helaian satu rekod satu muka surat — bukan modal yang diregangkan,
+   sebab modal disusun untuk skrin dan jadi renggang bila dicetak. */
+function buildRecordSheet(r){
+  const d  = v => v ? `<td class="mono">${dstr(v)}</td>` : '<td class="none">None</td>';
+  const flag = v => {
+    const cls = v === 'YES' ? '' : (v === 'DROP' ? 'bad' : 'idle');
+    return `<td><span class="pr-flag ${cls}">${v || 'Pending'}</span></td>`;
+  };
+  const now = new Date().toLocaleString('en-MY',
+    {day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'});
+  const age = r.days === null ? 'No expiry date recorded'
+    : r.days > 0 ? `Expired ${fmt(r.days)} days ago${r.frozen ? ' (frozen at the CPC order)' : ''}`
+                 : `${fmt(-r.days)} days left`;
+
+  return `
+  <div class="pr-head">
+    <div>
+      <div class="pr-name">UTARA INFRA</div>
+      <div class="pr-kick">CPC &amp; Work Permit Record</div>
+    </div>
+    <div class="pr-right">
+      Reference<b>${r.uid}</b>
+      Generated<b style="font-family:var(--mono);font-size:10px">${now}</b>
+    </div>
+  </div>
+  <div class="pr-rule"></div>
+
+  <h1 class="pr-title">${r.p}</h1>
+  <div class="pr-sub">${r.b} &middot; ${r.t}</div>
+
+  <div class="pr-block">
+    <div class="pr-sec">Application details</div>
+    <table class="pr-t pr-kv">
+      <tr><td>PBM terlibat</td><td>${r.b}</td></tr>
+      <tr><td>Telco</td><td>${r.t}</td></tr>
+      <tr><td>Current status</td><td>${LBL[r.state] || r.state}</td></tr>
+    </table>
+  </div>
+
+  <div class="pr-block">
+    <div class="pr-sec">Work permit (WP) process</div>
+    <table class="pr-t">
+      <tr><th>Permit approval</th><th>WP work start order</th><th>Permit expiry date</th><th>Status WP</th></tr>
+      <tr>${d(r.kp)}${d(r.mw)}${d(r.te)}${flag(r.sw)}</tr>
+    </table>
+  </div>
+
+  <div class="pr-block">
+    <div class="pr-sec">Permit extension</div>
+    <table class="pr-t">
+      <tr><th>Extension application</th><th>Extension expiry</th><th>Effective expiry date</th></tr>
+      <tr>${d(r.ml)}${d(r.tl)}${d(r.eff)}</tr>
+    </table>
+  </div>
+
+  <div class="pr-block">
+    <div class="pr-sec">CPC (certificate of practical completion) process</div>
+    <table class="pr-t">
+      <tr><th>CPC work start order</th><th>CPC approval date</th><th>Status CPC</th></tr>
+      <tr>${d(r.mc)}${d(r.kc)}${flag(r.sc)}</tr>
+    </table>
+  </div>
+
+  <div class="pr-block">
+    <div class="pr-sec">Expiry standing</div>
+    <div class="pr-note"><span>${age}</span><span class="pr-flag ${
+      r.state === 'cpc' ? '' : (r.days > 365 ? 'bad' : 'idle')
+    }">${LBL[r.state] || r.state}</span></div>
+  </div>
+
+  <div class="pr-foot">
+    <span>Source: ${DATA && DATA.src ? DATA.src : '—'} &middot; Utara Infra CPC Tracker</span>
+    <span>Page 1 of 1</span>
+  </div>`;
+}
+
+/* Tajuk cetakan mesti memberitahu apa yang ada di dalamnya. "CPC Tracker"
+   sahaja tidak berguna bila muka surat itu sampai ke meja orang lain. */
+function shownNow(){ return DATA ? DATA.rows.filter(r=>pass(r,null)).length : 0; }
+
+function printTitle(){
+  const bits = [];
+  if(F.telco.size && F.telco.size <= 3) bits.push([...F.telco].join(', '));
+  else if(F.telco.size) bits.push(`${F.telco.size} telcos`);
+
+  const st = [];
+  if(F.state) st.push(SGROUP[F.state] ? SGROUP[F.state].map(k=>LBL[k]).join(' + ') : (LBL[F.state] || F.state));
+  if(F.st.size && F.st.size <= 3) st.push([...F.st].map(k=>LBL[k]||k).join(', '));
+  else if(F.st.size) st.push(`${F.st.size} statuses`);
+  if(F.check !== null && CHECKS[F.check]) st.push(CHECKS[F.check].t.trim());
+  if(st.length) bits.push(st.join(' + '));
+
+  if(F.pbm) bits.push(F.pbm);
+  if(F.wp.size) bits.push('WP ' + [...F.wp].join('/'));
+  if(F.cpc.size) bits.push('CPC ' + [...F.cpc].join('/'));
+  if(F.q) bits.push(`"${F.q}"`);
+
+  return bits.length ? bits.join(' \u2014 ') : 'All permit records';
+}
+
+function preparePrint(ctx){
   if(!DATA) return;
-  const shown = DATA.rows.filter(r => pass(r, null)).length;
+  const base  = DATA.rows.filter(r => pass(r, null));
+  const shown = base.length;
   const parts = filterSummary();
-  document.getElementById('print-head').innerHTML =
-    `CPC Tracker &middot; file <b>${DATA.src || '—'}</b> &middot; printed <b>${new Date().toLocaleDateString('en-MY')}</b><br>` +
-    `Records shown: <b>${fmt(shown)}</b> of ${fmt(DATA.rows.length)}<br>` +
-    `Filters: <b>${parts.length ? parts.join(' &middot; ') : 'none applied'}</b>`;
+  const now = new Date().toLocaleString('en-MY',
+    {day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'});
+  const title = (ctx && ctx.title) || printTitle();
+  const count = (ctx && ctx.count !== undefined) ? ctx.count : shown;
+  const cap   = (ctx && ctx.cap) || 'Records';
+  const meta  = (ctx && ctx.meta) ||
+    `<b>${fmt(shown)}</b> of ${fmt(DATA.rows.length)} records &middot; ` +
+    (parts.length ? parts.join(' &middot; ') : 'no filters applied') +
+    (shown > ROWCAP ? `<br><b>Only the first ${fmt(ROWCAP)} rows are printed</b> — narrow the filters or use the CSV for the full set` : '');
+
+  const c = s => base.filter(r => r.state === s).length;
+  const g = k => base.filter(r => SGROUP[k].includes(r.state)).length;
+  const stats = (ctx && ctx.stats === false) ? '' : `
+    <div class="pstats">
+      <div class="pstat crit"><div class="ps-k">Expired &gt; 1 yr</div><div class="ps-v">${fmt(g('g1y'))}</div></div>
+      <div class="pstat warn"><div class="ps-k">Expired 91&ndash;365</div><div class="ps-v">${fmt(g('g180'))}</div></div>
+      <div class="pstat warn"><div class="ps-k">Expired 0&ndash;90</div><div class="ps-v">${fmt(c('exp'))}</div></div>
+      <div class="pstat"><div class="ps-k">Still active</div><div class="ps-v">${fmt(c('act'))}</div></div>
+      <div class="pstat"><div class="ps-k">WP in progress</div><div class="ps-v">${fmt(c('nd'))}</div></div>
+      <div class="pstat ok"><div class="ps-k">CPC complete</div><div class="ps-v">${fmt(c('cpc'))}</div></div>
+    </div>`;
+
+  document.getElementById('print-head').innerHTML = `
+    <div class="pbrand">
+      <div>
+        <div class="pb-name">Utara Infra</div>
+        <div class="pb-kick">CPC Tracker &middot; Kedah</div>
+      </div>
+      <div class="pb-right">
+        <div class="pb-cap">${cap}</div>
+        <div class="pb-n">${typeof count === 'number' ? fmt(count) : count}</div>
+      </div>
+    </div>
+    <h1 class="ptitle">${title}</h1>
+    <div class="pmeta">Generated ${now} &middot; <b>${DATA.src || '—'}</b><br>${meta}</div>
+    ${stats}`;
 }
 
 /* dipasang pada beforeprint supaya Ctrl+P pun dapat layout yang sama */
 let printTheme = null;
 window.addEventListener('beforeprint', ()=>{
-  preparePrint();
+  const b = document.body;
+  const dOpen = document.getElementById('detail').classList.contains('show');
+  const mOpen = document.getElementById('modal').classList.contains('show');
+  b.classList.toggle('print-modal', dOpen || mOpen);
+  b.classList.toggle('pm-detail', dOpen);
+  b.classList.toggle('pm-list', mOpen && !dOpen);
+  if(dOpen && DTROW){
+    document.getElementById('print-record').innerHTML = buildRecordSheet(DTROW);
+  }else if(mOpen && MO){
+    preparePrint({
+      title: MO.title,
+      cap: MO.eyebrow ? 'Sites' : 'Records',
+      count: MO.rows.length,
+      stats: false,
+      meta: `${MO.eyebrow} &middot; ${MO.noun || 'expired sites without CPC'}<br>` +
+            `Filters: <b>${filterSummary().join(' &middot; ') || 'none applied'}</b>`
+    });
+  }else{
+    const n = selMode ? selCount() : 0;
+    b.classList.toggle('printsel', n > 0);
+    preparePrint(n > 0 ? {
+      title: `Selected records — ${printTitle()}`,
+      count: n,
+      cap: 'Selected',
+      stats: false,
+      meta: `<b>${fmt(n)}</b> of ${fmt(shownNow())} records in the current view, chosen manually`
+    } : undefined);
+  }
   /* tema gelap membazir dakwat dan selalunya tak keluar langsung pada pencetak */
   if(printTheme === null){ printTheme = theme; setTheme('light', true); }
 });
 window.addEventListener('afterprint', ()=>{
+  document.body.classList.remove('print-modal','pm-detail','pm-list','printsel');
   if(printTheme !== null){ setTheme(printTheme, true); printTheme = null; }
 });
 document.getElementById('print').addEventListener('click', ()=>window.print());
+document.getElementById('dt-print').addEventListener('click', ()=>window.print());
+document.getElementById('mo-print').addEventListener('click', ()=>window.print());
 
 /* ---- tema terang / gelap ---- */
 let theme = 'dark';
@@ -2361,7 +2730,8 @@ let DTROW = null;
 function fieldRows(r){
   const val = (v, cls) => v ? `<dd class="${cls||''}">${v}</dd>` : '<dd class="none">None</dd>';
   return [
-    ['No', `<dd class="mono">${r.uid}</dd>`],
+    ['Bil (tracker)', `<dd class="mono">${r.no || '\u2014'}</dd>`],
+    ['Row', `<dd class="mono">${r.uid}</dd>`],
     ['Telco', `<dd>${r.t}</dd>`],
     ['PBM terlibat', `<dd>${r.b}</dd>`, true],
     ['Status WP', r.sw ? `<dd class="mono">${r.sw}</dd>` : null],
@@ -2422,7 +2792,13 @@ function closeDetail(){ detail.classList.remove('show'); DTROW = null; }
 function rowClick(e){
   if(e.target.closest('button') || e.target.closest('a')) return;
   const tr = e.target.closest('tr.rowlink');
-  if(tr) openDetail(tr.dataset.uid);
+  if(!tr) return;
+  if(selMode && tr.closest('#tbody')){
+    SEL.has(tr.dataset.uid) ? SEL.delete(tr.dataset.uid) : SEL.add(tr.dataset.uid);
+    paintSel();
+    return;
+  }
+  openDetail(tr.dataset.uid);
 }
 document.getElementById('tbody').addEventListener('click', rowClick);
 document.getElementById('mo-rows').addEventListener('click', rowClick);
@@ -2496,7 +2872,7 @@ function clearFilters(){
   F.dte.clear(); F.dtl.clear(); F.dmc.clear(); F.dkc.clear();
   F.state=''; F.pbm=''; F.q=''; F.check=null;
   const el=document.getElementById('q'); if(el) el.value='';
-  selP.value=''; sortK='days'; sortDir=-1;
+  selP.value=''; sortK='no'; sortDir=1;
   const n=document.getElementById('shared-note'); if(n) n.classList.remove('show');
 }
 function load(d){
