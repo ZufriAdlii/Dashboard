@@ -207,8 +207,10 @@ h1 em{font-style:italic;color:var(--dim)}
 .mast-meta b{color:var(--dim);font-weight:400}
 
 /* ---------- kpis ---------- */
-.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);
+.kpis{display:grid;grid-template-columns:repeat(12,1fr);gap:1px;background:var(--line);
       border:1px solid var(--line);margin-bottom:30px}
+.kpi.sp3{grid-column:span 3}
+.kpi.sp4{grid-column:span 4}
 .kpi{padding:24px 24px 22px;position:relative;cursor:pointer;text-align:left;font:inherit;color:inherit;
      background:var(--surface);border:0;transition:background .16s;overflow:hidden}
 .kpi:hover{background:var(--surface-2)}
@@ -278,6 +280,10 @@ h1 em{font-style:italic;color:var(--dim)}
 
 /* telco bars */
 .tbar{margin-bottom:15px}
+@media (min-width:900px){
+  #telcobars{display:grid;grid-template-columns:repeat(2,1fr);column-gap:40px}
+  .tbar{margin-bottom:18px}
+}
 .tbar-head{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;margin-bottom:7px}
 .tbar-head .nm{font-family:var(--display);font-size:17px}
 .tbar-head .ct{font-family:var(--mono);font-size:11.5px;color:var(--faint);letter-spacing:.04em}
@@ -473,8 +479,28 @@ tbody tr.rowlink:focus-visible{outline:2px solid var(--amber);outline-offset:-2p
 .dnone .dsel{font-style:italic}
 .dtree-sub{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:10px;letter-spacing:.1em;text-transform:uppercase}
 
+/* ---------- tab paparan ---------- */
+.tabs{display:flex;gap:2px;margin:26px 0 24px;border-bottom:1px solid var(--line)}
+.tab{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+     padding:13px 20px;background:transparent;color:var(--faint);border:0;
+     border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;
+     display:inline-flex;align-items:center;gap:9px;transition:color .14s,border-color .14s}
+.tab:hover{color:var(--dim)}
+.tab.on{color:var(--amber);border-bottom-color:var(--amber)}
+.tab-n{font-family:var(--mono);font-size:10px;letter-spacing:.04em;padding:2px 7px;
+       background:var(--barbg);color:var(--faint)}
+.tab.on .tab-n{background:var(--amber);color:var(--on-accent)}
+.view{display:none}
+.view.on{display:block;animation:vfade .18s ease}
+@keyframes vfade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media (max-width:560px){
+  .tabs{overflow-x:auto;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{padding:12px 14px;letter-spacing:.1em;white-space:nowrap}
+}
+
 /* ---------- controls ---------- */
-.controls{background:var(--surface);border:1px solid var(--line);border-top:0;padding:16px 22px;
+.controls{background:var(--surface);border:1px solid var(--line);margin-top:22px;padding:16px 22px;
           display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .controls input[type=search],.controls select{
   font-family:var(--body);font-size:13.5px;padding:9px 12px;border:1px solid var(--line-2);
@@ -502,7 +528,7 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim);background:transpare
 .filepill button:hover{color:var(--brand-green);background:var(--hover)}
 
 #shared-note{display:none;padding:12px 22px;background:var(--amber-soft);border:1px solid var(--line);
-             border-top:0;font-size:13px;color:#F0D3A6;line-height:1.5}
+             margin-bottom:2px;font-size:13px;color:#F0D3A6;line-height:1.5}
 #shared-note.show{display:block}
 #shared-note b{color:var(--amber)}
 .toast{position:fixed;left:50%;bottom:32px;transform:translateX(-50%);z-index:80;
@@ -510,6 +536,44 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim);background:transpare
        padding:13px 22px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
        opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
+
+/* ---------- panel penapis sisi (sidebar) ---------- */
+.sb-head,.sb-open{display:none}
+.sb-n{font-family:var(--mono);font-size:10px;padding:2px 8px;
+      background:var(--amber);color:var(--on-accent)}
+.sb-n:empty{display:none}
+
+@media (min-width:1101px){
+  body{padding-left:330px;transition:padding-left .22s ease}
+  body.sb-collapsed{padding-left:0}
+
+  .filterwrap{position:fixed;left:0;top:0;bottom:0;width:330px;z-index:40;
+              background:var(--surface);border-right:1px solid var(--line);
+              overflow-y:auto;overscroll-behavior:contain;transition:transform .22s ease}
+  body.sb-collapsed .filterwrap{transform:translateX(-100%)}
+  .filterwrap::-webkit-scrollbar{width:9px}
+  .filterwrap::-webkit-scrollbar-track{background:transparent}
+  .filterwrap::-webkit-scrollbar-thumb{background:var(--line-2)}
+
+  .sb-head{display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:2;
+           padding:16px 18px;background:var(--surface);border-bottom:1px solid var(--line)}
+  .sb-head h3{flex:1;margin:0;font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+              text-transform:uppercase;color:var(--faint);font-weight:500}
+  .sb-x{padding:6px 11px;font-size:12px;letter-spacing:0;background:transparent;
+        color:var(--dim);border:1px solid var(--line-2)}
+  .sb-x:hover{color:var(--ink);border-color:var(--dim)}
+
+  .slicers,.dslicers{grid-template-columns:1fr;border:0;background:transparent;gap:0}
+  .slicer,.dslicer{padding:18px;border-bottom:1px solid var(--line)}
+  .slicer.wide{grid-column:auto;border-top:0}
+  .dtree{max-height:210px}
+
+  .sb-open{position:fixed;left:0;top:92px;z-index:41;align-items:center;gap:8px;
+           padding:12px 15px;background:var(--surface);color:var(--ink);
+           border:1px solid var(--line-2);border-left:0}
+  .sb-open:hover{border-color:var(--dim);background:var(--surface-2)}
+  body.sb-collapsed .sb-open{display:inline-flex}
+}
 
 /* ---------- susun atur mudah alih ---------- */
 .cardcell{display:none}
@@ -536,11 +600,11 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim);background:transpare
 
   /* KPI: dua lajur, lebih padat */
   .kpis{grid-template-columns:repeat(2,1fr)}
+  .kpi.sp3,.kpi.sp4{grid-column:auto}
   .kpi{padding:16px 14px}
   .kpi .val{font-size:32px;margin:10px 0 6px}
   .kpi .sub{font-size:11.5px}
   .kpi .hint{display:none}
-  .kpi:last-child{grid-column:1 / -1}
 
   .panel{padding:20px 16px}
   .recon-key{grid-template-columns:1fr}
@@ -592,12 +656,12 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim);background:transpare
 }
 @media (max-width:420px){
   .kpis{grid-template-columns:1fr}
-  .kpi:last-child{grid-column:auto}
+  .kpi.sp3,.kpi.sp4{grid-column:auto}
   .c-meta{grid-template-columns:1fr}
 }
 
 /* ---------- table ---------- */
-.tablewrap{background:var(--surface);border:1px solid var(--line);border-top:0;
+.tablewrap{background:var(--surface);border:1px solid var(--line);
             max-height:72vh;overflow:auto;overscroll-behavior:contain}
 .tablewrap::-webkit-scrollbar{width:10px;height:10px}
 .tablewrap::-webkit-scrollbar-track{background:var(--well)}
@@ -661,6 +725,7 @@ footer.credit b{color:var(--dim);font-weight:400}
 @media (max-width:1000px){
   .dslicers{grid-template-columns:1fr}
   .kpis{grid-template-columns:repeat(2,1fr)}
+  .kpi.sp3,.kpi.sp4{grid-column:auto}
   .slicers{grid-template-columns:1fr}
   .mast-meta{text-align:left}
 }
@@ -670,9 +735,34 @@ footer.credit b{color:var(--dim);font-weight:400}
   .gatebox{padding:32px 26px}
 }
 @media print{
-  body{background:#fff;color:#000}
-  .controls,.slicers,.dslicers,button,#gate{display:none}
+  @page{size:A4 landscape;margin:11mm}
+
+  /* sidebar fixed dan offsetnya mesti dibatalkan, kalau tidak kandungan terpotong */
+  body{background:#fff;padding-left:0 !important}
+  .wrap{max-width:none;padding:0}
+
+  /* alat kawalan tiada makna di atas kertas */
+  .filterwrap,.tabs,.controls,.mfilter,.sb-open,.sb-head,
+  #gate,#detail,.toast,#hint,.filepill,#theme,.kpi .hint,.panel-hint,
+  .chip,.dsel,.iconbtn{display:none !important}
+
+  /* semua tab dicetak, satu paparan satu halaman */
+  .view{display:block !important}
+  .view + .view{break-before:page}
+
+  /* jadual mesti mengalir penuh, bukan tetingkap berskrol */
+  .tablewrap{max-height:none !important;overflow:visible !important}
+  thead th{position:static !important}
+  tr,.panel,.kpi,.recon,.tbar{break-inside:avoid}
+
+  /* kad KPI ialah butang — tanpa ini semuanya hilang masa cetak */
+  .kpi{cursor:default}
+  #print-head{display:block}
 }
+
+#print-head{display:none;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--line);
+            font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--faint);line-height:1.9}
+#print-head b{color:var(--ink);font-weight:500}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -767,74 +857,14 @@ footer.credit b{color:var(--dim);font-weight:400}
   </div>
 </header>
 
-<section class="kpis" id="kpis" aria-label="Key indicators — click to filter"></section>
-
-<section class="panel recon">
-  <div class="recon-head">
-    <div>
-      <h2>Where the <span id="rc-total"></span> records go</h2>
-      <p class="note">Every record falls into exactly one category. The categories add back up to the original total.
-         Click any segment to filter.</p>
-    </div>
-    <div class="recon-eq" id="rc-eq"></div>
-  </div>
-  <div class="recon-bar" id="rc-bar"></div>
-  <div class="recon-key" id="rc-key"></div>
-</section>
-
-<div class="grid">
-  <div class="panel">
-    <h2>Status by telco</h2>
-    <p class="note">Each bar is the permit record count for that telco. Click a bar to filter the table below.</p>
-    <div id="telcobars"></div>
-    <div class="legend">
-      <span><i class="s-crit"></i>1&ndash;2 years</span>
-      <span><i class="s-e90"></i>0&ndash;90 days</span>
-      <span><i class="s-exp"></i>91&ndash;180 days</span>
-      <span><i class="s-e365"></i>181&ndash;365 days</span>
-      <span><i class="s-e2y"></i>Over 2 years</span>
-      <span><i class="s-act"></i>Still active</span>
-      <span><i class="s-sub"></i>CPC submitted</span>
-      <span><i class="s-cpc"></i>CPC complete</span>
-      <span><i class="s-nd"></i>WP still in progress</span>
-    </div>
-  </div>
-
-  <div class="panel">
-    <h2>How long permits have been expired</h2>
-    <p class="note">How long permits have been expired without CPC. Click to see the list of sites.</p>
-    <div id="age"></div>
-    <div class="panel-hint" id="age-tot"></div>
-  </div>
-</div>
-
-<div class="grid">
-  <div class="panel">
-    <h2>Early warning &mdash; permits expiring soon</h2>
-    <p class="note">Permits still within their term. Handle them here before they fall into the overdue list.
-       Click to see the list of sites.</p>
-    <div id="soon"></div>
-  </div>
-
-  <div class="panel">
-    <h2>Records needing review</h2>
-    <p class="note">Inconsistencies in the file that may be hiding real cases.</p>
-    <ul class="checks" id="checks"></ul>
-  </div>
-</div>
-
-<div class="grid" style="grid-template-columns:1fr">
-  <div class="panel">
-    <h2>Expired permits by PBM</h2>
-    <p class="note">Authorities with the most overdue cases &mdash; first targets for follow-up.
-       Click any PBM to see the list of sites.</p>
-    <ul class="pbm" id="pbm"></ul>
-  </div>
-</div>
-
 <button class="mfilter" id="mfilter" aria-expanded="false">Filters<span id="mfilter-n"></span></button>
 
 <div class="filterwrap" id="filterwrap">
+<div class="sb-head">
+  <h3>Filters</h3>
+  <span class="sb-n" id="sb-n"></span>
+  <button class="sb-x" id="sb-close" title="Collapse the filter panel" aria-label="Collapse the filter panel">&laquo;</button>
+</div>
 <section class="slicers">
   <div class="slicer">
     <div class="slicer-head"><h3>Telco</h3><button class="clr" data-clr="telco">Clear</button></div>
@@ -877,16 +907,78 @@ footer.credit b{color:var(--dim);font-weight:400}
   </div>
 </section>
 
+</div>
+
+<button class="sb-open" id="sb-open" title="Show the filter panel">Filters<span class="sb-n" id="sb-open-n"></span></button>
+
 <div class="controls">
   <input type="search" id="q" placeholder="Search project name, PBM or no&hellip;" aria-label="Search">
   <select id="f-pbm" aria-label="Filter PBM"><option value="">All PBM</option></select>
   <button class="ghost" id="undo" disabled title="Undo the last filter change">Undo</button>
   <button class="ghost" id="reset">Reset</button>
   <button class="ghost" id="share">Copy link</button>
+  <button class="ghost" id="print">Print</button>
   <button id="csv">Download CSV</button>
 </div>
+
+<div id="print-head"></div>
+
+<nav class="tabs" id="tabs" role="tablist" aria-label="Dashboard views">
+  <button role="tab" class="tab on" data-view="sum"  aria-selected="true">Summary</button>
+  <button role="tab" class="tab"    data-view="brk"  aria-selected="false">Breakdown</button>
+  <button role="tab" class="tab"    data-view="rec"  aria-selected="false">Records<span class="tab-n" id="tab-rec-n"></span></button>
+</nav>
+
+<div class="view on" id="v-sum" role="tabpanel">
+<section class="kpis" id="kpis" aria-label="Key indicators — click to filter"></section>
+
+<section class="panel recon">
+  <div class="recon-head">
+    <div>
+      <h2>Where the <span id="rc-total"></span> records go</h2>
+      <p class="note">Every record falls into exactly one category. The categories add back up to the original total.
+         Click any segment to filter.</p>
+    </div>
+    <div class="recon-eq" id="rc-eq"></div>
+  </div>
+  <div class="recon-bar" id="rc-bar"></div>
+  <div class="recon-key" id="rc-key"></div>
+</section>
 </div>
+
+<div class="view" id="v-brk" role="tabpanel">
+<div class="grid" style="grid-template-columns:1fr">
+  <div class="panel">
+    <h2>Status by telco</h2>
+    <p class="note">Each bar is the permit record count for that telco. Click a bar to filter the table below.</p>
+    <div id="telcobars"></div>
+    <div class="legend">
+      <span><i class="s-crit"></i>1&ndash;2 years</span>
+      <span><i class="s-e90"></i>0&ndash;90 days</span>
+      <span><i class="s-exp"></i>91&ndash;180 days</span>
+      <span><i class="s-e365"></i>181&ndash;365 days</span>
+      <span><i class="s-e2y"></i>Over 2 years</span>
+      <span><i class="s-act"></i>Still active</span>
+      <span><i class="s-sub"></i>CPC submitted</span>
+      <span><i class="s-cpc"></i>CPC complete</span>
+      <span><i class="s-nd"></i>WP still in progress</span>
+    </div>
+  </div>
+</div>
+
+<div class="grid" style="grid-template-columns:1fr">
+  <div class="panel">
+    <h2>Expired permits by PBM</h2>
+    <p class="note">Authorities with the most overdue cases &mdash; first targets for follow-up.
+       Click any PBM to see the list of sites.</p>
+    <ul class="pbm" id="pbm"></ul>
+  </div>
+</div>
+</div>
+
 <div id="shared-note"></div>
+
+<div class="view" id="v-rec" role="tabpanel">
 <div class="tablewrap">
   <table>
     <thead><tr id="thead"></tr></thead>
@@ -897,6 +989,7 @@ footer.credit b{color:var(--dim);font-weight:400}
 <div class="foot">
   <span id="count"></span>
   <span id="hint">Click a column heading to sort</span>
+</div>
 </div>
 
 <div id="detail" role="dialog" aria-modal="true" aria-labelledby="dt-title">
@@ -1322,6 +1415,13 @@ document.getElementById('m-drop').textContent =
 }
 
 /* ---- filter state ---- */
+/* kunci KPI yang mewakili lebih daripada satu status */
+const SGROUP = {
+  open: ['exp','mid','e365','crit','e2y'],
+  g1y:  ['crit','e2y'],
+  g180: ['mid','e365'],
+  gcpc: ['sub','cpc']
+};
 const F = {telco:new Set(), wp:new Set(), cpc:new Set(), st:new Set(),
            dte:new Set(), dtl:new Set(), dmc:new Set(), dkc:new Set(), state:'', pbm:'', q:'', check:null};
 
@@ -1343,7 +1443,8 @@ function pass(r, skip){
   if(skip!=='dmc'   && !dmatch(F.dmc, r.mc)) return false;
   if(skip!=='dkc'   && !dmatch(F.dkc, r.kc)) return false;
   if(skip!=='state' && F.state){
-    if(F.state==='open'){ if(!r.open) return false; }
+    const g = SGROUP[F.state];
+    if(g){ if(!g.includes(r.state)) return false; }
     else if(r.state!==F.state) return false;
   }
   if(F.pbm && r.b!==F.pbm) return false;
@@ -1355,28 +1456,32 @@ function pass(r, skip){
 /* ---- KPIs (clickable) ---- */
 function drawKpis(){
 /* KPI ikut semua slicer, tetapi abaikan tapisan KPI sendiri supaya
-   kelima-lima kad sentiasa boleh dibanding dan tidak berlegar sendiri */
+   kesemua sepuluh kad sentiasa boleh dibanding dan tidak berlegar sendiri */
 const base = DATA.rows.filter(r=>pass(r,'state'));
 const N = base.length;
+const cnt = s => base.filter(r=>r.state===s).length;
+const grp = k => base.filter(r=>SGROUP[k].includes(r.state)).length;
+const pc = v => N ? v/N*100 : 0;
 const ALL = DATA.rows.length;
 const narrowed = N !== ALL;
-const cnt = s => base.filter(r=>r.state===s).length;
-const openN = cnt('exp')+cnt('mid')+cnt('e365')+cnt('crit')+cnt('e2y');
-const activeN = base.filter(r=>r.state!=='drop').length;
-const active = activeN || 1;
 const KPIS = [
-  {key:'',     lbl:narrowed?'Records in filter':'Total permit records', val:N,
-   sub:narrowed ? `of ${fmt(ALL)} records \u00b7 ${fmt(activeN)} active`
-                : `${fmt(activeN)} active \u00b7 ${fmt(cnt('drop'))} drop excluded`,
-   pct:100, cls:''},
-  {key:'open', lbl:'Expired permits', val:openN,    sub:Math.round(openN/active*100)+'% of active records', pct:openN/active*100, cls:'warn'},
-  {key:'crit', lbl:'Expired over a year', val:cnt('crit')+cnt('e2y'), sub:'needs immediate follow-up', pct:(cnt('crit')+cnt('e2y'))/active*100, cls:'crit'},
-  {key:'sub',  lbl:'CPC submitted',       val:cnt('sub'),  sub:'order issued, approval pending', pct:cnt('sub')/active*100, cls:'sub'},
-  {key:'cpc',  lbl:'CPC complete',         val:cnt('cpc'),  sub:Math.round(cnt('cpc')/active*100)+'% of active records', pct:cnt('cpc')/active*100, cls:'ok'},
-  {key:'nd',   lbl:'WP still in progress', val:cnt('nd'), sub:'no permit expiry date yet', pct:cnt('nd')/active*100, cls:''}
-];
+  /* baris 1 — jumlah keseluruhan, kemudian permit luput mengikut keterukan */
+  {key:'',     lbl:'Total Application',     val:N, sp:3,
+   sub:narrowed ? `of ${fmt(ALL)} records \u00b7 click to show all` : 'all permit records in the file', cls:''},
+  {key:'g1y',  lbl:'Expired over a year',  val:grp('g1y'),  sp:3, sub:'needs immediate follow-up',   cls:'crit'},
+  {key:'g180', lbl:'Expired 91\u2013365 days', val:grp('g180'), sp:3, sub:'expired 3\u201312 months',    cls:'mid'},
+  {key:'exp',  lbl:'Expired 0\u201390 days',   val:cnt('exp'),  sp:3, sub:'expired within the last 90 days', cls:'warn'},
+  /* baris 2 — rekod yang belum masuk kiraan luput */
+  {key:'act',  lbl:'Still active',          val:cnt('act'),  sp:4, sub:'permit still within its term', cls:''},
+  {key:'nd',   lbl:'WP still in progress',  val:cnt('nd'),   sp:4, sub:'no permit expiry date yet',    cls:''},
+  {key:'drop', lbl:'Drop',                  val:cnt('drop'), sp:4, sub:'excluded from the overdue list', cls:''},
+  /* baris 3 — kemajuan CPC */
+  {key:'gcpc', lbl:'Total CPC',             val:grp('gcpc'), sp:4, sub:'submitted + complete',         cls:'ok'},
+  {key:'sub',  lbl:'CPC submitted',         val:cnt('sub'),  sp:4, sub:'order issued, approval pending', cls:'sub'},
+  {key:'cpc',  lbl:'CPC complete',          val:cnt('cpc'),  sp:4, sub:Math.round(pc(cnt('cpc')))+'% of records in view', cls:'ok'}
+].map(k=>({...k, pct:k.key===''?100:pc(k.val)}));
 document.getElementById('kpis').innerHTML = KPIS.map(k=>`
-  <button type="button" class="kpi ${k.cls}" data-key="${k.key}" aria-pressed="false">
+  <button type="button" class="kpi sp${k.sp} ${k.cls}" data-key="${k.key}" aria-pressed="false">
     <span class="lbl">${k.lbl}</span>
     <div class="val">${fmt(k.val)}</div>
     <div class="sub">${k.sub}</div>
@@ -1412,7 +1517,7 @@ function drawRecon(){
   document.getElementById('rc-total').textContent = fmt(base.length);
   document.getElementById('rc-bar').innerHTML = RECON.map((x,i)=>{
     const pc = vals[i]/tot*100;
-    const dim = F.state && F.state!==x.k && !(F.state==='open' && (x.k==='exp'||x.k==='crit'));
+    const dim = F.state && F.state!==x.k && !(SGROUP[F.state] && SGROUP[F.state].includes(x.k));
     return `<button type="button" class="${x.c}${dim?' dim':''}" data-k="${x.k}"
       style="width:${pc.toFixed(3)}%" title="${x.l}: ${fmt(vals[i])} records (${pc.toFixed(1)}%)"
       >${pc>6?fmt(vals[i]):''}</button>`;
@@ -1486,13 +1591,15 @@ const BUCKETS = [
   {l:'Over 2 years', f:d=>d>730}
 ];
 let ageRows = [];
+const ageEl = document.getElementById('age');
 function drawAge(){
 const open = DATA.rows.filter(r=>pass(r,null) && r.open && r.days!==null);
 ageRows = BUCKETS.map(b=>open.filter(r=>b.f(r.days)).sort((a,c)=>c.days-a.days));
+if(!ageEl) return;
 const bv = ageRows.map(a=>a.length);
 const maxB = Math.max(...bv,1);
 const sev = ['sev-lo','sev-mid','sev-mid','sev-hi','sev-hi'];
-document.getElementById('age').innerHTML = bv.map((v,i)=>
+ageEl.innerHTML = bv.map((v,i)=>
   `<button type="button" class="brow ${sev[i]}" data-i="${i}" ${v?'':'disabled'}
      title="${v?`Click for the list of ${v} sites`:'No sites'}">
      <span class="sl">${BUCKETS[i].l}</span>
@@ -1517,19 +1624,21 @@ const SOON = [
   {l:'Over 90 days', f:d=>d>90}
 ];
 let soonRows = [];
+const soonEl = document.getElementById('soon');
 function drawSoon(){
+  if(!soonEl) return;
   const live = DATA.rows.filter(r=>pass(r,null) && r.state==='act' && r.days!==null);
   live.forEach(r=>r.left = -r.days);
   soonRows = SOON.map(b=>live.filter(r=>b.f(r.left)).sort((a,c)=>a.left-c.left));
   const max = Math.max(...soonRows.map(a=>a.length),1);
-  document.getElementById('soon').innerHTML = soonRows.map((rs,i)=>`
+  soonEl.innerHTML = soonRows.map((rs,i)=>`
     <button type="button" class="brow ${['sev-hi','sev-mid','sev-mid','sev-lo'][i]}" data-i="${i}" ${rs.length?'':'disabled'}
       title="${rs.length?`Click for the list of ${rs.length} sites`:'No sites'}">
       <span class="sl">${SOON[i].l}</span>
       <span class="bar2"><i style="width:${(rs.length/max*100).toFixed(1)}%"></i></span>
       <span class="n">${fmt(rs.length)}</span></button>`).join('');
 }
-document.getElementById('soon').addEventListener('click',e=>{
+if(soonEl) soonEl.addEventListener('click',e=>{
   const b = e.target.closest('.brow');
   if(!b || b.hasAttribute('disabled')) return;
   const i = +b.dataset.i;
@@ -1571,16 +1680,18 @@ const CHECKS = [
    f:r=>r.mw && r.eff && r.mw > r.eff}
 ];
 let checkRows = [];
+const checksEl = document.getElementById('checks');
 function drawChecks(){
+  if(!checksEl) return;
   const base = DATA.rows.filter(r=>pass(r,'check'));
   checkRows = CHECKS.map(c=>base.filter(c.f));
-  document.getElementById('checks').innerHTML = CHECKS.map((c,i)=>`
+  checksEl.innerHTML = CHECKS.map((c,i)=>`
     <li><button type="button" class="chk-row${checkRows[i].length?'':' zero'}${F.check===i?' on':''}" data-i="${i}"
       ${checkRows[i].length?'':'disabled'} title="${checkRows[i].length?'Click for the full list':'No issues'}">
       <span><span class="ct">${c.t}</span><span class="cd">${c.d}</span></span>
       <span class="n">${fmt(checkRows[i].length)}</span></button></li>`).join('');
 }
-document.getElementById('checks').addEventListener('click',e=>{
+if(checksEl) checksEl.addEventListener('click',e=>{
   const b = e.target.closest('.chk-row');
   if(!b || b.hasAttribute('disabled')) return;
   const i = +b.dataset.i;
@@ -1668,13 +1779,13 @@ document.getElementById('mo-thead').addEventListener('click',e=>{
 });
 function closeModal(){ modal.classList.remove('show'); MO = null; }
 
-document.getElementById('age').addEventListener('click',e=>{
+if(ageEl) ageEl.addEventListener('click',e=>{
   const b = e.target.closest('.brow');
   if(!b || b.hasAttribute('disabled')) return;
   const i = +b.dataset.i;
   openList({eyebrow:'How long permits have been expired', title:BUCKETS[i].l, rows:ageRows[i],
             file:'tapak_'+BUCKETS[i].l.replace(/[^0-9a-zA-Z]+/g,'_'),
-            onFilter:()=>{ F.state = i>=3 ? 'crit' : 'exp'; }});
+            onFilter:()=>{ F.state = ['exp','mid','e365','g1y','g1y'][i]; }});
 });
 document.getElementById('pbm').addEventListener('click',e=>{
   const b = e.target.closest('.pbm-row');
@@ -1695,7 +1806,8 @@ document.addEventListener('keydown',e=>{
 document.getElementById('mo-filter').addEventListener('click',()=>{
   if(!MO || !MO.onFilter) return;
   MO.onFilter(); closeModal(); render();
-  document.querySelector('.controls').scrollIntoView({behavior:'smooth',block:'start'});
+  setView('rec');
+  document.querySelector('.tabs').scrollIntoView({behavior:'smooth',block:'start'});
 });
 document.getElementById('mo-csv').addEventListener('click',()=>{
   if(!MO) return;
@@ -1991,9 +2103,12 @@ function render(){
   writeHash();
   const an = activeCount();
   document.getElementById('mfilter-n').textContent = an ? an : '';
+  document.getElementById('sb-n').textContent = an ? an : '';
+  document.getElementById('sb-open-n').textContent = an ? an : '';
   document.getElementById('hint').innerHTML = F.check !== null
     ? `Filter: <b>${CHECKS[F.check].t}</b> <span class="tot-all">(click that row again, or press Undo, to clear)</span>`
     : 'Click a column heading to sort &middot; click a row for details';
+  document.getElementById('tab-rec-n').textContent = fmt(rows.length);
   document.getElementById('count').innerHTML =
     `Showing <b>${fmt(view.length)}</b> of <b>${fmt(rows.length)}</b> matching records` +
     (rows.length !== DATA.rows.length ? ` <span class="tot-all">/ ${fmt(DATA.rows.length)} total</span>` : '') +
@@ -2017,7 +2132,8 @@ document.getElementById('telcobars').addEventListener('click',e=>{
   const t = tr.dataset.telco;
   F.telco.has(t) ? F.telco.delete(t) : F.telco.add(t);
   render();
-  document.querySelector('.slicers').scrollIntoView({behavior:'smooth',block:'start'});
+  setView('rec');
+  document.querySelector('.tabs').scrollIntoView({behavior:'smooth',block:'start'});
 });
 document.getElementById('undo').addEventListener('click', doUndo);
 document.addEventListener('keydown', e=>{
@@ -2116,6 +2232,48 @@ function noteSharedFile(q){
     note.classList.remove('show');
   }
 }
+
+/* ---- cetak ---- */
+function filterSummary(){
+  const p = [], list = s => [...s].map(v => v === '__none' ? 'No date' : v).join(', ');
+  if(F.telco.size) p.push('Telco: ' + list(F.telco));
+  if(F.wp.size)    p.push('Status WP: ' + list(F.wp));
+  if(F.cpc.size)   p.push('Status CPC: ' + list(F.cpc));
+  if(F.st.size)    p.push('Status: ' + [...F.st].map(k => LBL[k] || k).join(', '));
+  if(F.dte.size)   p.push('Permit expiry: ' + list(F.dte));
+  if(F.dtl.size)   p.push('Extension expiry: ' + list(F.dtl));
+  if(F.dmc.size)   p.push('CPC work start: ' + list(F.dmc));
+  if(F.dkc.size)   p.push('CPC approval: ' + list(F.dkc));
+  if(F.state)      p.push('KPI: ' + (SGROUP[F.state]
+                     ? SGROUP[F.state].map(k => LBL[k]).join(' + ')
+                     : (LBL[F.state] || F.state)));
+  if(F.pbm)        p.push('PBM: ' + F.pbm);
+  if(F.q)          p.push('Search: "' + F.q + '"');
+  if(F.check !== null && CHECKS[F.check]) p.push('Check: ' + CHECKS[F.check].t);
+  return p;
+}
+
+function preparePrint(){
+  if(!DATA) return;
+  const shown = DATA.rows.filter(r => pass(r, null)).length;
+  const parts = filterSummary();
+  document.getElementById('print-head').innerHTML =
+    `CPC Tracker &middot; file <b>${DATA.src || '—'}</b> &middot; printed <b>${new Date().toLocaleDateString('en-MY')}</b><br>` +
+    `Records shown: <b>${fmt(shown)}</b> of ${fmt(DATA.rows.length)}<br>` +
+    `Filters: <b>${parts.length ? parts.join(' &middot; ') : 'none applied'}</b>`;
+}
+
+/* dipasang pada beforeprint supaya Ctrl+P pun dapat layout yang sama */
+let printTheme = null;
+window.addEventListener('beforeprint', ()=>{
+  preparePrint();
+  /* tema gelap membazir dakwat dan selalunya tak keluar langsung pada pencetak */
+  if(printTheme === null){ printTheme = theme; setTheme('light', true); }
+});
+window.addEventListener('afterprint', ()=>{
+  if(printTheme !== null){ setTheme(printTheme, true); printTheme = null; }
+});
+document.getElementById('print').addEventListener('click', ()=>window.print());
 
 /* ---- tema terang / gelap ---- */
 let theme = 'dark';
@@ -2292,6 +2450,33 @@ document.getElementById('dt-copy').addEventListener('click',()=>{
   ].join('\n');
   copyText(lines, 'Details copied');
 });
+
+/* ---- tab paparan ---- */
+function setView(v){
+  document.querySelectorAll('.tab').forEach(t=>{
+    const on = t.dataset.view===v;
+    t.classList.toggle('on',on); t.setAttribute('aria-selected',on);
+  });
+  document.querySelectorAll('.view').forEach(p=>p.classList.toggle('on', p.id==='v-'+v));
+  try{ localStorage.setItem('cpc-view', v); }catch(e){}
+}
+document.getElementById('tabs').addEventListener('click',e=>{
+  const t = e.target.closest('.tab'); if(!t) return;
+  setView(t.dataset.view);
+});
+try{
+  const v = localStorage.getItem('cpc-view');
+  if(v && document.getElementById('v-'+v)) setView(v);
+}catch(e){}
+
+/* ---- panel penapis sisi: buka / tutup ---- */
+function setSidebar(collapsed){
+  document.body.classList.toggle('sb-collapsed', collapsed);
+  try{ localStorage.setItem('cpc-sb', collapsed ? '1' : '0'); }catch(e){}
+}
+try{ if(localStorage.getItem('cpc-sb') === '1') document.body.classList.add('sb-collapsed'); }catch(e){}
+document.getElementById('sb-close').addEventListener('click',()=>setSidebar(true));
+document.getElementById('sb-open').addEventListener('click',()=>setSidebar(false));
 
 /* ---- panel tapisan pada skrin kecil ---- */
 const mfilter = document.getElementById('mfilter');
