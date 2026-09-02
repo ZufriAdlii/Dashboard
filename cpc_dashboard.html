@@ -456,16 +456,6 @@ tbody tr.rowlink:focus-visible{outline:2px solid var(--amber);outline-offset:-2p
 .dslicers{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
           border:1px solid var(--line);border-top:0}
 .dslicer{padding:20px 22px;min-width:0;background:var(--surface)}
-/* date tree ialah alat siasatan — dilipat secara lalai supaya Telco dan Status
-   kekal di bahagian atas sidebar tanpa perlu scroll */
-.dslicer .slicer-head{cursor:pointer}
-.dslicer .slicer-head h3::after{content:'\2212';float:none;margin-left:8px;color:var(--faint);font-family:var(--mono)}
-.dslicer.folded .slicer-head h3::after{content:'\002B'}
-.dslicer.folded .dtree,
-.dslicer.folded .dtree-sub{display:none}
-.dslicer.folded .clr{display:none}
-.dslicer.has .slicer-head h3{color:var(--amber)}
-
 .dtree{max-height:250px;overflow-y:auto;border:1px solid var(--line);background:var(--well);padding:5px}
 .dtree::-webkit-scrollbar{width:8px}
 .dtree::-webkit-scrollbar-track{background:transparent}
@@ -726,8 +716,6 @@ td.num,td.dt{font-family:var(--mono);font-size:12.5px;white-space:nowrap;font-va
 .days{font-family:var(--mono);font-size:11px;color:var(--amber)}
 .days.frozen{color:var(--sky)}
 .tot-all{color:var(--faint);letter-spacing:.06em}
-.caprow td{background:var(--amber-soft) !important;color:#F0D3A6;text-align:center;
-           font-family:var(--mono);font-size:12px;letter-spacing:.06em;padding:16px !important}
 .foot b{color:var(--ink);font-weight:400;font-size:12px}
 .mfoot b{color:var(--ink);font-weight:400;font-size:12px}
 .foot{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;
@@ -791,18 +779,7 @@ footer.credit{margin-top:32px;padding-top:20px;border-top:1px solid var(--line)}
   tr{break-inside:avoid}
 
   /* jadual senarai: padat, kepala gelap berulang tiap halaman, baris berjalur */
-  #v-rec table{font-size:8px;table-layout:auto;width:100%}
-  /* satu keluarga font untuk teks, satu untuk nombor — bukan tiga campur aduk */
-  #v-rec tbody td{font-family:var(--body)}
-  #v-rec .proj{font-family:var(--body);font-size:8px;min-width:0;max-width:none;
-        font-weight:600;color:#101B29}
-  #v-rec .num,#v-rec .dt{font-family:var(--mono);font-size:7.5px;color:#101B29;
-        white-space:nowrap;font-variant-numeric:tabular-nums}
-  /* sel kosong jangan dibaca sebagai data */
-  #v-rec tbody td.none,#v-rec tbody td:empty{color:#C3CCD6}
-  /* tarikh dan kiraan lebih senang dibanding bila dijajar kanan */
-  #v-rec .num,#v-rec .dt{text-align:right}
-  #v-rec thead th.num,#v-rec thead th.dt{text-align:right}
+  #v-rec table{font-size:8px;table-layout:auto}
   #v-rec thead th{background:#0F141C !important;color:#EDF1F6 !important;
         font-family:var(--mono);font-size:6.5px;letter-spacing:.09em;text-transform:uppercase;
         font-weight:500;padding:6px 5px;border:0;white-space:nowrap;
@@ -810,14 +787,20 @@ footer.credit{margin-top:32px;padding-top:20px;border-top:1px solid var(--line)}
   #v-rec thead th .ar{display:none}
   #v-rec tbody td{padding:4px 5px;border:0;border-bottom:1px solid #E3E9EF;
         background:none !important;position:static !important;vertical-align:top;line-height:1.3}
-  #v-rec tbody tr:nth-child(even) td{background:#FAFCFD !important;
+  #v-rec tbody tr:nth-child(even) td{background:#F7F9FB !important;
         -webkit-print-color-adjust:exact;print-color-adjust:exact}
-  /* satu warna teks untuk semua sel; hierarki datang dari saiz dan berat sahaja */
-  #v-rec tbody td,#v-rec tbody td *:not(.tag){color:#101B29}
-  #v-rec td.rno{font-family:var(--mono);font-size:7px;color:#8192A6;text-align:right}
-  /* span .days ialah 11px amber pada skrin — samakan dengan lajur nombor lain */
-  #v-rec .days,#v-rec .days.frozen{font-family:var(--mono);font-size:7.5px;color:#101B29}
-  #v-rec td.none,#v-rec td:empty{color:#C3CCD6}
+  #v-rec tbody td:first-child{font-family:var(--mono);font-size:7px;color:#8192A6}
+  /* warna aksen skrin jadi bising atas kertas — kekalkan hierarki dengan berat, bukan warna */
+  #v-rec tbody td{color:#101B29}
+  #v-rec .proj{font-size:8.5px;min-width:0;max-width:none;font-weight:500;color:#101B29}
+  #v-rec .num{font-family:var(--mono);font-size:7.5px;color:#101B29}
+  #v-rec tbody td:nth-child(2),
+  #v-rec tbody td:nth-child(4){color:#5C6E82;font-size:7.5px}
+  /* sel kosong jangan dibaca sebagai data */
+  #v-rec tbody td.none,#v-rec tbody td:empty{color:#C3CCD6}
+  /* tarikh dan kiraan lebih senang dibanding bila dijajar kanan */
+  #v-rec .num,#v-rec td.mono{text-align:right}
+  #v-rec thead th.num{text-align:right}
   /* garis amber nipis memisahkan kepala daripada data */
   #v-rec thead{border-bottom:2px solid #E8A33D}
   /* lencana jadi teks berwarna — jimat dakwat dan lebar */
@@ -832,11 +815,7 @@ footer.credit{margin-top:32px;padding-top:20px;border-top:1px solid var(--line)}
   footer.credit .by-meta{font-size:8px;color:#8192A6;line-height:1.7}
 
   /* cetak pilihan sahaja: baris yang tidak dipilih digugurkan */
-  body.printsel .foot{display:none !important}
   body.printsel #tbody tr:not(.sel){display:none !important}
-  .foot{font-family:var(--mono);font-size:8px;letter-spacing:.08em;color:#8192A6;
-        padding:9px 0 0;margin:0}
-  .foot #hint{display:none}
   body.printsel #tbody tr.sel td:first-child{padding-left:5px;box-shadow:none}
   body.printsel #tbody tr.sel td{background:none !important}
 
@@ -1046,22 +1025,22 @@ footer.credit{margin-top:32px;padding-top:20px;border-top:1px solid var(--line)}
 </section>
 
 <section class="dslicers">
-  <div class="dslicer folded">
+  <div class="dslicer">
     <div class="slicer-head"><h3>Permit expiry date</h3><button class="clr" data-clr="dte">Clear</button></div>
     <div class="dtree" id="dt-te"></div>
     <div class="dtree-sub">Year &rsaquo; month &rsaquo; day &mdash; multi-select</div>
   </div>
-  <div class="dslicer folded">
+  <div class="dslicer">
     <div class="slicer-head"><h3>Extension expiry date</h3><button class="clr" data-clr="dtl">Clear</button></div>
     <div class="dtree" id="dt-tl"></div>
     <div class="dtree-sub">Empty = no extension applied for</div>
   </div>
-  <div class="dslicer folded">
+  <div class="dslicer">
     <div class="slicer-head"><h3>CPC work start order</h3><button class="clr" data-clr="dmc">Clear</button></div>
     <div class="dtree" id="dt-mc"></div>
     <div class="dtree-sub">Empty = order not yet issued</div>
   </div>
-  <div class="dslicer folded">
+  <div class="dslicer">
     <div class="slicer-head"><h3>CPC approval date</h3><button class="clr" data-clr="dkc">Clear</button></div>
     <div class="dtree" id="dt-kc"></div>
     <div class="dtree-sub">Empty = approval not yet recorded</div>
@@ -1104,20 +1083,25 @@ footer.credit{margin-top:32px;padding-top:20px;border-top:1px solid var(--line)}
   <div class="recon-bar" id="rc-bar"></div>
   <div class="recon-key" id="rc-key"></div>
 </section>
-
-<div class="panel">
-  <h2>Records needing review</h2>
-  <p class="note">Inconsistencies in the file that may be hiding real cases. Click a row to see the sites.</p>
-  <ul class="checks" id="checks"></ul>
-</div>
 </div>
 
 <div class="view" id="v-brk" role="tabpanel">
 <div class="grid" style="grid-template-columns:1fr">
   <div class="panel">
     <h2>Status by telco</h2>
-    <p class="note">Each bar is the permit record count for that telco. Colours follow the reconciliation key in Summary. Click a bar to filter the table.</p>
+    <p class="note">Each bar is the permit record count for that telco. Click a bar to filter the table below.</p>
     <div id="telcobars"></div>
+    <div class="legend">
+      <span><i class="s-crit"></i>1&ndash;2 years</span>
+      <span><i class="s-e90"></i>0&ndash;90 days</span>
+      <span><i class="s-exp"></i>91&ndash;180 days</span>
+      <span><i class="s-e365"></i>181&ndash;365 days</span>
+      <span><i class="s-e2y"></i>Over 2 years</span>
+      <span><i class="s-act"></i>Still active</span>
+      <span><i class="s-sub"></i>CPC submitted</span>
+      <span><i class="s-cpc"></i>CPC complete</span>
+      <span><i class="s-nd"></i>WP still in progress</span>
+    </div>
   </div>
 </div>
 
@@ -1595,7 +1579,7 @@ function pass(r, skip){
   }
   if(F.pbm && r.b!==F.pbm) return false;
   if(F.q && !(r.p.toLowerCase().includes(F.q) || r.b.toLowerCase().includes(F.q)
-              || String(r.uid) === F.q || String(r.no) === F.q)) return false;
+              || String(r.uid) === F.q)) return false;
   return true;
 }
 
@@ -1862,11 +1846,10 @@ function moSorted(){
   const order = {e2y:0,crit:1,e365:2,mid:3,exp:4,sub:5,nd:6,act:7,cpc:8,drop:9};
   const swOrder = {YES:0, NO:1, DROP:2};
   return MO.rows.slice().sort((a,b)=>{
-    if(moSortK==='no') return (a.uid - b.uid) * moSortDir;
     let x=a[moSortK], y=b[moSortK];
     if(moSortK==='state'){ x=order[x]; y=order[y]; }
     else if(moSortK==='sw'){ x=swOrder[x] ?? 3; y=swOrder[y] ?? 3; }
-    else if(moSortK==='uid'||moSortK==='no'){ x=+x||0; y=+y||0; }
+    else if(moSortK==='uid'){ x=+x||0; y=+y||0; }
     if(x===null||x===undefined||x==='') return 1;
     if(y===null||y===undefined||y==='') return -1;
     if(typeof x==='number') return (x-y)*moSortDir;
@@ -1958,7 +1941,7 @@ document.getElementById('mo-filter').addEventListener('click',()=>{
 });
 document.getElementById('mo-csv').addEventListener('click',()=>{
   if(!MO) return;
-  const head = ['Row','Bil','Telco','Project Name','PBM Involved','WP Work Start','Permit Approval',
+  const head = ['No','No in sheet','Telco','Project Name','PBM Involved','WP Work Start','Permit Approval',
                 'WP Status','Permit Expiry','Extension Expiry','Expiry Age (days)','CPC Work Start','CPC Approval','CPC Status','Status'];
   const esc = v => '"'+String(v??'').replace(/"/g,'""')+'"';
   const body = moSorted().map(r=>[r.uid,r.no,r.t,r.p,r.b,r.mw||'',r.kp||'',r.sw,r.te||'',r.tl||'',
@@ -2107,7 +2090,7 @@ document.querySelector('.slicers').addEventListener('click',e=>{
 });
 
 const COLS = [
-  {k:'no', h:'Bil',          cls:'num'},
+  {k:'uid', h:'No',          cls:'num'},
   {k:'t',  h:'Telco',        cls:''},
   {k:'p',  h:'Project name',  cls:'proj'},
   {k:'b',  h:'PBM involved', cls:''},
@@ -2119,16 +2102,13 @@ const COLS = [
   {k:'kc', h:'CPC approval',  cls:'dt'},
   {k:'state',h:'Status',     cls:''}
 ];
-/* jadual render sehingga had ini; lebihannya dinyatakan dengan jelas di hujung jadual */
-const ROWCAP = 1500;
-let sortK='no', sortDir=1;
+let sortK='days', sortDir=-1;
 
 /* Sel jadual dijana daripada COLS supaya tajuk dan sel tidak boleh tersasar lagi.
    cell5 membenarkan popup menggantikan kandungan lajur "umur tamat". */
 function cellHTML(r, c, cell5){
   switch(c.k){
     case 'uid':   return `<td class="rno">${r.uid}</td>`;
-    case 'no':    return `<td class="rno">${r.no || '—'}</td>`;
     case 't':     return `<td>${r.t}</td>`;
     case 'p':     return `<td class="proj">${r.p}</td>`;
     case 'b':     return `<td>${r.b}</td>`;
@@ -2158,14 +2138,9 @@ function current(){
   let out = DATA.rows.filter(r=>pass(r,null));
   const order = {e2y:0,crit:1,e365:2,mid:3,exp:4,nd:5,act:6,cpc:7,drop:8};
   out.sort((a,b)=>{
-    /* Bil berulang setiap telco, jadi tanpa pengasing telco senarai jadi
-       semua "1" bertimbun, kemudian semua "2". Telco jadi kunci utama. */
-    /* "Bil" bermaksud susunan tracker: ikut turutan sheet, kemudian turutan baris.
-       uid diberi mengikut susunan baca fail, jadi ia salinan tepat susunan itu. */
-    if(sortK==='no') return (a.uid - b.uid) * sortDir;
     let x=a[sortK], y=b[sortK];
     if(sortK==='state'){ x=order[x]; y=order[y]; }
-    else if(sortK==='uid'||sortK==='no'){ x=+x||0; y=+y||0; }
+    else if(sortK==='uid'){ x=+x||0; y=+y||0; }
     if(x===null||x===undefined||x==='') return 1;
     if(y===null||y===undefined||y==='') return -1;
     if(typeof x==='number') return (x-y)*sortDir;
@@ -2237,7 +2212,7 @@ function render(){
   });
   const tb = document.getElementById('tbody');
   document.getElementById('empty').style.display = rows.length?'none':'block';
-  const view = rows.slice(0,ROWCAP);
+  const view = rows.slice(0,600);
   tb.innerHTML = view.map(r=>`<tr class="rowlink" data-uid="${r.uid}" tabindex="0">
     <td class="cardcell" aria-hidden="true">
       <div class="c-top"><span class="c-no">${r.uid}</span><span class="c-telco">${r.t}</span>
@@ -2254,9 +2229,7 @@ function render(){
       </dl>
     </td>
     ${rowCells(r)}
-  </tr>`).join('') + (rows.length > ROWCAP ? `<tr class="caprow"><td colspan="${COLS.length+1}">
-      ${fmt(rows.length - ROWCAP)} more records match these filters but are not shown.
-      Narrow the filters or download the CSV for the full set.</td></tr>` : '');
+  </tr>`).join('');
   writeHash();
   const an = activeCount();
   document.getElementById('mfilter-n').textContent = an ? an : '';
@@ -2266,13 +2239,12 @@ function render(){
     ? `Filter: <b>${CHECKS[F.check].t}</b> <span class="tot-all">(click that row again, or press Undo, to clear)</span>`
     : 'Click a column heading to sort &middot; click a row for details';
   document.getElementById('tab-rec-n').textContent = fmt(rows.length);
-  if(typeof syncDateFolds === 'function') syncDateFolds();
   if(typeof paintSel === 'function') paintSel();
   if(typeof preparePrint === 'function') preparePrint();
   document.getElementById('count').innerHTML =
     `Showing <b>${fmt(view.length)}</b> of <b>${fmt(rows.length)}</b> matching records` +
     (rows.length !== DATA.rows.length ? ` <span class="tot-all">/ ${fmt(DATA.rows.length)} total</span>` : '') +
-    (rows.length>ROWCAP?` <span class="tot-all">(showing first ${fmt(ROWCAP)})</span>`:'');
+    (rows.length>600?' <span class="tot-all">(first 600 only — filter further or download the CSV)</span>':'');
   document.getElementById('thead').querySelectorAll('th').forEach(th=>{
     th.querySelector('.ar').textContent = th.dataset.k===sortK?(sortDir>0?'▲':'▼'):'↕';
   });
@@ -2308,11 +2280,11 @@ document.getElementById('reset').addEventListener('click',()=>{
   F.telco.clear(); F.wp.clear(); F.cpc.clear(); F.st.clear();
   F.dte.clear(); F.dtl.clear(); F.dmc.clear(); F.dkc.clear();
   F.state=''; F.pbm=''; F.q=''; F.check=null;
-  sortK='no'; sortDir=1; render();
+  sortK='days'; sortDir=-1; render();
 });
 document.getElementById('csv').addEventListener('click',()=>{
   const rows = current();
-  const head = ['Row','Bil','Telco','Project Name','PBM Involved','WP Work Start','Permit Approval',
+  const head = ['No','No in sheet','Telco','Project Name','PBM Involved','WP Work Start','Permit Approval',
                 'WP Status','Permit Expiry','Extension Expiry','Effective Date','Expiry Age (days)','CPC Work Start','CPC Approval','CPC Status','Status'];
   const esc = v => '"'+String(v??'').replace(/"/g,'""')+'"';
   const body = rows.map(r=>[r.uid,r.no,r.t,r.p,r.b,r.mw||'',r.kp||'',r.sw,r.te||'',r.tl||'',r.eff||'',
@@ -2337,7 +2309,7 @@ function buildQuery(){
   if(F.state) q.set('s',F.state);
   if(F.pbm)   q.set('p',F.pbm);
   if(F.q)     q.set('q',F.q);
-  if(sortK!=='no' || sortDir!==1) q.set('o', sortK+':'+sortDir);
+  if(sortK!=='days' || sortDir!==-1) q.set('o', sortK+':'+sortDir);
   if(theme === 'light') q.set('th','l');
   if(DATA && DATA.src) q.set('f', DATA.src);
   return q.toString();
@@ -2374,7 +2346,7 @@ function applyHash(q){
   const el = document.getElementById('q'); if(el) el.value = F.q;
   if(selP) selP.value = F.pbm;
   const o = q.get('o');
-  if(o){ const [k,d] = o.split(':'); sortK = k; sortDir = +d || 1; }
+  if(o){ const [k,d] = o.split(':'); sortK = k; sortDir = +d || -1; }
   setTheme(q.get('th') === 'l' ? 'light' : 'dark', true);
   /* buka cabang tahun/bulan yang dipilih supaya kelihatan */
   HKEYS.slice(3).forEach(([k,dim])=>{
@@ -2391,24 +2363,6 @@ function noteSharedFile(q){
   }else{
     note.classList.remove('show');
   }
-}
-
-/* ---- date tree: lipat / buka ---- */
-document.querySelectorAll('.dslicer .slicer-head').forEach(h=>{
-  h.addEventListener('click', e=>{
-    if(e.target.closest('.clr')) return;      /* butang Clear bukan togol */
-    h.closest('.dslicer').classList.toggle('folded');
-  });
-});
-/* tapisan tarikh yang aktif tak boleh tersembunyi — buka sendiri dan tandakan */
-function syncDateFolds(){
-  [['dte','dt-te'],['dtl','dt-tl'],['dmc','dt-mc'],['dkc','dt-kc']].forEach(([key,id])=>{
-    const box = document.getElementById(id); if(!box) return;
-    const sl = box.closest('.dslicer');
-    const on = F[key].size > 0;
-    sl.classList.toggle('has', on);
-    if(on) sl.classList.remove('folded');
-  });
 }
 
 /* ---- mod pilih baris ----
@@ -2571,8 +2525,7 @@ function preparePrint(ctx){
   const cap   = (ctx && ctx.cap) || 'Records';
   const meta  = (ctx && ctx.meta) ||
     `<b>${fmt(shown)}</b> of ${fmt(DATA.rows.length)} records &middot; ` +
-    (parts.length ? parts.join(' &middot; ') : 'no filters applied') +
-    (shown > ROWCAP ? `<br><b>Only the first ${fmt(ROWCAP)} rows are printed</b> — narrow the filters or use the CSV for the full set` : '');
+    (parts.length ? parts.join(' &middot; ') : 'no filters applied');
 
   const c = s => base.filter(r => r.state === s).length;
   const g = k => base.filter(r => SGROUP[k].includes(r.state)).length;
@@ -2730,8 +2683,7 @@ let DTROW = null;
 function fieldRows(r){
   const val = (v, cls) => v ? `<dd class="${cls||''}">${v}</dd>` : '<dd class="none">None</dd>';
   return [
-    ['Bil (tracker)', `<dd class="mono">${r.no || '\u2014'}</dd>`],
-    ['Row', `<dd class="mono">${r.uid}</dd>`],
+    ['No', `<dd class="mono">${r.uid}</dd>`],
     ['Telco', `<dd>${r.t}</dd>`],
     ['PBM terlibat', `<dd>${r.b}</dd>`, true],
     ['Status WP', r.sw ? `<dd class="mono">${r.sw}</dd>` : null],
@@ -2872,7 +2824,7 @@ function clearFilters(){
   F.dte.clear(); F.dtl.clear(); F.dmc.clear(); F.dkc.clear();
   F.state=''; F.pbm=''; F.q=''; F.check=null;
   const el=document.getElementById('q'); if(el) el.value='';
-  selP.value=''; sortK='no'; sortDir=1;
+  selP.value=''; sortK='days'; sortDir=-1;
   const n=document.getElementById('shared-note'); if(n) n.classList.remove('show');
 }
 function load(d){
