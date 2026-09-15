@@ -1312,7 +1312,7 @@
       <div class="gdrop" id="udmDropZone">
         <svg viewBox="0 0 48 48" stroke-linecap="square"><path d="M24 31V9m0 0l-8 8m8-8l8 8"/><path d="M9 29v10h30V29"/></svg>
         <div class="big">Drop your Excel file here</div>
-        <div class="small">or click to browse &middot; remembered for next time</div>
+        <div class="small">or click to browse &middot; .xlsx</div>
       </div>
       <input type="file" id="udmGateFileInput" accept=".xlsx,.xls" style="display:none;">
       <div class="gacts"><button type="button" class="gbtn" id="udmGateChooseFile">Browse file</button><button type="button" class="gbtn" id="udmGateUseExisting">Use existing data</button></div>
@@ -3522,7 +3522,8 @@ function runUdmDashboard(initialData){
 
   if(!FSA_OK && linkRow){ linkRow.hidden = true; }
 
-  function pickAndRemember(){
+  if(linkPick){
+    linkPick.addEventListener('click', function(){
       window.showOpenFilePicker({
         types: [{description:'Excel workbook', accept:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx']}}],
         multiple: false
@@ -3537,18 +3538,7 @@ function runUdmDashboard(initialData){
         gateError.textContent = (err && err.message) || 'That file could not be opened.';
         gateError.style.display = 'block';
       });
-  }
-  if(linkPick) linkPick.addEventListener('click', pickAndRemember);
-  if(FSA_OK){
-    /* the drop zone and Browse button use the same picker, so every file
-       opened this way is remembered for next time */
-    var dz = document.getElementById('udmDropZone');
-    if(dz){
-      dz.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); pickAndRemember(); }, true);
-    }
-    if(chooseFileBtn){
-      chooseFileBtn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); pickAndRemember(); }, true);
-    }
+    });
   }
   if(linkGoBtn){
     linkGoBtn.addEventListener('click', function(){
