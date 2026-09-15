@@ -5,6 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>UDM Project Performance Dashboard</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+/* If cdnjs is blocked or slow, try two more mirrors before giving up. */
+(function(){
+  var mirrors = [
+    'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',
+    'https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js'
+  ];
+  function tryNext(){
+    if(window.XLSX || !mirrors.length) return;
+    var s = document.createElement('script');
+    s.src = mirrors.shift();
+    s.onerror = tryNext;
+    s.onload = function(){ /* loaded */ };
+    document.head.appendChild(s);
+  }
+  if(!window.XLSX) tryNext();
+  window.addEventListener('load', function(){ if(!window.XLSX) tryNext(); });
+})();
+</script>
 <link rel="icon" type="image/png" href="UISB_NEW.png">
 <style>
   :root{
@@ -798,6 +817,165 @@
   .udm-change-file-btn:hover{background:var(--panel-2); color:var(--text-light);}
   .udm-change-file-btn svg{width:13px; height:13px;}
 
+
+  /* === linked file + progress (auto update from the synced OneDrive copy) === */
+  .glinkrow{ margin-top:14px; }
+  .glinked{ display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+            padding:9px 12px; margin-bottom:10px; border-radius:8px;
+            background:var(--panel-2); border:1px solid var(--panel-border); }
+  .gl-lbl{ font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+           color:var(--g-ink, #4caf82); }
+  .gl-name{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px;
+            flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+            color:var(--text-light); }
+  .gl-btn{ padding:5px 10px; font-size:11.5px; }
+  .glinknote{ margin:9px 0 0; font-size:11.5px; line-height:1.6; color:var(--text-muted); max-width:46ch; }
+  .glinkrow.has-link .glinknote{ display:none; }
+  #udmGateOverlay .gright.has-link .gate-toggle{ order:-2; }
+  #udmGateOverlay .gright.has-link .glinkrow{ order:-1; margin-top:0; margin-bottom:16px; }
+  #udmGateOverlay .gright.has-link .gdrop{ padding:18px 16px; opacity:.82; }
+  #udmGateOverlay .gright.has-link .gdrop:hover{ opacity:1; }
+  #udmGateOverlay .gright.has-link .gdrop svg{ width:22px; height:22px; margin-bottom:8px; }
+  #udmGateOverlay .gright.has-link .gdrop .big{ font-size:15px; margin-bottom:5px; }
+  #udmGateOverlay .gright.has-link .gdrop .small{ font-size:9.5px; }
+  .glinked[hidden], .udm-refresh-btn[hidden]{ display:none !important; }
+
+  .udm-loadbar{ position:fixed; top:0; left:0; height:3px; width:0; z-index:9000;
+                background:#3ba776; opacity:0; border-radius:0 2px 2px 0;
+                transition:width .28s ease, opacity .25s; }
+  .udm-loadbar.on{ opacity:1; }
+  .udm-loadchip{ position:fixed; left:50%; bottom:30px; transform:translate(-50%,12px); z-index:9001;
+                 display:flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px;
+                 background:var(--panel); border:1px solid var(--panel-border);
+                 box-shadow:0 12px 34px -14px rgba(0,0,0,.5);
+                 font-size:12.5px; color:var(--text-light); opacity:0; pointer-events:none;
+                 transition:opacity .2s ease, transform .2s ease; }
+  .udm-loadchip.on{ opacity:1; transform:translate(-50%,0); }
+  .ulc-ring{ width:13px; height:13px; border-radius:50%; flex:none;
+             border:2px solid var(--panel-border); border-top-color:#3ba776;
+             animation:udmspin .7s linear infinite; }
+  .ulc-pct{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px;
+            font-weight:700; color:#3ba776; min-width:34px; text-align:right; }
+  @keyframes udmspin{ to{ transform:rotate(360deg); } }
+  .udm-refresh-btn.busy{ opacity:.6; pointer-events:none; }
+  .udm-refresh-btn.busy svg{ animation:udmspin .8s linear infinite; transform-origin:50% 50%; }
+
+
+  /* ══════════════════════════════════════════════════════════
+     VENDOR SKIN — UDM takes the Vendor dashboard design language
+     ══════════════════════════════════════════════════════════ */
+  :root{
+    --bg:#F4F6F9;
+    --panel-bg:#FFFFFF;
+    --panel-2:#F8FAFB;
+    --panel-border:#E3E7ED;
+    --panel-border-2:#D2D8E0;
+    --text-light:#1B1F3B;
+    --text-dim:#3E4759;
+    --text-muted:#6B7280;
+    --yellow:#1B1F3B;
+    --green:#2FA360;
+    --blue:#2563EB;
+    --orange:#D97706;
+    --pink:#DC2626;
+    --cyan:#2FA360;
+    --drafter-adam:#2FA360;
+    --drafter-intan:#7C3AED;
+    --drafter-nabihah:#2563EB;
+    --drafter-nasuha:#DC2626;
+    --drafter-syafiqa:#D97706;
+    --display:'Segoe UI',ui-sans-serif,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",Arial,sans-serif;
+    --body:'Segoe UI',ui-sans-serif,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",Arial,sans-serif;
+    --accent:#2FA360;
+    --accent-soft:rgba(47,163,96,.12);
+    --chart:#1B1F3B;
+    --chart-soft:#9AA3AF;
+    --focus:#2563EB;
+    --ov:rgba(27,31,59,.06);
+    --ov-soft:rgba(27,31,59,.035);
+    --shadow:0 10px 30px -12px rgba(27,31,59,.22);
+  }
+  html[data-theme="dark"]{
+    --bg:#0E1320;
+    --panel-bg:#161B29;
+    --panel-2:#1A2030;
+    --panel-border:rgba(255,255,255,.09);
+    --panel-border-2:rgba(255,255,255,.17);
+    --text-light:#E7ECF5;
+    --text-dim:#B3BCCC;
+    --text-muted:#8B95A7;
+    --yellow:#E7ECF5;
+    --accent:#4FC181;
+    --accent-soft:rgba(79,193,129,.16);
+    --chart:#7AA2F7;
+    --chart-soft:#4A5568;
+    --drafter-adam:#4FC181;
+    --drafter-intan:#B08AF0;
+    --drafter-nabihah:#7AA2F7;
+    --drafter-nasuha:#EF7B6E;
+    --drafter-syafiqa:#E0A144;
+  }
+
+  /* type: plain sans throughout, no serif display */
+  .topbar h1, .kpi-box .kb-value, .brand .wordmark, .panel-title, h2, h3{
+    font-family:var(--body);
+  }
+  .topbar h1{font-size:21px;font-weight:700;letter-spacing:-.02em}
+  .brand .wordmark{font-size:15px;font-weight:700;letter-spacing:-.01em}
+  .brand .wordmark::after{background:#F5B324;width:38px;height:3px;border-radius:2px}
+
+  /* sidebar: bordered rows with counts, like the vendor picker */
+  .sidebar{width:236px;background:#EFF8F2;padding:16px 14px 22px}
+  html[data-theme="dark"] .sidebar{background:#141B22}
+  .back-btn{border:1px solid var(--panel-border);background:var(--panel-bg);
+    border-radius:6px;padding:7px 11px;font-size:12.5px}
+  .side-filter-label,.side-select-label{font-family:var(--body);font-size:10.5px;
+    letter-spacing:.05em;text-transform:uppercase;font-weight:700;color:#4C7A5C}
+  html[data-theme="dark"] .side-filter-label,
+  html[data-theme="dark"] .side-select-label{color:#7FB894}
+  .side-btn,.drafter-chip{
+    border:1px solid var(--panel-border);border-radius:6px;background:var(--panel-bg);
+    padding:7px 11px;margin-bottom:5px;color:var(--text-dim);font-size:12.5px}
+  .side-btn:hover,.drafter-chip:hover{background:var(--panel-bg);border-color:var(--text-light);color:var(--text-light)}
+  .side-btn.active{background:#1B1F3B;border-color:#1B1F3B;color:#fff;font-weight:600}
+  .drafter-chip.selected{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+  html[data-theme="dark"] .side-btn.active{background:#4FC181;border-color:#4FC181;color:#0E1320}
+  html[data-theme="dark"] .drafter-chip.selected{color:#0E1320}
+  .side-select{border-radius:6px;background:var(--panel-bg)}
+  .udm-change-file-btn{border-radius:6px;background:var(--panel-bg);font-size:12px}
+
+  /* KPI cards: separate rounded cards */
+  .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));
+    gap:12px;background:transparent;border:0;border-radius:0;overflow:visible}
+  .kpi-box{border:1px solid var(--panel-border);border-radius:10px;background:var(--panel-bg);
+    padding:13px 15px 12px;transition:border-color .14s,box-shadow .14s}
+  .kpi-box:hover{background:var(--panel-bg);border-color:var(--text-light);box-shadow:var(--shadow)}
+  .kpi-box .kb-label{font-family:var(--body);font-size:11px;letter-spacing:0;text-transform:none;
+    color:var(--text-muted);margin-bottom:6px;font-weight:400}
+  .kpi-box .kb-value{font-size:23px;font-weight:700;letter-spacing:-.02em}
+
+  /* topbar mini KPIs */
+  .tk-card{border-left:1px solid var(--panel-border);padding-left:16px}
+  .tk-card .tk-label{font-family:var(--body);font-size:10.5px;letter-spacing:.04em;color:var(--text-muted)}
+  .tk-card .tk-value{font-family:var(--body);font-size:15px;font-weight:700;color:var(--text-light)}
+
+  /* panels and tables */
+  .panel,.card,.chart-card,.list-card{border-radius:10px}
+  .list-table-wrap{border-radius:10px}
+  table.list-table{font-size:11.8px}
+  table.list-table thead th,table.modal-table thead th{
+    font-family:var(--body);font-size:10.5px;letter-spacing:.03em;font-weight:600;
+    background:#F8FAFB;color:var(--text-muted)}
+  html[data-theme="dark"] table.list-table thead th,
+  html[data-theme="dark"] table.modal-table thead th{background:#1A2030}
+  table.list-table tbody tr:hover{background:rgba(47,163,96,.08)}
+  .status-pill{border-radius:10px;font-weight:600;font-size:10.5px;padding:2px 9px}
+  .status-pill.complete{background:rgba(47,163,96,.12);color:#2FA360}
+  .status-pill.pending{background:rgba(217,119,6,.14);color:#D97706}
+  .modal-box{border-radius:12px}
+  .theme-toggle{border-radius:6px}
+
+
   /* === Boot loader (file is large; show progress while it parses) === */
   #boot-loader{
     position:fixed; inset:0; z-index:9999;
@@ -1026,6 +1204,47 @@
   #gate-overlay .gleft, #udmGateOverlay .gleft{ padding:28px 20px !important; }
   #gate-overlay .gright, #udmGateOverlay .gright{ padding:24px 20px !important; }
 }
+
+  /* gate: same treatment as the vendor upload screen */
+  #udmGateOverlay{
+    --g-bg:#F4F6F9; --g-surface:#FFFFFF; --g-surface2:#F8FAFB;
+    --g-ink:#1B1F3B; --g-dim:#3E4759; --g-faint:#9AA3AF;
+    --g-line:#E3E7ED; --g-line2:#D2D8E0;
+    --g-green:#2FA360; --g-amber:#D97706; --g-crit:#DC2626;
+    --g-display:var(--body); --g-mono:var(--body);
+    background-image:none;
+  }
+  html[data-theme="dark"] #udmGateOverlay{
+    --g-bg:#0E1320; --g-surface:#161B29; --g-surface2:#1A2030;
+    --g-ink:#E7ECF5; --g-dim:#B3BCCC; --g-faint:#6E7787;
+    --g-line:rgba(255,255,255,.09); --g-line2:rgba(255,255,255,.17);
+    --g-green:#4FC181; --g-amber:#E0A144;
+  }
+  #udmGateOverlay .gbox{border-radius:14px;box-shadow:0 30px 80px -40px rgba(27,31,59,.45);
+    background:var(--g-surface)}
+  #udmGateOverlay .gright{background:var(--g-surface2)}
+  #udmGateOverlay h1{font-family:var(--body);font-size:30px;font-weight:700;letter-spacing:-.02em}
+  #udmGateOverlay h1 em{font-style:normal;color:var(--g-green)}
+  #udmGateOverlay .geyebrow{font-family:var(--body);font-size:11px;font-weight:700;
+    letter-spacing:.06em;border:1px solid var(--g-green);border-radius:4px;padding:3px 8px;
+    display:inline-block;color:var(--g-green)}
+  #udmGateOverlay .gdrop{border-radius:10px;border:1.5px dashed var(--g-line2)}
+  #udmGateOverlay .gdrop .big{font-family:var(--body);font-size:20px;font-weight:600}
+  #udmGateOverlay .gdrop .small{font-family:var(--body);font-size:12.5px;letter-spacing:0;
+    text-transform:none}
+  #udmGateOverlay .gbtn,#udmGateOverlay .gl-btn{font-family:var(--body);font-size:12.5px;
+    letter-spacing:0;text-transform:none;border-radius:6px;padding:9px 14px;
+    background:var(--g-surface);border:1px solid var(--g-line2);color:var(--g-dim)}
+  #udmGateOverlay .gbtn:hover{border-color:var(--g-ink);color:var(--g-ink)}
+  #udmGateOverlay .glinked{border-radius:8px;background:var(--g-surface)}
+  #udmGateOverlay .gl-lbl{font-family:var(--body);font-size:10px;letter-spacing:.06em;color:var(--g-green)}
+  #udmGateOverlay .gl-name{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px}
+  #udmGateOverlay .gfeats li{font-size:13px}
+  #udmGateOverlay .gn{font-family:var(--body);color:var(--g-green)}
+  #udmGateOverlay .gby .gby-name,#udmGateOverlay .gby b{font-family:var(--body);font-weight:700}
+  #udmGateOverlay .back-btn{border-radius:6px;font-family:var(--body);font-size:12.5px;
+    letter-spacing:0;text-transform:none}
+
 </style>
 </head>
 <body>
@@ -1040,7 +1259,9 @@
   </div>
 
 
-  <div class="gate-overlay" id="udmGateOverlay" style="display:none;">
+  <div class="udm-loadbar" id="udmLoadbar"></div>
+<div class="udm-loadchip" id="udmLoadchip"><span class="ulc-ring"></span><span class="ulc-txt" id="udmLoadchipT"></span><span class="ulc-pct" id="udmLoadchipP"></span></div>
+<div class="gate-overlay" id="udmGateOverlay" style="display:none;">
   <div class="gbox">
     <div class="gleft">
       <a class="gback" href="index.html">
@@ -1065,6 +1286,16 @@
       </div>
       <input type="file" id="udmGateFileInput" accept=".xlsx,.xls" style="display:none;">
       <div class="gacts"><button type="button" class="gbtn" id="udmGateChooseFile">Browse file</button><button type="button" class="gbtn" id="udmGateUseExisting">Use existing data</button></div>
+      <div class="glinkrow" id="udmLinkRow">
+        <div class="glinked" id="udmLinked" hidden>
+          <span class="gl-lbl">Linked</span>
+          <span class="gl-name" id="udmLinkedName"></span>
+          <button type="button" class="gbtn gl-btn" id="udmLinkGo">Load latest</button>
+          <button type="button" class="gbtn gl-btn" id="udmLinkClear">Unlink</button>
+        </div>
+        <button type="button" class="gbtn" id="udmLinkPick">Link a file &amp; remember it</button>
+        <p class="glinknote">Pick the tracker once from your synced OneDrive folder. Choose <b>Allow on every visit</b> and this dashboard reloads the latest saved version by itself. The file still never leaves this machine.</p>
+      </div>
       <div class="gstatus" id="udmGateStatus"></div><div class="gerror" id="udmGateError"></div>
       <div class="gnote">Data source: Tracker_Report_UDM_Project_V1.xlsx</div>
     </div>
@@ -1106,6 +1337,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
           Update The File
         </button>
+        <button class="udm-change-file-btn udm-refresh-btn" hidden title="Re-read the linked file">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11a8 8 0 1 0-.9 4.6"/><path d="M20 5v6h-6"/></svg>
+          Refresh
+        </button>
       </div>
       <button type="button" class="theme-toggle" aria-pressed="false">
         <span class="tt-icon">&#9788;</span><span class="tt-text">Dark mode</span>
@@ -1126,6 +1361,10 @@
         <button class="udm-change-file-btn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
           Update The File
+        </button>
+        <button class="udm-change-file-btn udm-refresh-btn" hidden title="Re-read the linked file">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11a8 8 0 1 0-.9 4.6"/><path d="M20 5v6h-6"/></svg>
+          Refresh
         </button>
       </div>
       <button type="button" class="theme-toggle" aria-pressed="false">
@@ -2785,7 +3024,7 @@ function runUdmDashboard(initialData){
   var chooseFileBtn = document.getElementById('udmGateChooseFile');
   var gateError = document.getElementById('udmGateError');
   var gateStatus = document.getElementById('udmGateStatus');
-  var changeFileBtns = document.querySelectorAll('.udm-change-file-btn');
+  var changeFileBtns = document.querySelectorAll('.udm-change-file-btn:not(.udm-refresh-btn)');
 
   function bakedInData(){
     return JSON.parse(document.getElementById('raw-data').textContent);
@@ -2988,41 +3227,75 @@ function runUdmDashboard(initialData){
     return {data: out, skipped: skipped, sheetUsed: sheetName, noTelco: noTelco};
   }
 
-  function handleFile(file){
+  function udmProg(pct, label){
+    var bar = document.getElementById('udmLoadbar'), chip = document.getElementById('udmLoadchip');
+    if(bar){ bar.classList.add('on'); bar.style.width = Math.max(0, Math.min(100, pct)) + '%'; }
+    if(chip){
+      chip.classList.add('on');
+      document.getElementById('udmLoadchipT').textContent = label || '';
+      document.getElementById('udmLoadchipP').textContent = Math.round(pct) + '%';
+    }
+  }
+  function udmProgDone(){
+    var bar = document.getElementById('udmLoadbar'), chip = document.getElementById('udmLoadchip');
+    if(bar){ bar.style.width = '100%'; setTimeout(function(){ bar.classList.remove('on'); bar.style.width = '0%'; }, 320); }
+    if(chip) setTimeout(function(){ chip.classList.remove('on'); }, 320);
+  }
+  function handleFile(file, opts){
     if(!file) return;
+    opts = opts || {};
     gateError.style.display = 'none';
     gateStatus.textContent = 'Processing file...';
+    udmProg(8, 'Opening ' + file.name);
     if(!window.XLSX){
       gateError.textContent = 'Unable to load the Excel processor (requires an internet connection). Please try again or use the existing data.';
       gateError.style.display = 'block';
       gateStatus.textContent = '';
+      udmProgDone();
       return;
     }
     var reader = new FileReader();
     reader.onload = function(e){
       try{
+        udmProg(34, 'Unpacking the workbook');
         var result = parseUdmWorkbook(e.target.result);
+        udmProg(72, 'Reading the rows');
         if(result.data.length === 0){
           gateError.textContent = 'No valid records were found in this file. Please make sure the "UDM PROGRESS" sheet format matches the tracker template.';
           gateError.style.display = 'block';
           gateStatus.textContent = '';
+          udmProgDone();
           return;
         }
-        sessionStorage.setItem(STORAGE_KEY_DATA, JSON.stringify(result.data));
-        sessionStorage.setItem(STORAGE_KEY_READY, '1');
+        udmProg(88, result.data.length + ' records \u00b7 saving');
+        try{
+          sessionStorage.setItem(STORAGE_KEY_DATA, JSON.stringify(result.data));
+          sessionStorage.setItem(STORAGE_KEY_READY, '1');
+        }catch(quotaErr){
+          gateError.textContent = 'This tracker is too large for the browser to hold in one session. Use a filtered copy, or continue with the existing data.';
+          gateError.style.display = 'block';
+          gateStatus.textContent = '';
+          udmProgDone();
+          return;
+        }
         var note = result.skipped > 0 ? (' ('+result.skipped+' rows skipped due to incomplete data)') : '';
         gateStatus.textContent = 'Success! ' + result.data.length + ' records processed' + note + '. Loading dashboard...';
-        setTimeout(function(){ window.location.reload(); }, 700);
+        udmProg(100, 'Ready');
+        udmProgDone();
+        if(opts.render){ showDashboard(result.data); }
+        else { setTimeout(function(){ window.location.reload(); }, 700); }
       } catch(err){
         gateError.textContent = 'Failed to read the file. Please make sure it is a valid Excel (.xlsx) file.';
         gateError.style.display = 'block';
         gateStatus.textContent = '';
+        udmProgDone();
       }
     };
     reader.onerror = function(){
       gateError.textContent = 'Failed to read the file.';
       gateError.style.display = 'block';
       gateStatus.textContent = '';
+      udmProgDone();
     };
     reader.readAsArrayBuffer(file);
   }
@@ -3046,9 +3319,147 @@ function runUdmDashboard(initialData){
     btn.addEventListener('click', function(){
       sessionStorage.removeItem(STORAGE_KEY_DATA);
       sessionStorage.removeItem(STORAGE_KEY_READY);
+      try{ sessionStorage.setItem('udm_gate_force', '1'); }catch(e){}
       window.location.reload();
     });
   });
+
+  // ---- Linked file: read the synced OneDrive copy without dropping it ----
+  var UDM_DB = 'uisb_udm_link';            // own store, kept apart from the vendor dashboard
+  var FSA_OK = (typeof window.showOpenFilePicker === 'function');
+  var linkPick = document.getElementById('udmLinkPick');
+  var linkRow = document.getElementById('udmLinkRow');
+  var linkedBox = document.getElementById('udmLinked');
+  var linkedName = document.getElementById('udmLinkedName');
+  var linkGoBtn = document.getElementById('udmLinkGo');
+  var linkClearBtn = document.getElementById('udmLinkClear');
+  var refreshBtns = document.querySelectorAll('.udm-refresh-btn');
+
+  function idbOpen(){
+    return new Promise(function(res, rej){
+      var r = indexedDB.open(UDM_DB, 1);
+      r.onupgradeneeded = function(e){ e.target.result.createObjectStore('kv'); };
+      r.onsuccess = function(){ res(r.result); };
+      r.onerror = function(){ rej(r.error); };
+    });
+  }
+  function idbRun(mode, fn){
+    return idbOpen().then(function(db){
+      return new Promise(function(res, rej){
+        var t = db.transaction('kv', mode), store = t.objectStore('kv'), out;
+        out = fn(store);
+        t.oncomplete = function(){ db.close(); res(out && out.result !== undefined ? out.result : undefined); };
+        t.onerror = function(){ db.close(); rej(t.error); };
+      });
+    });
+  }
+  function idbPut(k, v){ return idbRun('readwrite', function(s){ s.put(v, k); }); }
+  function idbGet(k){ return idbRun('readonly', function(s){ return s.get(k); }); }
+  function idbDel(k){ return idbRun('readwrite', function(s){ s.delete(k); }); }
+
+  function showLinked(name){
+    if(!linkedBox) return;
+    linkedName.textContent = name;
+    linkedName.title = name;
+    var gr = document.querySelector('#udmGateOverlay .gright');
+    if(gr) gr.classList.add('has-link');
+    var dz = document.getElementById('udmDropZone');
+    if(dz){
+      var bg = dz.querySelector('.big'), sm = dz.querySelector('.small');
+      if(bg) bg.textContent = 'Open a one-off file';
+      if(sm) sm.textContent = 'drop or click · the link above stays';
+    }
+    linkedBox.hidden = false;
+    if(linkRow) linkRow.classList.add('has-link');
+    if(linkPick) linkPick.textContent = 'Link a different file';
+    for(var i = 0; i < refreshBtns.length; i++) refreshBtns[i].hidden = false;
+  }
+  function hideLinked(){
+    if(!linkedBox) return;
+    linkedBox.hidden = true;
+    if(linkRow) linkRow.classList.remove('has-link');
+    if(linkPick) linkPick.textContent = 'Link a file & remember it';
+    var gr2 = document.querySelector('#udmGateOverlay .gright');
+    if(gr2) gr2.classList.remove('has-link');
+    var dz2 = document.getElementById('udmDropZone');
+    if(dz2){
+      var bg2 = dz2.querySelector('.big'), sm2 = dz2.querySelector('.small');
+      if(bg2) bg2.textContent = 'Drop your Excel file here';
+      if(sm2) sm2.textContent = 'or click to browse · .xlsx';
+    }
+    for(var i = 0; i < refreshBtns.length; i++) refreshBtns[i].hidden = true;
+  }
+  function readLinked(handle, opts){
+    return handle.getFile().then(function(file){ handleFile(file, opts); });
+  }
+
+  if(!FSA_OK && linkRow){ linkRow.hidden = true; }
+
+  if(linkPick){
+    linkPick.addEventListener('click', function(){
+      window.showOpenFilePicker({
+        types: [{description:'Excel workbook', accept:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx']}}],
+        multiple: false
+      }).then(function(handles){
+        var h = handles[0];
+        return idbPut('handle', h).catch(function(){}).then(function(){
+          showLinked(h.name);
+          return readLinked(h, {render:true});
+        });
+      }).catch(function(err){
+        if(err && err.name === 'AbortError') return;
+        gateError.textContent = (err && err.message) || 'That file could not be opened.';
+        gateError.style.display = 'block';
+      });
+    });
+  }
+  if(linkGoBtn){
+    linkGoBtn.addEventListener('click', function(){
+      idbGet('handle').then(function(h){
+        if(!h) return;
+        return h.requestPermission({mode:'read'}).then(function(p){
+          if(p !== 'granted'){
+            gateError.textContent = 'Permission to read the linked file was not given.';
+            gateError.style.display = 'block';
+            return;
+          }
+          return readLinked(h, {render:true});
+        });
+      }).catch(function(){});
+    });
+  }
+  if(linkClearBtn){
+    linkClearBtn.addEventListener('click', function(){
+      idbDel('handle').catch(function(){}).then(function(){ hideLinked(); });
+    });
+  }
+  for(var ri = 0; ri < refreshBtns.length; ri++){
+    (function(btn){
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        btn.classList.add('busy');
+        idbGet('handle').then(function(h){
+          if(!h){ btn.classList.remove('busy'); return; }
+          return h.requestPermission({mode:'read'}).then(function(p){
+            if(p !== 'granted'){ btn.classList.remove('busy'); return; }
+            return readLinked(h, {render:false});   // stores, then reloads cleanly
+          });
+        }).catch(function(){ btn.classList.remove('busy'); });
+      });
+    })(refreshBtns[ri]);
+  }
+
+  function initLinked(){
+    if(!FSA_OK) return Promise.resolve(false);
+    return idbGet('handle').then(function(h){
+      if(!h) return false;
+      showLinked(h.name);
+      return h.queryPermission({mode:'read'}).then(function(p){
+        if(p !== 'granted') return false;
+        return readLinked(h, {render:true}).then(function(){ return true; });
+      });
+    }).catch(function(){ return false; });
+  }
 
   // ---- Resolve on page load ----
   var ready = sessionStorage.getItem(STORAGE_KEY_READY) === '1';
@@ -3056,8 +3467,23 @@ function runUdmDashboard(initialData){
     var override = sessionStorage.getItem(STORAGE_KEY_DATA);
     var data = override ? JSON.parse(override) : bakedInData();
     showDashboard(data);
+    initLinked = (function(fn){ return function(){ 
+      return fn().then(function(){ return true; }).catch(function(){ return true; }); }; })(function(){
+      /* dashboard already drawn from this session's data; just show the link chip */
+      if(!FSA_OK) return Promise.resolve();
+      return idbGet('handle').then(function(h){ if(h) showLinked(h.name); }).catch(function(){});
+    });
+    initLinked();
   } else {
     showGate();
+    var forceGate = false;
+    try{ forceGate = sessionStorage.getItem('udm_gate_force') === '1'; sessionStorage.removeItem('udm_gate_force'); }catch(e){}
+    if(forceGate){
+      /* the user asked for the gate, so only show which file is linked */
+      if(FSA_OK) idbGet('handle').then(function(h){ if(h) showLinked(h.name); }).catch(function(){});
+    }else{
+      initLinked().then(function(loaded){ if(!loaded) showGate(); });
+    }
   }
 })();
 
