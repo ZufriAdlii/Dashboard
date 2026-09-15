@@ -367,6 +367,106 @@
     white-space: nowrap;
   }
 
+  .badge.live {
+    color: #0a1a10;
+    background: linear-gradient(120deg, var(--brass), var(--champagne) 52%, var(--green));
+    border-color: rgba(246, 230, 196, 0.55);
+    box-shadow: 0 0 16px -4px rgba(228, 169, 63, 0.75);
+  }
+
+  /* === featured card: the polished-brass treatment === */
+  .card.featured {
+    background:
+      linear-gradient(158deg, rgba(34, 47, 40, 0.80), rgba(12, 21, 29, 0.68)),
+      radial-gradient(120% 80% at 50% -10%, rgba(228, 169, 63, 0.14), transparent 62%);
+    border-color: rgba(228, 169, 63, 0.30);
+    box-shadow: 0 22px 46px -26px rgba(0, 0, 0, 0.9),
+                0 0 30px -14px var(--glow-brass);
+  }
+
+  /* a lit rim that breathes around the whole plate */
+  .card.featured::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    left: 0;
+    right: 0;
+    height: auto;
+    border-radius: 6px;
+    padding: 1px;
+    background: linear-gradient(135deg,
+                rgba(63, 190, 104, 0.85) 0%,
+                rgba(228, 169, 63, 0.95) 38%,
+                rgba(246, 230, 196, 0.95) 52%,
+                rgba(63, 190, 104, 0.75) 100%);
+    background-size: 240% 240%;
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask-composite: exclude;
+    opacity: 0.55;
+    transition: opacity 0.45s ease;
+    animation: rim-drift 7s linear infinite;
+  }
+  .card.featured:hover::after { opacity: 1; left: 0; right: 0; }
+
+  @keyframes rim-drift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* the sheen: a band of light sweeping across the plate */
+  .card.featured .sheen {
+    position: absolute;
+    top: -60%;
+    bottom: -60%;
+    width: 42%;
+    left: -60%;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(100deg,
+                transparent,
+                rgba(255, 255, 255, 0.10) 42%,
+                rgba(246, 230, 196, 0.26) 50%,
+                rgba(255, 255, 255, 0.10) 58%,
+                transparent);
+    transform: rotate(14deg);
+    filter: blur(2px);
+    animation: sheen-sweep 5.4s var(--ease) infinite;
+  }
+  @keyframes sheen-sweep {
+    0%, 62%  { left: -60%; opacity: 0; }
+    66%      { opacity: 1; }
+    100%     { left: 130%; opacity: 0; }
+  }
+  .card.featured > *:not(.sheen) { position: relative; z-index: 1; }
+
+  .card.featured .card-icon {
+    background: linear-gradient(150deg, rgba(228, 169, 63, 0.30), rgba(63, 190, 104, 0.18));
+    border-color: rgba(228, 169, 63, 0.45);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14),
+                0 0 20px -6px rgba(228, 169, 63, 0.7);
+  }
+  .card.featured .card-icon svg { stroke: #fff; }
+
+  .card.featured h2 {
+    background: linear-gradient(180deg, #ffffff 10%, var(--champagne) 70%, #e0c48c 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  .card.featured .card-rule {
+    background: linear-gradient(90deg, var(--hair-brass), rgba(63, 190, 104, 0.28), transparent);
+  }
+
+  .card.featured .tag { color: #fff; }
+
+  .card.featured:hover {
+    box-shadow: 0 30px 56px -24px rgba(0, 0, 0, 0.9),
+                0 0 46px -8px rgba(228, 169, 63, 0.34);
+  }
+
   /* === footer === */
   footer {
     margin-bottom: auto;
@@ -629,6 +729,8 @@
     .splash-bar span, .splash-lockup { animation: none; }
     .card, .install-btn, .replay-btn, header .brand-logo { transition: none; }
     .reveal, body.ready .reveal { opacity: 1; transform: none; animation: none; }
+    .card.featured::after { animation: none; }
+    .card.featured .sheen { display: none; }
   }
   @media print { .replay-btn, .install-btn { display: none; } }
 </style>
@@ -778,19 +880,23 @@
       </span>
     </a>
 
-    <div class="card disabled reveal" style="--d:.68s">
+    <a class="card featured reveal" style="--d:.68s" href="UTARA_SLA_Dashboard_PowerBI_v6_09_26.html">
+      <span class="sheen" aria-hidden="true"></span>
       <div class="card-head">
         <div class="card-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-6"/></svg>
         </div>
-        <span class="badge">Next module</span>
+        <span class="badge live">Now live</span>
       </div>
       <h2>Company Progress</h2>
-      <p class="desc">One view of overall company performance. This module is still being built.</p>
+      <p class="desc">SLA compliance, revenue recognition and CPC billing in one view — filtered by telco, PBM, method and month.</p>
       <div class="card-rule"></div>
-      <div class="meta">Not yet published</div>
-      <span class="tag muted">In development</span>
-    </div>
+      <div class="meta">SLA &middot; Revenue &middot; CPC &middot; Reporting</div>
+      <span class="tag">
+        Open dashboard
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </a>
 
   </div>
 
