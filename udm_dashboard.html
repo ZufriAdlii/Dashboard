@@ -945,8 +945,12 @@
   .udm-change-file-btn{border-radius:6px;background:var(--panel-bg);font-size:12px}
 
   /* KPI cards: separate rounded cards */
-  .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));
+  /* five cards, one row — no orphan card on a second line */
+  .kpi-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
     gap:12px;background:transparent;border:0;border-radius:0;overflow:visible}
+  @media (max-width:1240px){ .kpi-row{grid-template-columns:repeat(3,minmax(0,1fr));} }
+  @media (max-width:820px){ .kpi-row{grid-template-columns:repeat(2,minmax(0,1fr));} }
+  .kpi-box .kb-value{white-space:nowrap}
   .kpi-box{border:1px solid var(--panel-border);border-radius:10px;background:var(--panel-bg);
     padding:13px 15px 12px;transition:border-color .14s,box-shadow .14s}
   .kpi-box:hover{background:var(--panel-bg);border-color:var(--text-light);box-shadow:var(--shadow)}
@@ -1312,7 +1316,7 @@
       <div class="gdrop" id="udmDropZone">
         <svg viewBox="0 0 48 48" stroke-linecap="square"><path d="M24 31V9m0 0l-8 8m8-8l8 8"/><path d="M9 29v10h30V29"/></svg>
         <div class="big">Drop your Excel file here</div>
-        <div class="small">or click to browse &middot; .xlsx</div>
+        <div class="small">drag it in to link it &middot; or click to browse</div>
       </div>
       <input type="file" id="udmGateFileInput" accept=".xlsx,.xls" style="display:none;">
       <div class="gacts"><button type="button" class="gbtn" id="udmGateChooseFile">Browse file</button><button type="button" class="gbtn" id="udmGateUseExisting">Use existing data</button></div>
@@ -1324,7 +1328,7 @@
           <button type="button" class="gbtn gl-btn" id="udmLinkClear">Unlink</button>
         </div>
         <button type="button" class="gbtn" id="udmLinkPick">Link a file &amp; remember it</button>
-        <p class="glinknote">Pick the tracker once from your synced OneDrive folder. Choose <b>Allow on every visit</b> and this dashboard reloads the latest saved version by itself. The file still never leaves this machine.</p>
+        <p class="glinknote">Drag the tracker in from File Explorer, or pick it here. Choose <b>Allow on every visit</b> and this dashboard reloads the latest saved version by itself. The file still never leaves this machine.</p>
       </div>
       <div class="gstatus" id="udmGateStatus"></div><div class="gerror" id="udmGateError"></div>
       <div class="gnote">Data source: Tracker_Report_UDM_Project_V1.xlsx</div>
@@ -3516,17 +3520,39 @@ function runUdmDashboard(initialData){
     }
     for(var i = 0; i < refreshBtns.length; i++) refreshBtns[i].hidden = true;
   }
+  /* Chrome keeps the grant for the session (or for good, if the page is
+     installed as an app). Only prompt when it is genuinely not granted. */
+  function ensureRead(h){
+    if(!h.queryPermission) return Promise.resolve('granted');
+    return h.queryPermission({mode:'read'}).then(function(p){
+      if(p === 'granted') return 'granted';
+      return h.requestPermission({mode:'read'});
+    });
+  }
   function readLinked(handle, opts){
     return handle.getFile().then(function(file){ handleFile(file, opts); });
   }
 
   if(!FSA_OK && linkRow){ linkRow.hidden = true; }
 
+  window.__udmLinkHandle = function(h){
+    return idbPut('handle', h).catch(function(){}).then(function(){
+      showLinked(h.name);
+      return readLinked(h, {render:true});
+    });
+  };
   if(linkPick){
     linkPick.addEventListener('click', function(){
-      window.showOpenFilePicker({
-        types: [{description:'Excel workbook', accept:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx']}}],
-        multiple: false
+      /* start in the folder of the file already linked; fall back to the last
+         folder this picker used, and only then to Documents */
+      idbGet('handle').catch(function(){ return null; }).then(function(prev){
+        var opts = {
+          types: [{description:'Excel workbook', accept:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx']}}],
+          multiple: false,
+          id: 'udmTracker'
+        };
+        if(prev) opts.startIn = prev;
+        return window.showOpenFilePicker(opts);
       }).then(function(handles){
         var h = handles[0];
         return idbPut('handle', h).catch(function(){}).then(function(){
@@ -3544,7 +3570,7 @@ function runUdmDashboard(initialData){
     linkGoBtn.addEventListener('click', function(){
       idbGet('handle').then(function(h){
         if(!h) return;
-        return h.requestPermission({mode:'read'}).then(function(p){
+        return ensureRead(h).then(function(p){
           if(p !== 'granted'){
             gateError.textContent = 'Permission to read the linked file was not given.';
             gateError.style.display = 'block';
@@ -3577,7 +3603,7 @@ function runUdmDashboard(initialData){
           return idbGet('handle');
         }).then(function(h){
           if(!h){ btn.classList.remove('busy'); udmRefreshScreen(false); return; }
-          return h.requestPermission({mode:'read'}).then(function(p){
+          return ensureRead(h).then(function(p){
             if(p !== 'granted'){ btn.classList.remove('busy'); udmRefreshScreen(false); return; }
             try{ sessionStorage.setItem('udm_refreshing', '1'); }catch(e){}
             return readLinked(h, {render:false});   // stores, then reloads cleanly
@@ -3680,7 +3706,29 @@ function runUdmDashboard(initialData){
   });
   drop.addEventListener('drop', function(e){
     e.preventDefault();
-    var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    var dtf = e.dataTransfer;
+    var item = dtf && dtf.items && dtf.items[0];
+
+    /* A dragged file carries a durable handle. That is the way into folders the
+       picker will not navigate to, such as shared OneDrive folders. */
+    if(item && typeof item.getAsFileSystemHandle === 'function' && window.__udmLinkHandle){
+      item.getAsFileSystemHandle().then(function(h){
+        if(!h || h.kind !== 'file') throw new Error('not a file');
+        return window.__udmLinkHandle(h);
+      }).catch(function(){
+        var f2 = dtf.files && dtf.files[0];
+        if(!f2) return;
+        try{
+          var dt2 = new DataTransfer();
+          dt2.items.add(f2);
+          input.files = dt2.files;
+        }catch(err2){}
+        input.dispatchEvent(new Event('change', {bubbles:true}));
+      });
+      return;
+    }
+
+    var f = dtf && dtf.files && dtf.files[0];
     if(!f) return;
     try{
       var dt = new DataTransfer();
