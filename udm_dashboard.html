@@ -975,6 +975,26 @@
   .modal-box{border-radius:12px}
   .theme-toggle{border-radius:6px}
 
+  .udm-refresh-screen{position:fixed;inset:0;z-index:9500;display:flex;align-items:center;
+    justify-content:center;background:var(--bg);opacity:0;pointer-events:none;
+    transition:opacity .22s ease}
+  .udm-refresh-screen.on{opacity:1;pointer-events:auto}
+  .urs-inner{width:min(360px,82vw);text-align:center}
+  .urs-logo{height:42px;width:auto;display:block;margin:0 auto 16px}
+  .urs-mark{display:none}
+  .urs-logo{margin-bottom:24px}
+  .urs-title{font-size:15px;font-weight:600;color:var(--text-light);margin-bottom:18px}
+  .urs-pct{font-size:44px;font-weight:700;letter-spacing:-.03em;color:var(--accent);
+    font-variant-numeric:tabular-nums;line-height:1;margin-bottom:16px}
+  .urs-track{height:4px;border-radius:3px;background:var(--panel-2);overflow:hidden;
+    border:1px solid var(--panel-border)}
+  .urs-track span{display:block;height:100%;width:0;background:var(--accent);
+    transition:width .3s ease}
+  .urs-stage{margin-top:14px;font-size:12px;color:var(--text-muted)}
+
+  .share-note{display:block;font-size:10px;color:var(--text-muted);margin-top:2px;line-height:1.3}
+  .chart-note{margin:2px 0 10px;font-size:11.5px;color:var(--text-muted);line-height:1.5}
+
 
   /* === Boot loader (file is large; show progress while it parses) === */
   #boot-loader{
@@ -1259,7 +1279,17 @@
   </div>
 
 
-  <div class="udm-loadbar" id="udmLoadbar"></div>
+  <div class="udm-refresh-screen" id="udmRefreshScreen" aria-hidden="true">
+  <div class="urs-inner">
+    <img class="urs-logo" id="udmRefreshLogo" alt="Utara Infra">
+    <div class="urs-mark">UTARA INFRA</div>
+    <div class="urs-title">Reading the latest tracker</div>
+    <div class="urs-pct" id="udmRefreshPct">0%</div>
+    <div class="urs-track"><span id="udmRefreshBar"></span></div>
+    <div class="urs-stage" id="udmRefreshStage">Opening the file</div>
+  </div>
+</div>
+<div class="udm-loadbar" id="udmLoadbar"></div>
 <div class="udm-loadchip" id="udmLoadchip"><span class="ulc-ring"></span><span class="ulc-txt" id="udmLoadchipT"></span><span class="ulc-pct" id="udmLoadchipP"></span></div>
 <div class="gate-overlay" id="udmGateOverlay" style="display:none;">
   <div class="gbox">
@@ -1474,7 +1504,7 @@
           <div class="chart-wrap" id="dr-chartDistance"></div>
         </div>
         <div class="panel">
-          <h2>Projects Completed by Drafter</h2>
+          <h2>Completed Sites by Drafter</h2><p class="chart-note">A site with two drafters counts for both, so these bars can add up to more than the site total. Distance is split evenly.</p>
           <div class="chart-wrap" id="dr-chartCompleted"></div>
         </div>
         <div class="panel">
@@ -1595,6 +1625,9 @@ function runUdmDashboard(initialData){
     'Adam':'var(--drafter-adam)','Intan':'var(--drafter-intan)','Nabihah':'var(--drafter-nabihah)',
     'Nasuha':'var(--drafter-nasuha)','Syafiqa':'var(--drafter-syafiqa)','Tbc':'var(--text-muted)'
   };
+  /* r[17] holds every drafter on the row; a shared site splits its distance evenly */
+  function dList(r){ return (r[17] && r[17].length) ? r[17] : [r[0]]; }
+  function dShare(r){ return 1 / dList(r).length; }
   var DRAFTER_ORDER = ['Adam','Intan','Nabihah','Nasuha','Syafiqa'];
 
   function fmtInt(n){ return Math.round(n).toLocaleString('en-US'); }
@@ -2692,7 +2725,12 @@ function runUdmDashboard(initialData){
       columns:[
         {key:'project', label:'Project Name', getVal:function(r){return r[10];}, render:function(r){return escapeHtml(r[10]);}},
         {key:'district', label:'District', getVal:function(r){return r[1];}, render:function(r){return escapeHtml(r[1]);}},
-        {key:'distance', label:'Distance (TP)', getVal:function(r){return r[4];}, render:function(r){return fmtDist(r[4]);}},
+        {key:'distance', label:'Distance (TP)', getVal:function(r){return r[4];}, render:function(r){
+          var note = (dList(r).length > 1)
+            ? '<span class="share-note">\u00bd \u00b7 split with ' + escapeHtml(dList(r).join(', ')) + '</span>'
+            : '';
+          return fmtDist(r[4]) + note;
+        }},
         {key:'status', label:'Status UDM', getVal:function(r){return r[7];}, render:function(r){
           var cls = r[7]==='Complete' ? 'complete' : (r[7]==='Assigned Awaiting site' ? 'pending' : 'other');
           return '<span class="status-pill '+cls+'">'+escapeHtml(r[7]||'-')+'</span>';
@@ -2811,6 +2849,13 @@ function runUdmDashboard(initialData){
   // =====================================================================
   (function(){
     var selectedDrafters = new Set();
+    /* the slice of a row that belongs to the current filter */
+    function weight(r){
+      var list = dList(r);
+      if(selectedDrafters.size === 0) return 1;
+      var mine = list.filter(function(d){ return selectedDrafters.has(d); }).length;
+      return mine / list.length;
+    }
     var chipsBox = document.getElementById('drafterChips');
     DRAFTER_ORDER.forEach(function(name){
       var chip = document.createElement('div');
@@ -2861,7 +2906,12 @@ function runUdmDashboard(initialData){
         {key:'project', label:'Project Name', getVal:function(r){return r[10];}, render:function(r){return escapeHtml(r[10]);}},
         {key:'district', label:'District', getVal:function(r){return r[1];}, render:function(r){return escapeHtml(r[1]);}},
         {key:'drafter', label:'Drafter', getVal:function(r){return r[0];}, render:function(r){return escapeHtml(r[0]);}},
-        {key:'distance', label:'Distance (TP)', getVal:function(r){return r[4];}, render:function(r){return fmtDist(r[4]);}},
+        {key:'distance', label:'Distance (TP)', getVal:function(r){return r[4];}, render:function(r){
+          var note = (dList(r).length > 1)
+            ? '<span class="share-note">\u00bd \u00b7 split with ' + escapeHtml(dList(r).join(', ')) + '</span>'
+            : '';
+          return fmtDist(r[4]) + note;
+        }},
         {key:'status', label:'Status', getVal:function(r){return statusLabel(r);}, render:function(r){
           var cls = r[6]==='Complete' ? 'complete' : (r[6]==='Incomplete' ? 'pending' : 'other');
           return '<span class="status-pill '+cls+'">'+escapeHtml(statusLabel(r))+'</span>';
@@ -2877,7 +2927,7 @@ function runUdmDashboard(initialData){
         if(district !== 'All' && r[1] !== district) return false;
         if(!matchesYearMonth(r[8], rYears, rMonths)) return false;
         if(!matchesYearMonth(r[9], cYears, cMonths)) return false;
-        if(selectedDrafters.size > 0 && !selectedDrafters.has(r[0])) return false;
+        if(selectedDrafters.size > 0 && !dList(r).some(function(d){ return selectedDrafters.has(d); })) return false;
         return true;
       });
     }
@@ -2889,7 +2939,7 @@ function runUdmDashboard(initialData){
       var inProgress = rows.filter(function(r){return r[6]==='Incomplete';}).length;
       var unassigned = rows.filter(function(r){return r[6]==='Unassigned Project';}).length;
       var awaiting = rows.filter(function(r){return r[6]==='Awaiting Team Site';}).length;
-      var sumTP = rows.reduce(function(a,r){return a+r[4];},0);
+      var sumTP = rows.reduce(function(a,r){return a + r[4] * weight(r);},0);
       var completionPct = total>0 ? (completed/total*100) : 0;
 
       document.getElementById('dr-sumTotal').textContent = fmtDist(sumTP);
@@ -2904,9 +2954,11 @@ function runUdmDashboard(initialData){
       // Distance by drafter
       var byDrafter = {};
       rows.forEach(function(r){
-        var d = r[0];
-        if(!byDrafter[d]) byDrafter[d] = {dist:0, completed:0};
-        byDrafter[d].dist += r[5];
+        var sh = dShare(r);
+        dList(r).forEach(function(d){
+          if(!byDrafter[d]) byDrafter[d] = {dist:0, completed:0};
+          byDrafter[d].dist += r[5] * sh;
+        });
       });
       var distArr = DRAFTER_ORDER.map(function(d){return {label:d, val:(byDrafter[d]?byDrafter[d].dist:0)};})
         .filter(function(d){return d.val>0;}).sort(function(a,b){return b.val-a.val;});
@@ -2918,9 +2970,10 @@ function runUdmDashboard(initialData){
       // Projects completed by drafter
       rows.forEach(function(r){
         if(r[6]==='Complete'){
-          var d = r[0];
-          if(!byDrafter[d]) byDrafter[d] = {dist:0, completed:0};
-          byDrafter[d].completed += 1;
+          dList(r).forEach(function(d){
+            if(!byDrafter[d]) byDrafter[d] = {dist:0, completed:0};
+            byDrafter[d].completed += 1;
+          });
         }
       });
       var compArr = DRAFTER_ORDER.map(function(d){return {label:d, val:(byDrafter[d]?byDrafter[d].completed:0)};})
@@ -2946,8 +2999,8 @@ function runUdmDashboard(initialData){
 
       // Monthly distance by drafter (multi-line, Date Completed)
       var series = DRAFTER_ORDER.map(function(name){
-        var subRows = rows.filter(function(r){return r[0]===name;});
-        var vals = fillMonthSeries(subRows, 9, function(r){return r[5];}, months);
+        var subRows = rows.filter(function(r){return dList(r).indexOf(name) >= 0;});
+        var vals = fillMonthSeries(subRows, 9, function(r){return r[5] * dShare(r);}, months);
         return {name:name, color:DRAFTER_COLORS[name], values:vals};
       });
       var monthLabels = months.map(function(mo){return {label: monthLabel(mo.y,mo.m).slice(0,3)+(mo.m===1?(' '+mo.y):'')};});
@@ -2963,7 +3016,9 @@ function runUdmDashboard(initialData){
       {label:'Project Name', render:function(r){return escapeHtml(r[10]);}},
       {label:'District', render:function(r){return escapeHtml(r[1]);}},
       {label:'Drafter', render:function(r){return escapeHtml(r[0]);}},
-      {label:'Distance (TP)', render:function(r){return fmtDist(r[4]);}},
+      {label:'Distance (TP)', render:function(r){
+        return fmtDist(r[4]) + ((r[17] && r[17].length > 1) ? ' (\u00bd share)' : '');
+      }},
       {label:'Status', render:function(r){return escapeHtml(statusLabel(r));}}
     ];
     document.getElementById('dr-kpiProgress-box').addEventListener('click', function(){
@@ -3073,11 +3128,22 @@ function runUdmDashboard(initialData){
     var s = String(v).trim();
     if(s === '') return 'TBC';
     if(s.toUpperCase() === 'TBC') return 'TBC';
-    /* a few cells name two drafters ("Intan/Nabiha"); the first one owns the row
-       so that colours and per-drafter charts stay valid */
-    s = s.split(/[\/&,]| and /i)[0].trim();
     var up = s.toUpperCase();
     return DRAFTER_CANON[up] || (s.charAt(0).toUpperCase() + s.slice(1).toLowerCase());
+  }
+  /* Some cells name two drafters ("Intan/Nabiha"). Both keep the site; the
+     distance is split evenly between them, which is how the team works it out. */
+  function normDrafterList(v){
+    if(v === null || v === undefined) return ['TBC'];
+    var s = String(v).trim();
+    if(s === '' || s.toUpperCase() === 'TBC') return ['TBC'];
+    var parts = s.split(/[\/&,+]| and /i)
+                 .map(function(p){ return p.trim(); })
+                 .filter(function(p){ return p !== ''; })
+                 .map(function(p){ return normDrafter(p); });
+    var seen = {}, out = [];
+    parts.forEach(function(p){ if(!seen[p]){ seen[p] = 1; out.push(p); } });
+    return out.length ? out : ['TBC'];
   }
 
   /* Telco is not carried on the UDM PROGRESS sheet, so it is looked up from the
@@ -3187,7 +3253,8 @@ function runUdmDashboard(initialData){
         if(projectName === '') continue;              /* blank or continuation row */
         if(projectName.toLowerCase() === 'school name') continue;
 
-        var drafter  = normDrafter(r[18]);
+        var drafterList = normDrafterList(r[18]);
+        var drafter  = drafterList.join(' / ');
         var district = (r[3]!==null && r[3]!==undefined && String(r[3]).trim()!=='')
                        ? String(r[3]).trim().replace(/\s+/g,' ') : 'Unknown';
         var pbm      = (r[4]!==null && r[4]!==undefined) ? String(r[4]).trim() : '';
@@ -3219,7 +3286,7 @@ function runUdmDashboard(initialData){
         var rawStatus = (r[31]===null || r[31]===undefined) ? '' : String(r[31]).trim();
         out.push([drafter, district, telco, pbm, totalTP, totalActual, status, statusUdm,
                   dateReceived, dateCompleted, projectName, dateCompletedOnSiteUdm, rawStatus,
-                  dateStartWorkUdm, projectIdOf[nameKey] || '', tpJkr, tpMajlis]);
+                  dateStartWorkUdm, projectIdOf[nameKey] || '', tpJkr, tpMajlis, drafterList]);
       } catch(e){
         skipped++;
       }
@@ -3227,16 +3294,65 @@ function runUdmDashboard(initialData){
     return {data: out, skipped: skipped, sheetUsed: sheetName, noTelco: noTelco};
   }
 
+  (function(){
+    var g = document.querySelector('#udmGateOverlay .glogo'),
+        l = document.getElementById('udmRefreshLogo');
+    if(g && l) l.src = g.src;
+  })();
+  function udmRefreshScreen(on){
+    var s = document.getElementById('udmRefreshScreen');
+    if(!s) return;
+    s.classList.toggle('on', !!on);
+    s.setAttribute('aria-hidden', on ? 'false' : 'true');
+  }
+  var _progCur = 0, _progTgt = 0, _progRaf = null;
+  function _progPaint(){
+    var rp = document.getElementById('udmRefreshPct'),
+        rb = document.getElementById('udmRefreshBar');
+    if(rp) rp.textContent = Math.round(_progCur) + '%';
+    if(rb) rb.style.width = _progCur + '%';
+    var bar = document.getElementById('udmLoadbar');
+    if(bar) bar.style.width = _progCur + '%';
+    var chipP = document.getElementById('udmLoadchipP');
+    if(chipP) chipP.textContent = Math.round(_progCur) + '%';
+  }
+  function _progTick(){
+    var gap = _progTgt - _progCur;
+    if(gap <= 0.2){
+      _progCur = _progTgt; _progPaint(); _progRaf = null; return;
+    }
+    /* ease toward the target, but always keep creeping so it never looks stuck */
+    _progCur += Math.max(0.55, gap * 0.05);
+    _progPaint();
+    _progRaf = requestAnimationFrame(_progTick);
+  }
+  function udmProgTo(pct){
+    _progTgt = Math.max(_progTgt, Math.max(0, Math.min(100, pct)));
+    if(!_progRaf) _progRaf = requestAnimationFrame(_progTick);
+  }
+  function udmProgSeed(v){
+    _progCur = v; _progTgt = v;
+  }
+  function udmProgReset(){
+    _progCur = 0; _progTgt = 0;
+    if(_progRaf){ cancelAnimationFrame(_progRaf); _progRaf = null; }
+  }
   function udmProg(pct, label){
+    udmProgTo(pct);
+    var rp = document.getElementById('udmRefreshPct'),
+        rb = document.getElementById('udmRefreshBar'),
+        rs = document.getElementById('udmRefreshStage');
+    if(rs && label) rs.textContent = label;
     var bar = document.getElementById('udmLoadbar'), chip = document.getElementById('udmLoadchip');
-    if(bar){ bar.classList.add('on'); bar.style.width = Math.max(0, Math.min(100, pct)) + '%'; }
-    if(chip){
+    if(bar){ bar.classList.add('on'); }
+    var full = document.getElementById('udmRefreshScreen');
+    if(chip && !(full && full.classList.contains('on'))){
       chip.classList.add('on');
       document.getElementById('udmLoadchipT').textContent = label || '';
-      document.getElementById('udmLoadchipP').textContent = Math.round(pct) + '%';
     }
   }
   function udmProgDone(){
+    udmProgReset();
     var bar = document.getElementById('udmLoadbar'), chip = document.getElementById('udmLoadchip');
     if(bar){ bar.style.width = '100%'; setTimeout(function(){ bar.classList.remove('on'); bar.style.width = '0%'; }, 320); }
     if(chip) setTimeout(function(){ chip.classList.remove('on'); }, 320);
@@ -3257,9 +3373,9 @@ function runUdmDashboard(initialData){
     var reader = new FileReader();
     reader.onload = function(e){
       try{
-        udmProg(34, 'Unpacking the workbook');
+        udmProg(18, 'Unpacking the workbook');
         var result = parseUdmWorkbook(e.target.result);
-        udmProg(72, 'Reading the rows');
+        udmProg(40, 'Reading the rows');
         if(result.data.length === 0){
           gateError.textContent = 'No valid records were found in this file. Please make sure the "UDM PROGRESS" sheet format matches the tracker template.';
           gateError.style.display = 'block';
@@ -3267,7 +3383,7 @@ function runUdmDashboard(initialData){
           udmProgDone();
           return;
         }
-        udmProg(88, result.data.length + ' records \u00b7 saving');
+        udmProg(56, result.data.length + ' records \u00b7 saving');
         try{
           sessionStorage.setItem(STORAGE_KEY_DATA, JSON.stringify(result.data));
           sessionStorage.setItem(STORAGE_KEY_READY, '1');
@@ -3280,10 +3396,21 @@ function runUdmDashboard(initialData){
         }
         var note = result.skipped > 0 ? (' ('+result.skipped+' rows skipped due to incomplete data)') : '';
         gateStatus.textContent = 'Success! ' + result.data.length + ' records processed' + note + '. Loading dashboard...';
-        udmProg(100, 'Ready');
-        udmProgDone();
-        if(opts.render){ showDashboard(result.data); }
-        else { setTimeout(function(){ window.location.reload(); }, 700); }
+        if(opts.render){
+          udmProg(100, 'Ready');
+          udmProgDone();
+          showDashboard(result.data);
+        }else{
+          udmProg(58, 'Reloading with the new data');
+          var spent = Date.now() - (window.__refreshT0 || Date.now());
+          var wait = Math.max(900, 2000 - spent);
+          var step = 35 / (wait / 100);       /* 58 -> 93 across the whole wait */
+          var creep = setInterval(function(){ udmProgTo(Math.min(93, _progTgt + step)); }, 100);
+          setTimeout(function(){
+            clearInterval(creep);
+            window.location.reload();
+          }, wait);
+        }
       } catch(err){
         gateError.textContent = 'Failed to read the file. Please make sure it is a valid Excel (.xlsx) file.';
         gateError.style.display = 'block';
@@ -3438,13 +3565,22 @@ function runUdmDashboard(initialData){
       btn.addEventListener('click', function(e){
         e.stopPropagation();
         btn.classList.add('busy');
+        udmRefreshScreen(true);
+        window.__refreshT0 = Date.now();
+        udmProgReset();
+        udmProg(4, 'Opening the linked file');
         idbGet('handle').then(function(h){
-          if(!h){ btn.classList.remove('busy'); return; }
+          if(!h){ btn.classList.remove('busy'); udmRefreshScreen(false); return; }
           return h.requestPermission({mode:'read'}).then(function(p){
-            if(p !== 'granted'){ btn.classList.remove('busy'); return; }
+            if(p !== 'granted'){ btn.classList.remove('busy'); udmRefreshScreen(false); return; }
+            try{ sessionStorage.setItem('udm_refreshing', '1'); }catch(e){}
             return readLinked(h, {render:false});   // stores, then reloads cleanly
           });
-        }).catch(function(){ btn.classList.remove('busy'); });
+        }).catch(function(){
+          btn.classList.remove('busy');
+          udmRefreshScreen(false);
+          try{ sessionStorage.removeItem('udm_refreshing'); }catch(e){}
+        });
       });
     })(refreshBtns[ri]);
   }
@@ -3462,11 +3598,23 @@ function runUdmDashboard(initialData){
   }
 
   // ---- Resolve on page load ----
+  var wasRefreshing = false;
+  try{ wasRefreshing = sessionStorage.getItem('udm_refreshing') === '1'; }catch(e){}
+  if(wasRefreshing){
+    udmRefreshScreen(true);
+    udmProgSeed(93);
+    udmProg(94, 'Drawing the dashboard');
+  }
   var ready = sessionStorage.getItem(STORAGE_KEY_READY) === '1';
   if(ready){
     var override = sessionStorage.getItem(STORAGE_KEY_DATA);
     var data = override ? JSON.parse(override) : bakedInData();
     showDashboard(data);
+    if(wasRefreshing){
+      udmProg(100, 'Up to date \u00b7 ' + data.length + ' records');
+      try{ sessionStorage.removeItem('udm_refreshing'); }catch(e){}
+      setTimeout(function(){ udmRefreshScreen(false); udmProgDone(); }, 1100);
+    }
     initLinked = (function(fn){ return function(){ 
       return fn().then(function(){ return true; }).catch(function(){ return true; }); }; })(function(){
       /* dashboard already drawn from this session's data; just show the link chip */
