@@ -58,8 +58,10 @@
   html, body {
     margin: 0;
     padding: 0;
-    height: 100%;
-    overflow: hidden;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   body {
@@ -71,8 +73,8 @@
       radial-gradient(ellipse 80% 60% at 6% 84%, rgba(52, 108, 210, 0.10) 0%, transparent 58%),
       linear-gradient(180deg, #071023 0%, #050912 55%, #04070E 100%);
     color: var(--platinum);
-    height: 100vh;
-    height: 100dvh;
+    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -713,6 +715,25 @@
     .card-icon { width: 36px; height: 36px; }
     .grid { gap: 16px; }
     footer { gap: 10px; }
+  }
+
+  /* iPad and other tablets: let the hub flow top-down and scroll */
+  @media (min-width: 901px) and (max-width: 1200px) {
+    body { padding: 40px 24px 92px; justify-content: flex-start; gap: 30px; }
+    header { margin-top: 0; }
+    footer { margin-bottom: 0; }
+    .grid {
+      grid-template-columns: repeat(2, minmax(240px, 340px));
+      max-width: 720px;
+      margin: 0;
+    }
+    .install-btn { top: auto; bottom: 20px; right: 20px; }
+    .replay-btn { top: auto; bottom: 20px; left: 20px; }
+  }
+
+  /* touch devices keep the hover-only sheen off and the tap target honest */
+  @media (hover: none) {
+    .card:active { transform: translateY(-2px); }
   }
 
   @media (max-width: 900px) {
