@@ -317,6 +317,39 @@ h1 em{font-style:italic;color:var(--dim)}
 .brow.sev-lo .n{color:var(--dim)}      .brow.sev-lo .bar2 i{background:var(--slate)}
 .brow.sev-mid .n{color:var(--amber)}   .brow.sev-mid .bar2 i{background:var(--amber)}
 .brow.sev-hi .n{color:var(--crit)}     .brow.sev-hi .bar2 i{background:var(--crit)}
+.trend-ctl{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.trend-ctl button{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  padding:7px 13px;border:1px solid var(--line);background:transparent;color:var(--dim);cursor:pointer}
+.trend-ctl button:hover{color:var(--ink);border-color:var(--slate)}
+.trend-ctl button.on{color:var(--bg);background:var(--ink);border-color:var(--ink)}
+.trow{display:grid;grid-template-columns:92px 1fr 52px 52px 62px;gap:14px;align-items:center;
+  padding:9px 0;border-bottom:1px solid var(--line)}
+.trow:last-child{border-bottom:0}
+.trow .tl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);
+  text-align:left;background:none;border:0;padding:0}
+.trow .tl.has,.trow .tbars.has{cursor:pointer}
+.trow .tl.has:hover{color:var(--ink);text-decoration:underline}
+.trow .tbars{display:grid;gap:3px;background:none;border:0;padding:0;width:100%}
+.trow .tbars.has:hover .tb{outline:1px solid var(--slate);outline-offset:1px}
+.trow .tb{display:block;height:7px;background:var(--barbg)}
+.trow .tb i{display:block;height:100%}
+.trow .tb i.bs{background:var(--sky)} .trow .tb i.ba{background:var(--teal)}
+.trow .tn{font-family:var(--display);font-size:17px;text-align:right;font-variant-numeric:tabular-nums;
+  background:none;border:0;padding:0;cursor:pointer;color:var(--faint)}
+.trow .tn.has.s{color:var(--sky)} .trow .tn.has.a{color:var(--teal)}
+.trow .tn.has:hover{text-decoration:underline}
+.trow .tn:disabled{cursor:default}
+.trow .to{font-family:var(--mono);font-size:12px;text-align:right;font-variant-numeric:tabular-nums;color:var(--dim)}
+.trow.head{border-bottom:1px solid var(--line);padding-bottom:8px}
+.trow.head span{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.trow.head .tn,.trow.head .to{text-align:right}
+.trend-empty{font-size:13px;color:var(--dim);padding:18px 0}
+.trend-warn{font-size:13px;line-height:1.5;color:var(--amber);border-left:2px solid var(--amber);
+  padding:2px 0 2px 14px;margin:18px 0 0}
+@media(max-width:700px){
+  .trow{grid-template-columns:72px 1fr 38px 38px 46px;gap:7px}
+  .trow .tn{font-size:15px}
+}
 .panel-hint{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
             color:var(--faint);margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
 
@@ -456,6 +489,16 @@ tbody tr.rowlink:focus-visible{outline:2px solid var(--amber);outline-offset:-2p
 .dslicers{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
           border:1px solid var(--line);border-top:0}
 .dslicer{padding:20px 22px;min-width:0;background:var(--surface)}
+/* date tree ialah alat siasatan — dilipat secara lalai supaya Telco dan Status
+   kekal di bahagian atas sidebar tanpa perlu scroll */
+.dslicer .slicer-head{cursor:pointer}
+.dslicer .slicer-head h3::after{content:'\2212';float:none;margin-left:8px;color:var(--faint);font-family:var(--mono)}
+.dslicer.folded .slicer-head h3::after{content:'\002B'}
+.dslicer.folded .dtree,
+.dslicer.folded .dtree-sub{display:none}
+.dslicer.folded .clr{display:none}
+.dslicer.has .slicer-head h3{color:var(--amber)}
+
 .dtree{max-height:250px;overflow-y:auto;border:1px solid var(--line);background:var(--well);padding:5px}
 .dtree::-webkit-scrollbar{width:8px}
 .dtree::-webkit-scrollbar-track{background:transparent}
@@ -716,6 +759,8 @@ td.num,td.dt{font-family:var(--mono);font-size:12.5px;white-space:nowrap;font-va
 .days{font-family:var(--mono);font-size:11px;color:var(--amber)}
 .days.frozen{color:var(--sky)}
 .tot-all{color:var(--faint);letter-spacing:.06em}
+.caprow td{background:var(--amber-soft) !important;color:#F0D3A6;text-align:center;
+           font-family:var(--mono);font-size:12px;letter-spacing:.06em;padding:16px !important}
 .foot b{color:var(--ink);font-weight:400;font-size:12px}
 .mfoot b{color:var(--ink);font-weight:400;font-size:12px}
 .foot{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;
@@ -779,7 +824,18 @@ footer.credit{margin-top:32px;padding-top:20px;border-top:1px solid var(--line)}
   tr{break-inside:avoid}
 
   /* jadual senarai: padat, kepala gelap berulang tiap halaman, baris berjalur */
-  #v-rec table{font-size:8px;table-layout:auto}
+  #v-rec table{font-size:8px;table-layout:auto;width:100%}
+  /* satu keluarga font untuk teks, satu untuk nombor — bukan tiga campur aduk */
+  #v-rec tbody td{font-family:var(--body)}
+  #v-rec .proj{font-family:var(--body);font-size:8px;min-width:0;max-width:none;
+        font-weight:600;color:#101B29}
+  #v-rec .num,#v-rec .dt{font-family:var(--mono);font-size:7.5px;color:#101B29;
+        white-space:nowrap;font-variant-numeric:tabular-nums}
+  /* sel kosong jangan dibaca sebagai data */
+  #v-rec tbody td.none,#v-rec tbody td:empty{color:#C3CCD6}
+  /* tarikh dan kiraan lebih senang dibanding bila dijajar kanan */
+  #v-rec .num,#v-rec .dt{text-align:right}
+  #v-rec thead th.num,#v-rec thead th.dt{text-align:right}
   #v-rec thead th{background:#0F141C !important;color:#EDF1F6 !important;
         font-family:var(--mono);font-size:6.5px;letter-spacing:.09em;text-transform:uppercase;
         font-weight:500;padding:6px 5px;border:0;white-space:nowrap;
@@ -787,20 +843,14 @@ footer.credit{margin-top:32px;padding-top:20px;border-top:1px solid var(--line)}
   #v-rec thead th .ar{display:none}
   #v-rec tbody td{padding:4px 5px;border:0;border-bottom:1px solid #E3E9EF;
         background:none !important;position:static !important;vertical-align:top;line-height:1.3}
-  #v-rec tbody tr:nth-child(even) td{background:#F7F9FB !important;
+  #v-rec tbody tr:nth-child(even) td{background:#FAFCFD !important;
         -webkit-print-color-adjust:exact;print-color-adjust:exact}
-  #v-rec tbody td:first-child{font-family:var(--mono);font-size:7px;color:#8192A6}
-  /* warna aksen skrin jadi bising atas kertas — kekalkan hierarki dengan berat, bukan warna */
-  #v-rec tbody td{color:#101B29}
-  #v-rec .proj{font-size:8.5px;min-width:0;max-width:none;font-weight:500;color:#101B29}
-  #v-rec .num{font-family:var(--mono);font-size:7.5px;color:#101B29}
-  #v-rec tbody td:nth-child(2),
-  #v-rec tbody td:nth-child(4){color:#5C6E82;font-size:7.5px}
-  /* sel kosong jangan dibaca sebagai data */
-  #v-rec tbody td.none,#v-rec tbody td:empty{color:#C3CCD6}
-  /* tarikh dan kiraan lebih senang dibanding bila dijajar kanan */
-  #v-rec .num,#v-rec td.mono{text-align:right}
-  #v-rec thead th.num{text-align:right}
+  /* satu warna teks untuk semua sel; hierarki datang dari saiz dan berat sahaja */
+  #v-rec tbody td,#v-rec tbody td *:not(.tag){color:#101B29}
+  #v-rec td.rno{font-family:var(--mono);font-size:7px;color:#8192A6;text-align:right}
+  /* span .days ialah 11px amber pada skrin — samakan dengan lajur nombor lain */
+  #v-rec .days,#v-rec .days.frozen{font-family:var(--mono);font-size:7.5px;color:#101B29}
+  #v-rec td.none,#v-rec td:empty{color:#C3CCD6}
   /* garis amber nipis memisahkan kepala daripada data */
   #v-rec thead{border-bottom:2px solid #E8A33D}
   /* lencana jadi teks berwarna — jimat dakwat dan lebar */
@@ -815,7 +865,11 @@ footer.credit{margin-top:32px;padding-top:20px;border-top:1px solid var(--line)}
   footer.credit .by-meta{font-size:8px;color:#8192A6;line-height:1.7}
 
   /* cetak pilihan sahaja: baris yang tidak dipilih digugurkan */
+  body.printsel .foot{display:none !important}
   body.printsel #tbody tr:not(.sel){display:none !important}
+  .foot{font-family:var(--mono);font-size:8px;letter-spacing:.08em;color:#8192A6;
+        padding:9px 0 0;margin:0}
+  .foot #hint{display:none}
   body.printsel #tbody tr.sel td:first-child{padding-left:5px;box-shadow:none}
   body.printsel #tbody tr.sel td{background:none !important}
 
@@ -1025,22 +1079,22 @@ footer.credit{margin-top:32px;padding-top:20px;border-top:1px solid var(--line)}
 </section>
 
 <section class="dslicers">
-  <div class="dslicer">
+  <div class="dslicer folded">
     <div class="slicer-head"><h3>Permit expiry date</h3><button class="clr" data-clr="dte">Clear</button></div>
     <div class="dtree" id="dt-te"></div>
     <div class="dtree-sub">Year &rsaquo; month &rsaquo; day &mdash; multi-select</div>
   </div>
-  <div class="dslicer">
+  <div class="dslicer folded">
     <div class="slicer-head"><h3>Extension expiry date</h3><button class="clr" data-clr="dtl">Clear</button></div>
     <div class="dtree" id="dt-tl"></div>
     <div class="dtree-sub">Empty = no extension applied for</div>
   </div>
-  <div class="dslicer">
+  <div class="dslicer folded">
     <div class="slicer-head"><h3>CPC work start order</h3><button class="clr" data-clr="dmc">Clear</button></div>
     <div class="dtree" id="dt-mc"></div>
     <div class="dtree-sub">Empty = order not yet issued</div>
   </div>
-  <div class="dslicer">
+  <div class="dslicer folded">
     <div class="slicer-head"><h3>CPC approval date</h3><button class="clr" data-clr="dkc">Clear</button></div>
     <div class="dtree" id="dt-kc"></div>
     <div class="dtree-sub">Empty = approval not yet recorded</div>
@@ -1065,6 +1119,7 @@ footer.credit{margin-top:32px;padding-top:20px;border-top:1px solid var(--line)}
 <nav class="tabs" id="tabs" role="tablist" aria-label="Dashboard views">
   <button role="tab" class="tab on" data-view="sum"  aria-selected="true">Summary</button>
   <button role="tab" class="tab"    data-view="brk"  aria-selected="false">Breakdown</button>
+  <button role="tab" class="tab"    data-view="trd"  aria-selected="false">Trend</button>
   <button role="tab" class="tab"    data-view="rec"  aria-selected="false">Records<span class="tab-n" id="tab-rec-n"></span></button>
 </nav>
 
@@ -1083,25 +1138,20 @@ footer.credit{margin-top:32px;padding-top:20px;border-top:1px solid var(--line)}
   <div class="recon-bar" id="rc-bar"></div>
   <div class="recon-key" id="rc-key"></div>
 </section>
+
+<div class="panel">
+  <h2>Records needing review</h2>
+  <p class="note">Inconsistencies in the file that may be hiding real cases. Click a row to see the sites.</p>
+  <ul class="checks" id="checks"></ul>
+</div>
 </div>
 
 <div class="view" id="v-brk" role="tabpanel">
 <div class="grid" style="grid-template-columns:1fr">
   <div class="panel">
     <h2>Status by telco</h2>
-    <p class="note">Each bar is the permit record count for that telco. Click a bar to filter the table below.</p>
+    <p class="note">Each bar is the permit record count for that telco. Colours follow the reconciliation key in Summary. Click a bar to filter the table.</p>
     <div id="telcobars"></div>
-    <div class="legend">
-      <span><i class="s-crit"></i>1&ndash;2 years</span>
-      <span><i class="s-e90"></i>0&ndash;90 days</span>
-      <span><i class="s-exp"></i>91&ndash;180 days</span>
-      <span><i class="s-e365"></i>181&ndash;365 days</span>
-      <span><i class="s-e2y"></i>Over 2 years</span>
-      <span><i class="s-act"></i>Still active</span>
-      <span><i class="s-sub"></i>CPC submitted</span>
-      <span><i class="s-cpc"></i>CPC complete</span>
-      <span><i class="s-nd"></i>WP still in progress</span>
-    </div>
   </div>
 </div>
 
@@ -1111,6 +1161,25 @@ footer.credit{margin-top:32px;padding-top:20px;border-top:1px solid var(--line)}
     <p class="note">Authorities with the most overdue cases &mdash; first targets for follow-up.
        Click any PBM to see the list of sites.</p>
     <ul class="pbm" id="pbm"></ul>
+  </div>
+</div>
+</div>
+
+<div class="view" id="v-trd" role="tabpanel">
+<div class="grid" style="grid-template-columns:1fr">
+  <div class="panel">
+    <h2>CPC throughput</h2>
+    <p class="note">How many CPCs were <b>submitted</b> (work start order issued) and <b>approved</b>
+       in each period, counted on the date itself. Drops are excluded, and every other filter still applies.
+       Outstanding is the running gap &mdash; submitted so far minus approved so far.
+       Click a period or its bars for every site in that period, or a single number for just that group.</p>
+    <div class="trend-ctl" id="trend-ctl">
+      <button type="button" data-mode="m" class="on">Monthly</button>
+      <button type="button" data-mode="w">Weekly</button>
+      <button type="button" data-span="1" id="trend-span">Show all</button>
+    </div>
+    <div id="trend"></div>
+    <p class="panel-hint" id="trend-tot"></p>
   </div>
 </div>
 </div>
@@ -1579,7 +1648,7 @@ function pass(r, skip){
   }
   if(F.pbm && r.b!==F.pbm) return false;
   if(F.q && !(r.p.toLowerCase().includes(F.q) || r.b.toLowerCase().includes(F.q)
-              || String(r.uid) === F.q)) return false;
+              || String(r.uid) === F.q || String(r.no) === F.q)) return false;
   return true;
 }
 
@@ -1619,10 +1688,20 @@ document.getElementById('kpis').innerHTML = KPIS.map(k=>`
     <div class="hint">${k.key===''?'Show all':'Filter table'}</div>
   </button>`).join('');
 }
+/* Setiap KPI ada susunan yang munasabah untuknya: kes luput disusun ikut yang
+   paling lama, kes CPC ikut kelulusan terbaru, selebihnya kembali ke susunan tracker. */
+const KPISORT = {
+  g1y:['days',-1], g180:['days',-1], exp:['days',-1],
+  mid:['days',-1], e365:['days',-1], crit:['days',-1], e2y:['days',-1],
+  cpc:['kc',-1], gcpc:['kc',-1], sub:['mc',-1],
+  act:['eff',1], nd:['mw',-1], drop:['no',1]
+};
 document.getElementById('kpis').addEventListener('click',e=>{
   const b = e.target.closest('.kpi'); if(!b) return;
   const k = b.dataset.key;
   F.state = (k==='' ) ? '' : (F.state===k ? '' : k);
+  const s = F.state ? KPISORT[F.state] : null;
+  if(s){ sortK = s[0]; sortDir = s[1]; } else { sortK = 'no'; sortDir = 1; }
   render();
 });
 
@@ -1846,10 +1925,11 @@ function moSorted(){
   const order = {e2y:0,crit:1,e365:2,mid:3,exp:4,sub:5,nd:6,act:7,cpc:8,drop:9};
   const swOrder = {YES:0, NO:1, DROP:2};
   return MO.rows.slice().sort((a,b)=>{
+    if(moSortK==='no') return (a.uid - b.uid) * moSortDir;
     let x=a[moSortK], y=b[moSortK];
     if(moSortK==='state'){ x=order[x]; y=order[y]; }
     else if(moSortK==='sw'){ x=swOrder[x] ?? 3; y=swOrder[y] ?? 3; }
-    else if(moSortK==='uid'){ x=+x||0; y=+y||0; }
+    else if(moSortK==='uid'||moSortK==='no'){ x=+x||0; y=+y||0; }
     if(x===null||x===undefined||x==='') return 1;
     if(y===null||y===undefined||y==='') return -1;
     if(typeof x==='number') return (x-y)*moSortDir;
@@ -1941,7 +2021,7 @@ document.getElementById('mo-filter').addEventListener('click',()=>{
 });
 document.getElementById('mo-csv').addEventListener('click',()=>{
   if(!MO) return;
-  const head = ['No','No in sheet','Telco','Project Name','PBM Involved','WP Work Start','Permit Approval',
+  const head = ['Row','Bil','Telco','Project Name','PBM Involved','WP Work Start','Permit Approval',
                 'WP Status','Permit Expiry','Extension Expiry','Expiry Age (days)','CPC Work Start','CPC Approval','CPC Status','Status'];
   const esc = v => '"'+String(v??'').replace(/"/g,'""')+'"';
   const body = moSorted().map(r=>[r.uid,r.no,r.t,r.p,r.b,r.mw||'',r.kp||'',r.sw,r.te||'',r.tl||'',
@@ -1951,6 +2031,169 @@ document.getElementById('mo-csv').addEventListener('click',()=>{
   a.href = URL.createObjectURL(blob);
   a.download = MO.file + '.csv';
   a.click(); URL.revokeObjectURL(a.href);
+});
+
+/* ---- aliran kerja CPC ikut tempoh ---- */
+let TRMODE = 'm';      /* 'm' bulanan, 'w' mingguan */
+let TRALL  = false;    /* papar semua tempoh atau yang terkini sahaja */
+let trCells = [];      /* [{key,lbl,s:[],a:[],out}] mengikut susunan paparan */
+
+function isoOf(d){
+  const p = n => String(n).padStart(2,'0');
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());
+}
+/* Minggu bermula hari Isnin. */
+function trKey(iso, mode){
+  if(mode==='m') return iso.slice(0,7);
+  const d = parse(iso); if(!d) return null;
+  d.setDate(d.getDate() - ((d.getDay()+6)%7));
+  return isoOf(d);
+}
+function trNext(key, mode){
+  if(mode==='m'){
+    let y = +key.slice(0,4), m = +key.slice(5,7) + 1;
+    if(m > 12){ m = 1; y++; }
+    return y+'-'+String(m).padStart(2,'0');
+  }
+  const d = parse(key); d.setDate(d.getDate()+7); return isoOf(d);
+}
+function trLabel(key, mode){
+  const d = parse(mode==='m' ? key+'-01' : key);
+  if(!d) return key;
+  return mode==='m'
+    ? d.toLocaleDateString('en-GB',{month:'short',year:'2-digit'})
+    : d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'});
+}
+function trRangeLabel(c){
+  if(TRMODE==='m') return trLabel(c.key,'m');
+  const s = parse(c.key), e = parse(c.key); e.setDate(e.getDate()+6);
+  return s.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}) + ' – ' +
+         e.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+}
+
+function drawTrend(){
+  const el = document.getElementById('trend');
+  if(!el) return;
+  const box  = document.getElementById('trend-tot');
+  const base = DATA.rows.filter(r => pass(r,null) && r.sc !== 'DROP');
+  const map  = new Map();
+  const put = (r, iso, k) => {
+    const key = trKey(iso, TRMODE); if(!key) return;
+    if(!map.has(key)) map.set(key, {key, s:[], a:[]});
+    map.get(key)[k].push(r);
+  };
+  base.forEach(r => { if(r.mc) put(r,r.mc,'s'); if(r.kc) put(r,r.kc,'a'); });
+
+  /* Rekod yang sudah CPC tetapi tiada tarikh kelulusan tidak boleh diletak
+     dalam mana-mana tempoh — ia perlu disebut supaya angka tidak salah dibaca. */
+  const noDate = base.filter(r => r.sc === 'YES' && !r.kc).length;
+  if(!map.size){
+    trCells = [];
+    el.innerHTML = '<p class="trend-empty">No CPC dates in the current filter.</p>';
+    if(box) box.textContent = '';
+    return;
+  }
+
+  /* tempoh berterusan dari yang terawal ke terkini, supaya jurang kekal kelihatan */
+  const keys = [...map.keys()].sort();
+  const all  = [];
+  for(let k = keys[0]; k <= keys[keys.length-1]; k = trNext(k, TRMODE)){
+    all.push(map.get(k) || {key:k, s:[], a:[]});
+    if(all.length > 400) break;
+  }
+  /* baki terkumpul dikira dari mula, jadi ia betul walaupun paparan dipotong */
+  let run = 0;
+  all.forEach(c => { run += c.s.length - c.a.length; c.out = run; });
+
+  const cap = TRMODE==='m' ? 12 : 13;
+  trCells = (TRALL || all.length <= cap) ? all : all.slice(-cap);
+
+  const max = Math.max(1, ...trCells.map(c => Math.max(c.s.length, c.a.length)));
+  const w   = n => (n/max*100).toFixed(1)+'%';
+  const chip = (c,i,k) => {
+    const n = c[k].length, cls = k==='s' ? 's' : 'a';
+    const nm = k==='s' ? 'submitted' : 'approved';
+    return `<button type="button" class="tn ${cls}${n?' has':''}" data-i="${i}" data-k="${k}"
+      ${n?`title="List the ${n} CPC ${nm} in ${trRangeLabel(c)}"`:'disabled'}>${n?fmt(n):'·'}</button>`;
+  };
+
+  el.innerHTML =
+    `<div class="trow head"><span>${TRMODE==='m'?'Month':'Week of'}</span><span></span>
+       <span class="tn">Sub</span><span class="tn">Appr</span><span class="to">Outstd</span></div>` +
+    trCells.map((c,i) => {
+      const tot = c.s.length + c.a.length;
+      const hint = tot ? `title="List the ${fmt(tot)} site${tot>1?'s':''} in ${trRangeLabel(c)}"` : 'disabled';
+      return `<div class="trow">
+      <button type="button" class="tl${tot?' has':''}" data-i="${i}" data-k="all" ${hint}>${trLabel(c.key, TRMODE)}</button>
+      <button type="button" class="tbars${tot?' has':''}" data-i="${i}" data-k="all" ${hint}>
+        <span class="tb"><i class="bs" style="width:${w(c.s.length)}"></i></span>
+        <span class="tb"><i class="ba" style="width:${w(c.a.length)}"></i></span>
+      </button>
+      ${chip(c,i,'s')}${chip(c,i,'a')}
+      <span class="to">${fmt(c.out)}</span>
+    </div>`;}).join('');
+
+  if(box){
+    const ts = trCells.reduce((a,c)=>a+c.s.length,0);
+    const ta = trCells.reduce((a,c)=>a+c.a.length,0);
+    const per = TRMODE==='m' ? 'month' : 'week';
+    box.innerHTML =
+      `${fmt(trCells.length)} ${per}s shown &middot; ${fmt(ts)} submitted, ${fmt(ta)} approved ` +
+      `&middot; average ${(ts/trCells.length).toFixed(1)} submitted per ${per} ` +
+      `&middot; ${fmt(trCells[trCells.length-1].out)} still outstanding` +
+      (noDate ?
+        `<span class="trend-warn">${fmt(noDate)} record${noDate>1?'s are':' is'} marked CPC Status = YES
+         with no approval date, so ${noDate>1?'they':'it'} cannot sit in any period &mdash; the approved bar
+         and the outstanding figure both miss ${noDate>1?'them':'it'}. Fill in the
+         &ldquo;Tarikh Kelulusan CPC&rdquo; column in the Excel file to track completions over time.</span>`
+        : '');
+  }
+}
+
+document.getElementById('trend-ctl').addEventListener('click', e => {
+  const b = e.target.closest('button'); if(!b) return;
+  if(b.dataset.mode){
+    if(b.dataset.mode === TRMODE) return;
+    TRMODE = b.dataset.mode;
+    document.querySelectorAll('#trend-ctl [data-mode]').forEach(x =>
+      x.classList.toggle('on', x.dataset.mode === TRMODE));
+  } else {
+    TRALL = !TRALL;
+    b.classList.toggle('on', TRALL);
+    b.textContent = TRALL ? 'Recent only' : 'Show all';
+  }
+  drawTrend();
+});
+
+document.getElementById('trend').addEventListener('click', e => {
+  const b = e.target.closest('.tn,.tl,.tbars'); if(!b || b.disabled) return;
+  const c = trCells[+b.dataset.i]; if(!c) return;
+  const k = b.dataset.k;
+  if(k === 'all'){
+    /* gabung kedua-dua senarai, satu tapak sekali sahaja */
+    const seen = new Set(), rows = [];
+    c.s.concat(c.a).forEach(r => { if(!seen.has(r.uid)){ seen.add(r.uid); rows.push(r); } });
+    openList({
+      eyebrow: 'CPC activity',
+      title  : trRangeLabel(c),
+      rows   : rows,
+      noun   : 'sites with CPC movement in this period',
+      sortK  : 'mc',
+      sortDir: 1,
+      file   : 'cpc_aktiviti_' + c.key
+    });
+    return;
+  }
+  const sub = k === 's';
+  openList({
+    eyebrow: sub ? 'CPC submitted' : 'CPC approved',
+    title  : trRangeLabel(c),
+    rows   : c[k],
+    noun   : sub ? 'CPC work start orders issued' : 'CPC approvals recorded',
+    sortK  : sub ? 'mc' : 'kc',
+    sortDir: 1,
+    file   : 'cpc_' + (sub ? 'submitted_' : 'approved_') + c.key
+  });
 });
 
 /* ---- PBM ---- */
@@ -2084,13 +2327,20 @@ document.querySelector('.dslicers').addEventListener('click',e=>{
 document.querySelector('.slicers').addEventListener('click',e=>{
   const c = e.target.closest('.chip');
   if(c){ const d=c.dataset.dim, v=c.dataset.val;
-    F[d].has(v) ? F[d].delete(v) : F[d].add(v); render(); return; }
+    F[d].has(v) ? F[d].delete(v) : F[d].add(v);
+    /* satu status dipilih daripada Status chips: guna susunan semula jadi status itu */
+    if(d==='st'){
+      const s = F.st.size === 1 ? KPISORT[[...F.st][0]] : null;
+      if(s){ sortK = s[0]; sortDir = s[1]; }
+      else if(!F.st.size){ sortK = 'no'; sortDir = 1; }
+    }
+    render(); return; }
   const b = e.target.closest('.clr');
   if(b){ F[b.dataset.clr].clear(); render(); }
 });
 
 const COLS = [
-  {k:'uid', h:'No',          cls:'num'},
+  {k:'no', h:'Bil',          cls:'num'},
   {k:'t',  h:'Telco',        cls:''},
   {k:'p',  h:'Project name',  cls:'proj'},
   {k:'b',  h:'PBM involved', cls:''},
@@ -2102,13 +2352,16 @@ const COLS = [
   {k:'kc', h:'CPC approval',  cls:'dt'},
   {k:'state',h:'Status',     cls:''}
 ];
-let sortK='days', sortDir=-1;
+/* jadual render sehingga had ini; lebihannya dinyatakan dengan jelas di hujung jadual */
+const ROWCAP = 1500;
+let sortK='no', sortDir=1;
 
 /* Sel jadual dijana daripada COLS supaya tajuk dan sel tidak boleh tersasar lagi.
    cell5 membenarkan popup menggantikan kandungan lajur "umur tamat". */
 function cellHTML(r, c, cell5){
   switch(c.k){
     case 'uid':   return `<td class="rno">${r.uid}</td>`;
+    case 'no':    return `<td class="rno">${r.no || '—'}</td>`;
     case 't':     return `<td>${r.t}</td>`;
     case 'p':     return `<td class="proj">${r.p}</td>`;
     case 'b':     return `<td>${r.b}</td>`;
@@ -2138,9 +2391,14 @@ function current(){
   let out = DATA.rows.filter(r=>pass(r,null));
   const order = {e2y:0,crit:1,e365:2,mid:3,exp:4,nd:5,act:6,cpc:7,drop:8};
   out.sort((a,b)=>{
+    /* Bil berulang setiap telco, jadi tanpa pengasing telco senarai jadi
+       semua "1" bertimbun, kemudian semua "2". Telco jadi kunci utama. */
+    /* "Bil" bermaksud susunan tracker: ikut turutan sheet, kemudian turutan baris.
+       uid diberi mengikut susunan baca fail, jadi ia salinan tepat susunan itu. */
+    if(sortK==='no') return (a.uid - b.uid) * sortDir;
     let x=a[sortK], y=b[sortK];
     if(sortK==='state'){ x=order[x]; y=order[y]; }
-    else if(sortK==='uid'){ x=+x||0; y=+y||0; }
+    else if(sortK==='uid'||sortK==='no'){ x=+x||0; y=+y||0; }
     if(x===null||x===undefined||x==='') return 1;
     if(y===null||y===undefined||y==='') return -1;
     if(typeof x==='number') return (x-y)*sortDir;
@@ -2204,6 +2462,7 @@ function render(){
   drawAge();
   drawPbm();
   drawSoon();
+  drawTrend();
   drawChecks();
   document.getElementById('kpis').querySelectorAll('.kpi').forEach(b=>{
     const on = b.dataset.key!=='' && b.dataset.key===F.state;
@@ -2212,7 +2471,7 @@ function render(){
   });
   const tb = document.getElementById('tbody');
   document.getElementById('empty').style.display = rows.length?'none':'block';
-  const view = rows.slice(0,600);
+  const view = rows.slice(0,ROWCAP);
   tb.innerHTML = view.map(r=>`<tr class="rowlink" data-uid="${r.uid}" tabindex="0">
     <td class="cardcell" aria-hidden="true">
       <div class="c-top"><span class="c-no">${r.uid}</span><span class="c-telco">${r.t}</span>
@@ -2229,7 +2488,9 @@ function render(){
       </dl>
     </td>
     ${rowCells(r)}
-  </tr>`).join('');
+  </tr>`).join('') + (rows.length > ROWCAP ? `<tr class="caprow"><td colspan="${COLS.length+1}">
+      ${fmt(rows.length - ROWCAP)} more records match these filters but are not shown.
+      Narrow the filters or download the CSV for the full set.</td></tr>` : '');
   writeHash();
   const an = activeCount();
   document.getElementById('mfilter-n').textContent = an ? an : '';
@@ -2239,12 +2500,13 @@ function render(){
     ? `Filter: <b>${CHECKS[F.check].t}</b> <span class="tot-all">(click that row again, or press Undo, to clear)</span>`
     : 'Click a column heading to sort &middot; click a row for details';
   document.getElementById('tab-rec-n').textContent = fmt(rows.length);
+  if(typeof syncDateFolds === 'function') syncDateFolds();
   if(typeof paintSel === 'function') paintSel();
   if(typeof preparePrint === 'function') preparePrint();
   document.getElementById('count').innerHTML =
     `Showing <b>${fmt(view.length)}</b> of <b>${fmt(rows.length)}</b> matching records` +
     (rows.length !== DATA.rows.length ? ` <span class="tot-all">/ ${fmt(DATA.rows.length)} total</span>` : '') +
-    (rows.length>600?' <span class="tot-all">(first 600 only — filter further or download the CSV)</span>':'');
+    (rows.length>ROWCAP?` <span class="tot-all">(showing first ${fmt(ROWCAP)})</span>`:'');
   document.getElementById('thead').querySelectorAll('th').forEach(th=>{
     th.querySelector('.ar').textContent = th.dataset.k===sortK?(sortDir>0?'▲':'▼'):'↕';
   });
@@ -2280,11 +2542,11 @@ document.getElementById('reset').addEventListener('click',()=>{
   F.telco.clear(); F.wp.clear(); F.cpc.clear(); F.st.clear();
   F.dte.clear(); F.dtl.clear(); F.dmc.clear(); F.dkc.clear();
   F.state=''; F.pbm=''; F.q=''; F.check=null;
-  sortK='days'; sortDir=-1; render();
+  sortK='no'; sortDir=1; render();
 });
 document.getElementById('csv').addEventListener('click',()=>{
   const rows = current();
-  const head = ['No','No in sheet','Telco','Project Name','PBM Involved','WP Work Start','Permit Approval',
+  const head = ['Row','Bil','Telco','Project Name','PBM Involved','WP Work Start','Permit Approval',
                 'WP Status','Permit Expiry','Extension Expiry','Effective Date','Expiry Age (days)','CPC Work Start','CPC Approval','CPC Status','Status'];
   const esc = v => '"'+String(v??'').replace(/"/g,'""')+'"';
   const body = rows.map(r=>[r.uid,r.no,r.t,r.p,r.b,r.mw||'',r.kp||'',r.sw,r.te||'',r.tl||'',r.eff||'',
@@ -2309,7 +2571,7 @@ function buildQuery(){
   if(F.state) q.set('s',F.state);
   if(F.pbm)   q.set('p',F.pbm);
   if(F.q)     q.set('q',F.q);
-  if(sortK!=='days' || sortDir!==-1) q.set('o', sortK+':'+sortDir);
+  if(sortK!=='no' || sortDir!==1) q.set('o', sortK+':'+sortDir);
   if(theme === 'light') q.set('th','l');
   if(DATA && DATA.src) q.set('f', DATA.src);
   return q.toString();
@@ -2346,7 +2608,7 @@ function applyHash(q){
   const el = document.getElementById('q'); if(el) el.value = F.q;
   if(selP) selP.value = F.pbm;
   const o = q.get('o');
-  if(o){ const [k,d] = o.split(':'); sortK = k; sortDir = +d || -1; }
+  if(o){ const [k,d] = o.split(':'); sortK = k; sortDir = +d || 1; }
   setTheme(q.get('th') === 'l' ? 'light' : 'dark', true);
   /* buka cabang tahun/bulan yang dipilih supaya kelihatan */
   HKEYS.slice(3).forEach(([k,dim])=>{
@@ -2363,6 +2625,24 @@ function noteSharedFile(q){
   }else{
     note.classList.remove('show');
   }
+}
+
+/* ---- date tree: lipat / buka ---- */
+document.querySelectorAll('.dslicer .slicer-head').forEach(h=>{
+  h.addEventListener('click', e=>{
+    if(e.target.closest('.clr')) return;      /* butang Clear bukan togol */
+    h.closest('.dslicer').classList.toggle('folded');
+  });
+});
+/* tapisan tarikh yang aktif tak boleh tersembunyi — buka sendiri dan tandakan */
+function syncDateFolds(){
+  [['dte','dt-te'],['dtl','dt-tl'],['dmc','dt-mc'],['dkc','dt-kc']].forEach(([key,id])=>{
+    const box = document.getElementById(id); if(!box) return;
+    const sl = box.closest('.dslicer');
+    const on = F[key].size > 0;
+    sl.classList.toggle('has', on);
+    if(on) sl.classList.remove('folded');
+  });
 }
 
 /* ---- mod pilih baris ----
@@ -2525,7 +2805,8 @@ function preparePrint(ctx){
   const cap   = (ctx && ctx.cap) || 'Records';
   const meta  = (ctx && ctx.meta) ||
     `<b>${fmt(shown)}</b> of ${fmt(DATA.rows.length)} records &middot; ` +
-    (parts.length ? parts.join(' &middot; ') : 'no filters applied');
+    (parts.length ? parts.join(' &middot; ') : 'no filters applied') +
+    (shown > ROWCAP ? `<br><b>Only the first ${fmt(ROWCAP)} rows are printed</b> — narrow the filters or use the CSV for the full set` : '');
 
   const c = s => base.filter(r => r.state === s).length;
   const g = k => base.filter(r => SGROUP[k].includes(r.state)).length;
@@ -2683,7 +2964,8 @@ let DTROW = null;
 function fieldRows(r){
   const val = (v, cls) => v ? `<dd class="${cls||''}">${v}</dd>` : '<dd class="none">None</dd>';
   return [
-    ['No', `<dd class="mono">${r.uid}</dd>`],
+    ['Bil (tracker)', `<dd class="mono">${r.no || '\u2014'}</dd>`],
+    ['Row', `<dd class="mono">${r.uid}</dd>`],
     ['Telco', `<dd>${r.t}</dd>`],
     ['PBM terlibat', `<dd>${r.b}</dd>`, true],
     ['Status WP', r.sw ? `<dd class="mono">${r.sw}</dd>` : null],
@@ -2824,7 +3106,7 @@ function clearFilters(){
   F.dte.clear(); F.dtl.clear(); F.dmc.clear(); F.dkc.clear();
   F.state=''; F.pbm=''; F.q=''; F.check=null;
   const el=document.getElementById('q'); if(el) el.value='';
-  selP.value=''; sortK='days'; sortDir=-1;
+  selP.value=''; sortK='no'; sortDir=1;
   const n=document.getElementById('shared-note'); if(n) n.classList.remove('show');
 }
 function load(d){
