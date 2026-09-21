@@ -324,35 +324,41 @@ h1 em{font-style:italic;color:var(--dim)}
 .trend-ctl button.on{color:var(--bg);background:var(--ink);border-color:var(--ink)}
 .tchart{display:flex;align-items:flex-end;gap:10px;overflow-x:auto;padding:22px 0 0}
 .tcol{flex:1 0 46px;min-width:46px;display:flex;flex-direction:column;align-items:center;gap:0}
-.tchart.wk .tcol{flex:1 0 64px;min-width:64px}
+.tchart.wk .tcol{flex:1 0 50px;min-width:50px}
 .tplot{position:relative;width:100%;height:170px;display:flex;align-items:flex-end;justify-content:center;
   gap:4px;border-bottom:1px solid var(--line)}
 .tbi{display:block;width:13px;padding:0;border:0;background:var(--barbg);cursor:pointer}
 .tbi.bs{background:var(--sky)} .tbi.ba{background:var(--teal)}
-.tbi:disabled{background:var(--barbg);cursor:default}
-.tbi:hover:not(:disabled){outline:2px solid var(--ink);outline-offset:1px}
+.tbi.zero{background:var(--line)}
+.tbi:hover{outline:2px solid var(--ink);outline-offset:1px}
 .tcap{position:absolute;top:-17px;left:0;right:0;text-align:center;font-family:var(--mono);
   font-size:10px;letter-spacing:.06em;color:var(--faint);font-variant-numeric:tabular-nums}
 .tcap b{font-weight:400;color:var(--sky)} .tcap em{font-style:normal;color:var(--teal)}
 .tlab{margin-top:9px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;
   color:var(--dim);background:none;border:0;padding:0;cursor:pointer;white-space:nowrap}
-.tlab:disabled{cursor:default;color:var(--faint)}
-.tlab:hover:not(:disabled){color:var(--ink);text-decoration:underline}
+.tlab.zero{color:var(--faint)}
+.tlab:hover{color:var(--ink);text-decoration:underline}
+.tcol.now .tlab{color:var(--ink);font-weight:600}
+.tcol.now .tlab::after{content:' \2022';color:var(--amber)}
+.tcol.now .tplot{border-bottom:2px solid var(--amber)}
+.trow.now .tl{color:var(--ink);font-weight:600}
+.trow.now .tl::after{content:' \2022';color:var(--amber)}
 .tout{margin-top:5px;font-family:var(--mono);font-size:10px;color:var(--faint);font-variant-numeric:tabular-nums}
 .tkey{display:flex;flex-wrap:wrap;gap:16px;margin:18px 0 0;font-family:var(--mono);font-size:10.5px;
   letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
 .tkey span{display:flex;align-items:center;gap:7px}
 .tkey i{width:11px;height:11px;display:block}
+.tkey i.bn{background:var(--amber);height:3px}
 .tkey i.bs{background:var(--sky)} .tkey i.ba{background:var(--teal)} .tkey i.bo{background:var(--faint)}
 .trow{display:grid;grid-template-columns:92px 1fr 52px 52px 62px;gap:14px;align-items:center;
   padding:9px 0;border-bottom:1px solid var(--line)}
 .trow:last-child{border-bottom:0}
 .trow .tl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);
   text-align:left;background:none;border:0;padding:0}
-.trow .tl.has,.trow .tbars.has{cursor:pointer}
-.trow .tl.has:hover{color:var(--ink);text-decoration:underline}
+.trow .tl,.trow .tbars{cursor:pointer}
+.trow .tl:hover{color:var(--ink);text-decoration:underline}
 .trow .tbars{display:grid;gap:3px;background:none;border:0;padding:0;width:100%}
-.trow .tbars.has:hover .tb{outline:1px solid var(--slate);outline-offset:1px}
+.trow .tbars:hover .tb{outline:1px solid var(--slate);outline-offset:1px}
 .trow .tb{display:block;height:7px;background:var(--barbg)}
 .trow .tb i{display:block;height:100%}
 .trow .tb i.bs{background:var(--sky)} .trow .tb i.ba{background:var(--teal)}
@@ -360,19 +366,21 @@ h1 em{font-style:italic;color:var(--dim)}
   background:none;border:0;padding:0;cursor:pointer;color:var(--faint)}
 .trow .tn.has.s{color:var(--sky)} .trow .tn.has.a{color:var(--teal)}
 .trow .tn.has:hover{text-decoration:underline}
-.trow .tn:disabled{cursor:default}
+
 .trow .to{font-family:var(--mono);font-size:12px;text-align:right;font-variant-numeric:tabular-nums;color:var(--dim)}
 .trow.head{border-bottom:1px solid var(--line);padding-bottom:8px}
 .trow.head span{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
 .trow.head .tn,.trow.head .to{text-align:right}
 .trend-empty{font-size:13px;color:var(--dim);padding:18px 0}
+tr.mo-none td{display:table-cell !important;text-align:center;padding:42px 16px !important;font-size:14px;color:var(--dim);border:0}
+#mo-csv:disabled,#mo-print:disabled{opacity:.4;cursor:default}
 .trend-warn{font-size:13px;line-height:1.5;color:var(--amber);border-left:2px solid var(--amber);
   padding:2px 0 2px 14px;margin:18px 0 0}
 @media(max-width:700px){
   .trow{grid-template-columns:72px 1fr 38px 38px 46px;gap:7px}
   .tchart{gap:6px}
   .tcol{flex:1 0 34px;min-width:34px}
-  .tchart.wk .tcol{flex:1 0 50px;min-width:50px}
+  .tchart.wk .tcol{flex:1 0 38px;min-width:38px}
   .tplot{height:140px;gap:3px}
   .tbi{width:10px}
   .tlab{font-size:9px;letter-spacing:0}
@@ -1061,7 +1069,7 @@ footer.credit{margin-top:32px;padding-top:20px;border-top:1px solid var(--line)}
       </span>
       <div>
         <div class="eyebrow">Utara Infra Sdn Bhd</div>
-        <h1>CPC Management  <em></em></h1>
+        <h1>CPC Management <em></em></h1>
       </div>
     </div>
     <div class="mast-side">
@@ -1991,13 +1999,16 @@ function moDraw(){
         <div><dt>CPC approval</dt><dd>${dstr(r.kc)}</dd></div>
       </dl>
     </td>
-    ${rowCells(r, cell5)}</tr>`).join('');
+    ${rowCells(r, cell5)}</tr>`).join('') +
+    (rows.length ? '' : `<tr class="mo-none"><td colspan="${COLS.length+1}">${MO.emptyMsg || 'No records.'}</td></tr>`);
+  document.getElementById('mo-csv').disabled = !rows.length;
+  document.getElementById('mo-print').disabled = !rows.length;
   document.getElementById('mo-count').innerHTML =
     `<b>${fmt(rows.length)}</b> records <span class="tot-all">/ ${fmt(DATA.rows.length)} total</span>`;
 }
 
 function openList(cfg){
-  if(!cfg.rows || !cfg.rows.length) return;
+  if(!cfg.rows || (!cfg.rows.length && !cfg.allowEmpty)) return;
   MO = cfg;
   moSortK = cfg.sortK || 'days'; moSortDir = cfg.sortDir || -1;
   modal.querySelector('.mhead .eyebrow').textContent = cfg.eyebrow;
@@ -2088,17 +2099,29 @@ function trNext(key, mode){
   }
   const d = parse(key); d.setDate(d.getDate()+7); return isoOf(d);
 }
+/* Nombor minggu ISO: minggu 1 ialah minggu yang mengandungi Khamis pertama tahun. */
+function isoWeek(d){
+  const t = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  t.setDate(t.getDate() + 3 - ((t.getDay()+6)%7));      /* pergi ke Khamis minggu ini */
+  const first = new Date(t.getFullYear(), 0, 4);
+  first.setDate(first.getDate() + 3 - ((first.getDay()+6)%7));
+  return {w: 1 + Math.round((t - first)/604800000), y: t.getFullYear()};
+}
 function trLabel(key, mode){
   const d = parse(mode==='m' ? key+'-01' : key);
   if(!d) return key;
-  return mode==='m'
-    ? d.toLocaleDateString('en-GB',{month:'short',year:'2-digit'})
-    : d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'});
+  if(mode==='m') return d.toLocaleDateString('en-GB',{month:'short',year:'2-digit'});
+  const k = isoWeek(d);
+  return 'W' + k.w + ' ' + String(k.y).slice(2);
 }
 function trRangeLabel(c){
+  return trRangeText(c) + (c.now ? (TRMODE==='m' ? ' (this month)' : ' (this week)') : '');
+}
+function trRangeText(c){
   if(TRMODE==='m') return trLabel(c.key,'m');
   const s = parse(c.key), e = parse(c.key); e.setDate(e.getDate()+6);
-  return s.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}) + ' – ' +
+  return trLabel(c.key,'w') + ' · ' +
+         s.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}) + ' – ' +
          e.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
 }
 
@@ -2127,11 +2150,15 @@ function drawTrend(){
 
   /* tempoh berterusan dari yang terawal ke terkini, supaya jurang kekal kelihatan */
   const keys = [...map.keys()].sort();
+  /* sentiasa sambung hingga tempoh semasa, supaya minggu/bulan kosong terkini tetap kelihatan */
+  const nowKey = trKey(isoOf(TODAY), TRMODE);
+  const endKey = keys[keys.length-1] > nowKey ? keys[keys.length-1] : nowKey;
   const all  = [];
-  for(let k = keys[0]; k <= keys[keys.length-1]; k = trNext(k, TRMODE)){
+  for(let k = keys[0]; k <= endKey; k = trNext(k, TRMODE)){
     all.push(map.get(k) || {key:k, s:[], a:[]});
     if(all.length > 400) break;
   }
+  all.forEach(c => { c.now = c.key === nowKey; });
   /* baki terkumpul dikira dari mula, jadi ia betul walaupun paparan dipotong */
   let run = 0;
   all.forEach(c => { run += c.s.length - c.a.length; c.out = run; });
@@ -2145,45 +2172,46 @@ function drawTrend(){
     const n = c[k].length, cls = k==='s' ? 's' : 'a';
     const nm = k==='s' ? 'submitted' : 'approved';
     return `<button type="button" class="tn ${cls}${n?' has':''}" data-i="${i}" data-k="${k}"
-      ${n?`title="List the ${n} CPC ${nm} in ${trRangeLabel(c)}"`:'disabled'}>${n?fmt(n):'·'}</button>`;
+      title="${n?`List the ${n}`:'No'} CPC ${nm} in ${trRangeLabel(c)}">${n?fmt(n):'·'}</button>`;
   };
 
   /* satu palang: tinggi (menegak) atau lebar (melintang) ikut nilai terbesar */
   const bar = (c,i,k) => {
     const n = c[k].length, nm = k==='s' ? 'submitted' : 'approved';
-    const t = n ? `title="List the ${fmt(n)} CPC ${nm} in ${trRangeLabel(c)}"` : 'disabled';
-    return `<button type="button" class="tbi ${k==='s'?'bs':'ba'}" data-i="${i}" data-k="${k}"
-      style="height:${n ? Math.max(2, n/max*100).toFixed(1)+'%' : '2px'}" ${t}></button>`;
+    const t = n ? `title="List the ${fmt(n)} CPC ${nm} in ${trRangeLabel(c)}"` : `title="No CPC ${nm} in ${trRangeLabel(c)}"`;
+    return `<button type="button" class="tbi ${k==='s'?'bs':'ba'}${n?'':' zero'}" data-i="${i}" data-k="${k}"
+      style="height:${n ? Math.max(2, n/max*100).toFixed(1)+'%' : '3px'}" ${t}></button>`;
   };
 
   if(TRVERT){
     el.innerHTML = `<div class="tchart${TRMODE==='w'?' wk':''}">` + trCells.map((c,i) => {
       const tot = c.s.length + c.a.length;
-      const hint = tot ? `title="List the ${fmt(tot)} site${tot>1?'s':''} in ${trRangeLabel(c)}"` : 'disabled';
-      return `<div class="tcol">
+      const hint = tot ? `title="List the ${fmt(tot)} site${tot>1?'s':''} in ${trRangeLabel(c)}"` : `title="No CPC activity in ${trRangeLabel(c)}"`;
+      return `<div class="tcol${c.now?' now':''}">
         <span class="tplot">
           <span class="tcap"><b>${c.s.length||'·'}</b>&thinsp;/&thinsp;<em>${c.a.length||'·'}</em></span>
           ${bar(c,i,'s')}${bar(c,i,'a')}
         </span>
-        <button type="button" class="tlab" data-i="${i}" data-k="all" ${hint}>${trLabel(c.key, TRMODE)}</button>
+        <button type="button" class="tlab${tot?'':' zero'}" data-i="${i}" data-k="all" ${hint}>${trLabel(c.key, TRMODE)}</button>
         <span class="tout" title="Outstanding after this period">${fmt(c.out)}</span>
       </div>`;}).join('') + '</div>' +
       `<div class="tkey">
          <span><i class="bs"></i>Submitted</span>
          <span><i class="ba"></i>Approved</span>
          <span><i class="bo"></i>Outstanding (number under each ${TRMODE==='m'?'month':'week'})</span>
+         <span><i class="bn"></i>This ${TRMODE==='m'?'month':'week'}</span>
        </div>`;
     drawTrendFoot(box);
     return;
   }
 
   el.innerHTML =
-    `<div class="trow head"><span>${TRMODE==='m'?'Month':'Week of'}</span><span></span>
+    `<div class="trow head"><span>${TRMODE==='m'?'Month':'Week'}</span><span></span>
        <span class="tn">Sub</span><span class="tn">Appr</span><span class="to">Outstd</span></div>` +
     trCells.map((c,i) => {
       const tot = c.s.length + c.a.length;
-      const hint = tot ? `title="List the ${fmt(tot)} site${tot>1?'s':''} in ${trRangeLabel(c)}"` : 'disabled';
-      return `<div class="trow">
+      const hint = tot ? `title="List the ${fmt(tot)} site${tot>1?'s':''} in ${trRangeLabel(c)}"` : `title="No CPC activity in ${trRangeLabel(c)}"`;
+      return `<div class="trow${c.now?' now':''}">
       <button type="button" class="tl${tot?' has':''}" data-i="${i}" data-k="all" ${hint}>${trLabel(c.key, TRMODE)}</button>
       <button type="button" class="tbars${tot?' has':''}" data-i="${i}" data-k="all" ${hint}>
         <span class="tb"><i class="bs" style="width:${w(c.s.length)}"></i></span>
@@ -2235,7 +2263,7 @@ document.getElementById('trend-ctl').addEventListener('click', e => {
 });
 
 document.getElementById('trend').addEventListener('click', e => {
-  const b = e.target.closest('.tn,.tl,.tbars,.tbi,.tlab'); if(!b || b.disabled) return;
+  const b = e.target.closest('.tn,.tl,.tbars,.tbi,.tlab'); if(!b) return;
   const c = trCells[+b.dataset.i]; if(!c) return;
   const k = b.dataset.k;
   if(k === 'all'){
@@ -2247,6 +2275,8 @@ document.getElementById('trend').addEventListener('click', e => {
       title  : trRangeLabel(c),
       rows   : rows,
       noun   : 'sites with CPC movement in this period',
+      allowEmpty: true,
+      emptyMsg: 'No CPC submitted or approved in this period.',
       sortK  : 'mc',
       sortDir: 1,
       file   : 'cpc_aktiviti_' + c.key
@@ -2259,6 +2289,8 @@ document.getElementById('trend').addEventListener('click', e => {
     title  : trRangeLabel(c),
     rows   : c[k],
     noun   : sub ? 'CPC work start orders issued' : 'CPC approvals recorded',
+    allowEmpty: true,
+    emptyMsg: sub ? 'No CPC submitted in this period.' : 'No CPC approved in this period.',
     sortK  : sub ? 'mc' : 'kc',
     sortDir: 1,
     file   : 'cpc_' + (sub ? 'submitted_' : 'approved_') + c.key
