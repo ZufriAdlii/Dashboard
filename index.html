@@ -338,6 +338,8 @@
     color: #6f7684;
   }
   .meta b { color: var(--champagne); font-weight: 500; }
+  .meta .warn { color: #F2A38B; }
+  .meta .ago { color: #4f5664; white-space: nowrap; }
 
   .card .tag {
     display: inline-flex;
@@ -877,7 +879,7 @@
       <h2>CPC Management</h2>
       <p class="desc">Work permit expiry and CPC completion status by telco, PBM and district.</p>
       <div class="card-rule"></div>
-      <div class="meta"><b>1,058</b> permit records</div>
+      <div class="meta" id="cpc-meta">Expiry &middot; CPC &middot; Trend</div>
       <span class="tag">
         Open dashboard
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -953,6 +955,25 @@
     </div>
   </div>
 
+<script>
+/* Kad CPC: tunjuk angka terkini dari kali terakhir dashboard CPC dibuka pada komputer ini.
+   Tiada ringkasan → kekal dengan teks umum, supaya tiada nombor lapuk. */
+(function(){
+  var el = document.getElementById('cpc-meta'); if(!el) return;
+  var s; try{ s = JSON.parse(localStorage.getItem('cpc-hub') || 'null'); }catch(e){ s = null; }
+  if(!s || typeof s.over !== 'number' || typeof s.at !== 'number') return;
+  var n = function(v){ return Number(v).toLocaleString('en-MY'); };
+  var mins = Math.max(0, Math.round((Date.now() - s.at) / 60000));
+  var ago = mins < 1 ? 'now' : mins < 60 ? mins + 'm ago' : mins < 1440 ? Math.round(mins/60) + 'h ago'
+          : mins < 43200 ? Math.round(mins/1440) + 'd ago'
+          : new Date(s.at).toLocaleDateString('en-GB', {day:'2-digit', month:'short'});
+  el.innerHTML = '<b class="warn">' + n(s.over) + '</b> expired &middot; <b>' + n(s.pend) + '</b> CPC pending'
+               + ' <span class="ago">&middot; ' + ago + '</span>';
+  el.title = n(s.over) + ' permits past expiry without CPC, ' + n(s.pend) + ' CPC awaiting approval, '
+           + n(s.done) + ' CPC complete \u2014 from ' + (s.src || 'the tracker') + ', '
+           + new Date(s.at).toLocaleString('en-GB', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
+})();
+</script>
 <script>
 (function(){
   'use strict';
