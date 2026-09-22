@@ -540,21 +540,6 @@ tbody tr.rowlink:focus-visible{outline:2px solid var(--amber);outline-offset:-2p
 .pbm .n{font-family:var(--display);font-size:19px;text-align:right;font-variant-numeric:tabular-nums;color:var(--amber)}
 
 /* perlu semak */
-.checks{list-style:none;margin:0;padding:0}
-.checks li{border-bottom:1px solid var(--line)}
-.checks li:last-child{border-bottom:0}
-.chk-row{display:grid;grid-template-columns:1fr 48px;gap:14px;align-items:center;width:100%;
-         padding:13px 6px 13px 0;border:0;background:none;font:inherit;color:inherit;text-align:left;
-         cursor:pointer;text-transform:none;letter-spacing:0;transition:none}
-.chk-row:hover{background:var(--hover)}
-.chk-row:hover .ct{color:var(--amber)}
-.chk-row.on{background:var(--surface-2);box-shadow:inset 3px 0 0 var(--amber)}
-.chk-row.on .ct{color:var(--amber)}
-.chk-row[disabled]{cursor:default;opacity:.4}
-.chk-row .ct{display:block;font-size:13.5px;color:var(--ink);line-height:1.4}
-.chk-row .cd{display:block;font-size:11.5px;color:var(--faint);margin-top:4px;line-height:1.45}
-.chk-row .n{font-family:var(--display);font-size:20px;text-align:right;font-variant-numeric:tabular-nums;color:var(--amber)}
-.chk-row.zero .n{color:var(--teal)}
 
 /* ---------- slicers ---------- */
 .cdot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:1px;
@@ -767,7 +752,6 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim);background:transpare
   .recon-bar button{font-size:9px}
 
   .brow{grid-template-columns:96px 1fr 44px;gap:10px}
-  .chk-row .cd{display:none}
 
   /* jadual -> senarai kad */
   .tablewrap{max-height:none;overflow:visible;border:0;background:none}
@@ -1283,11 +1267,6 @@ try{ if(localStorage.getItem('cpc-linked') === '1') document.documentElement.cla
   <div class="recon-key" id="rc-key"></div>
 </section>
 
-<div class="panel">
-  <h2>Records needing review</h2>
-  <p class="note">Inconsistencies in the file that may be hiding real cases. Click a row to see the sites.</p>
-  <ul class="checks" id="checks"></ul>
-</div>
 </div>
 
 <div class="view" id="v-brk" role="tabpanel">
@@ -2897,7 +2876,7 @@ function applyHash(q){
     F[dim].clear();
     const v = q.get(k); if(v) v.split('|').forEach(x=>F[dim].add(x));
   });
-  F.check = q.get('k') !== null && q.get('k') !== undefined && q.get('k') !== '' ? +q.get('k') : null;
+  F.check = null;                 /* panel semakan dibuang: pautan lama dengan k= diabaikan */
   F.state = q.get('s') || '';
   F.pbm   = q.get('p') || '';
   F.q     = q.get('q') || '';
