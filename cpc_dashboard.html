@@ -29,6 +29,15 @@
   --crit:#E4695C; --crit-soft:rgba(228,105,92,.13);
   --slate:#7C8EA4; --slate-soft:rgba(124,142,164,.13);
   --sky:#6EA8FF; --sky-soft:rgba(110,168,255,.14);
+  --aqua:#3FD6EE; --aqua-soft:rgba(63,214,238,.14);
+  --u-done:#5EE0A8; --u-done-soft:rgba(46,204,138,.16); --u-done-line:rgba(94,224,168,.45);
+  --u-lime:#C6F04E; --u-lime-soft:rgba(198,240,78,.14);
+  --u-violet:#B99CFF; --u-violet-soft:rgba(185,156,255,.16);
+  --u-indigo:#8E9BFF; --u-indigo-soft:rgba(142,155,255,.16);
+  --u-magenta:#EE82F5; --u-magenta-soft:rgba(238,130,245,.15);
+  --u-pink:#FF7EB0; --u-pink-soft:rgba(255,126,176,.15);
+  --u-silver:#E6ECF3; --u-silver-soft:rgba(230,236,243,.10);
+  --u-clay:#C9A48C; --u-clay-soft:rgba(201,164,140,.15);
   --hover:rgba(255,255,255,.03); --well:rgba(255,255,255,.02); --barbg:rgba(255,255,255,.06);
   --field:rgba(0,0,0,.25); --veil:rgba(4,7,11,.78);
   --hatch-a:rgba(255,255,255,.16); --hatch-b:rgba(255,255,255,.05);
@@ -50,6 +59,15 @@
   --crit:#A3322A; --crit-soft:rgba(163,50,42,.10);
   --slate:#54677D; --slate-soft:rgba(84,103,125,.12);
   --sky:#1F4FA8; --sky-soft:rgba(31,79,168,.10);
+  --aqua:#007C91; --aqua-soft:rgba(0,124,145,.10);
+  --u-done:#0E7A4E; --u-done-soft:rgba(18,160,100,.10); --u-done-line:rgba(14,122,78,.35);
+  --u-lime:#4E7208; --u-lime-soft:rgba(78,114,8,.11);
+  --u-violet:#6B3FC4; --u-violet-soft:rgba(107,63,196,.10);
+  --u-indigo:#3A47B8; --u-indigo-soft:rgba(58,71,184,.10);
+  --u-magenta:#9A1FA3; --u-magenta-soft:rgba(154,31,163,.09);
+  --u-pink:#B8195C; --u-pink-soft:rgba(184,25,92,.09);
+  --u-silver:#2E3A48; --u-silver-soft:rgba(46,58,72,.07);
+  --u-clay:#7A4E33; --u-clay-soft:rgba(122,78,51,.11);
   --hover:rgba(16,27,41,.035); --well:rgba(16,27,41,.02); --barbg:rgba(16,27,41,.08);
   --field:#FFFFFF; --veil:rgba(28,38,50,.55);
   --hatch-a:rgba(16,27,41,.22); --hatch-b:rgba(16,27,41,.06);
@@ -266,12 +284,15 @@ h1 em{font-style:italic;color:var(--dim)}
 .mast-meta b{color:var(--dim);font-weight:400}
 
 /* ---------- kpis ---------- */
-.kpis{display:grid;grid-template-columns:repeat(12,1fr);gap:1px;background:var(--line);
-      border:1px solid var(--line);margin-bottom:30px}
+.kpis{display:flex;flex-direction:column;gap:26px;margin-bottom:34px}
+.kgroup .kcap{margin:0 0 9px 1px;font-size:13px;letter-spacing:.01em;color:var(--dim);text-transform:none}
+.kgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
 .kpi.sp3{grid-column:span 3}
 .kpi.sp4{grid-column:span 4}
 .kpi.sp6{grid-column:span 6}
-.kpi{padding:24px 24px 22px;position:relative;cursor:pointer;text-align:left;font:inherit;color:inherit;
+.kpi.sp8{grid-column:span 8}
+.kpi.sp12{grid-column:1/-1}
+.kpi{display:flex;flex-direction:column;padding:26px 28px 22px;position:relative;cursor:pointer;text-align:left;font:inherit;color:inherit;
      background:var(--surface);border:0;transition:background .16s;overflow:hidden}
 .kpi:hover{background:var(--surface-2)}
 .kpi::after{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:transparent;transition:background .16s}
@@ -285,9 +306,40 @@ h1 em{font-style:italic;color:var(--dim)}
 .kpi .lbl{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
 .kpi .val{font-family:var(--display);font-size:46px;line-height:1;margin:14px 0 8px;
           font-variant-numeric:tabular-nums;letter-spacing:-.03em}
-.kpi .sub{font-size:12.5px;color:var(--dim);line-height:1.45}
+.kpi .sub{font-size:13px;color:var(--dim);line-height:1.5;text-transform:none;letter-spacing:.005em}
+.kpi .eq{display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:0 6px}
+.kpi .eq b{font-family:var(--display);font-weight:500;font-size:19px;line-height:1;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.kpi .eq .eq-ok{color:var(--sky)} .kpi .eq .eq-wo{color:var(--sky)} .kpi .eq .eq-op{color:var(--faint);margin:0 2px}
+.kpi .bar.split{display:flex;height:4px;gap:2px;background:transparent}
+.kpi .bar.split i{height:100%}
+.kpi .split-lg{display:flex;justify-content:space-between;margin-top:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--faint)}
+.kpi.hero .val{font-size:78px;margin:12px 0 10px;letter-spacing:-.04em}
+.kpi.hero .sub{font-size:14px}
 .kpi.mid .val{color:var(--orange)} .kpi.warn .val{color:var(--amber)} .kpi.crit .val{color:var(--crit)} .kpi.ok .val{color:var(--teal)} .kpi.sub .val{color:var(--sky)}
-.kpi .bar{height:2px;background:var(--barbg);margin-top:16px;overflow:hidden}
+.kpi .ucb{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:5px}
+.kpi .ucb .tag{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.kpi .ucb li.ucb-i{cursor:pointer;margin:0 -6px;padding:3px 6px;border-radius:3px;transition:background .14s}
+.kpi .ucb li.ucb-i:hover,.kpi .ucb li.ucb-i:focus-visible{background:var(--raised);outline:none}
+.kpi .ucb li{display:grid;grid-template-columns:minmax(0,172px) minmax(40px,1fr) 30px;align-items:center;gap:14px;font-size:12px;color:var(--dim)}
+.kpi .ucb .tag{justify-self:start}
+.kpi .ucbar{height:5px;background:var(--barbg);border-radius:3px;overflow:hidden}
+.kpi .ucbar i{display:block;height:100%;border-radius:3px;opacity:.85}
+.kpi .ucb li b{text-align:right}
+.kpi .ucb li b{font-family:var(--mono);font-weight:600;color:var(--sky)}
+.kpi .kpi-main{padding-bottom:16px}
+.kpi .bar{height:2px;background:var(--barbg);margin-top:auto;overflow:hidden;flex:0 0 auto}
+/* kad CPC Status (WO): nombor di kiri, pecahan Status CPC di kanan */
+.kpi .kpi-split{display:flex;align-items:flex-start;gap:26px}
+.kpi .kpi-split .kpi-main{flex:0 0 280px}
+.kpi .wo-split{display:flex;flex-direction:column;gap:4px;margin-top:16px}
+.kpi .wo-s{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--dim);text-transform:none;letter-spacing:0;
+           margin:0 -8px;padding:4px 8px;border-radius:3px;cursor:pointer;transition:background .14s}
+.kpi .wo-s i{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+.kpi .wo-s b{margin-left:auto;font-family:var(--mono);font-weight:600;color:var(--ink)}
+.kpi .wo-s:hover,.kpi .wo-s:focus-visible{background:var(--raised);outline:none}
+.kpi .wo-s.on{background:var(--raised);color:var(--ink)}
+.kpi .kpi-split .ucb{flex:1 1 auto;min-width:0;margin:2px 0 16px;padding-left:28px;border-left:1px solid var(--line);
+  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));column-gap:44px;row-gap:4px;align-content:start}
 .kpi .bar i{display:block;height:100%;background:var(--dim)}
 .kpi.mid .bar i{background:var(--orange)} .kpi.warn .bar i{background:var(--amber)} .kpi.crit .bar i{background:var(--crit)} .kpi.ok .bar i{background:var(--teal)} .kpi.sub .bar i{background:var(--sky)}
 .kpi .hint{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
@@ -312,11 +364,12 @@ h1 em{font-style:italic;color:var(--dim)}
 .rc-mid{background:var(--amber)}
 .rc-e90{background:var(--yellow)} .rc-e365{background:var(--orange)} .rc-e2y{background:var(--red2)}
 .rc-act{background:var(--slate)} .rc-cpc{background:var(--teal)}
-.rc-sub{background:var(--sky)}
+.rc-sub{background:var(--sky)} .rc-wo{background:var(--aqua)}
 .rc-nd{background:repeating-linear-gradient(45deg,var(--rc-nd-a) 0 5px,var(--rc-nd-b) 5px 10px)}
 .rc-drop{background:var(--rc-drop)}
 .rc-nd,.rc-drop{color:var(--dim)}
-.recon-key{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;margin-top:1px;background:var(--line)}
+.recon-key{display:grid;grid-template-columns:repeat(6,1fr);gap:0;margin-top:1px;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.recon-key .rkey{border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
 .rkey{background:var(--surface);border:0;padding:14px 14px 13px;text-align:left;cursor:pointer;
       font:inherit;color:inherit;transition:background .14s;text-transform:none;letter-spacing:0}
 .rkey:hover{background:var(--surface-2)}
@@ -355,7 +408,7 @@ h1 em{font-style:italic;color:var(--dim)}
 .track:hover span{filter:brightness(1.22)}
 .s-crit{background:var(--crit)} .s-exp{background:var(--amber)} .s-mid{background:var(--amber)}
 .s-e90{background:var(--yellow)} .s-e365{background:var(--orange)} .s-e2y{background:var(--red2)}
-.s-act{background:var(--slate)} .s-cpc{background:var(--teal)} .s-sub{background:var(--sky)}
+.s-act{background:var(--slate)} .s-cpc{background:var(--teal)} .s-sub{background:var(--sky)} .s-wo{background:var(--aqua)}
 .s-nd{background:repeating-linear-gradient(45deg,var(--hatch-a) 0 3px,var(--hatch-b) 3px 6px)}
 .legend{display:flex;flex-wrap:wrap;gap:20px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line);
         font-size:12px;color:var(--dim)}
@@ -739,12 +792,19 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim);background:transpare
   .filepill{flex:1}
 
   /* KPI: dua lajur, lebih padat */
-  .kpis{grid-template-columns:repeat(2,1fr)}
-  .kpi.sp3,.kpi.sp4,.kpi.sp6{grid-column:auto}
+  .kgrid{grid-template-columns:repeat(2,1fr)}
+  .kpi.sp3,.kpi.sp4,.kpi.sp6,.kpi.sp8{grid-column:auto}
   .kpi{padding:16px 14px}
   .kpi .val{font-size:32px;margin:10px 0 6px}
+  .kpi.hero .val{font-size:44px}
+  .kgrid > .kpi:last-child:nth-child(odd){grid-column:1/-1}
   .kpi .sub{font-size:11.5px}
   .kpi .hint{display:none}
+  .kpi.has-uc{grid-column:1/-1}
+  .kpi .kpi-split{flex-direction:column;gap:0}
+  .kpi .kpi-split .kpi-main{flex:none}
+  .kpi .kpi-split .ucb{grid-template-columns:1fr}
+  .kpi .kpi-split .ucb{width:100%;padding-left:0;border-left:0;border-top:1px solid var(--line);padding-top:12px}
 
   .panel{padding:20px 16px}
   .recon-key{grid-template-columns:1fr}
@@ -794,8 +854,8 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim);background:transpare
   .toast.show{transform:translateY(-4px)}
 }
 @media (max-width:420px){
-  .kpis{grid-template-columns:1fr}
-  .kpi.sp3,.kpi.sp4,.kpi.sp6{grid-column:auto}
+  .kgrid{grid-template-columns:1fr}
+  .kpi.sp3,.kpi.sp4,.kpi.sp6,.kpi.sp8{grid-column:auto}
   .c-meta{grid-template-columns:1fr}
 }
 
@@ -837,6 +897,7 @@ thead th:first-child::after,tbody td:first-child::after{
   content:"";position:absolute;top:0;bottom:0;right:0;width:1px;background:var(--line)}
 tbody td{padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink)}
 tbody tr:hover td{background:var(--hover);color:var(--ink)}
+td.upd{min-width:180px;max-width:320px;white-space:normal}
 td.proj{min-width:300px;max-width:440px;color:var(--ink);font-family:var(--display);font-size:15px}
 td.rno{font-family:var(--mono);font-size:12px;color:var(--faint);text-align:right;
        white-space:nowrap;font-variant-numeric:tabular-nums;width:48px;padding-right:16px}
@@ -855,6 +916,18 @@ td.num,td.dt{font-family:var(--mono);font-size:12.5px;white-space:nowrap;font-va
 .tag.drop{color:var(--faint);background:var(--well)}
 .tag.nd{color:var(--dim);background:transparent;border-style:dashed}
 .tag.sub{color:var(--sky);background:var(--sky-soft)}
+.tag.wo{color:var(--aqua);background:var(--aqua-soft)}
+/* Status CPC (lajur CK) — palet berasingan daripada tag Status */
+.tag.u-done{color:var(--u-done);background:var(--u-done-soft);border-color:var(--u-done-line);font-weight:600}
+.tag.u-done::before{content:'\2713';margin-right:5px;font-weight:700}
+.tag.u-lime{color:var(--u-lime);background:var(--u-lime-soft)}
+.tag.u-violet{color:var(--u-violet);background:var(--u-violet-soft)}
+.tag.u-indigo{color:var(--u-indigo);background:var(--u-indigo-soft)}
+.tag.u-magenta{color:var(--u-magenta);background:var(--u-magenta-soft)}
+.tag.u-pink{color:var(--u-pink);background:var(--u-pink-soft)}
+.tag.u-silver{color:var(--u-silver);background:var(--u-silver-soft);border-color:var(--u-silver)}
+.tag.u-clay{color:var(--u-clay);background:var(--u-clay-soft)}
+.tag.u-none{color:var(--faint);background:transparent;border-style:dotted}
 .hintx{font-size:11px;color:var(--faint);letter-spacing:0}
 .days{font-family:var(--mono);font-size:11px;color:var(--amber)}
 .days.frozen{color:var(--sky)}
@@ -890,8 +963,8 @@ footer.credit{margin-top:32px;padding-top:20px;border-top:1px solid var(--line)}
 
 @media (max-width:1000px){
   .dslicers{grid-template-columns:1fr}
-  .kpis{grid-template-columns:repeat(2,1fr)}
-  .kpi.sp3,.kpi.sp4,.kpi.sp6{grid-column:auto}
+  .kgrid{grid-template-columns:repeat(2,1fr)}
+  .kpi.sp3,.kpi.sp4,.kpi.sp6,.kpi.sp8{grid-column:auto}
   .slicers{grid-template-columns:1fr}
   .mast-meta{text-align:left}
 }
@@ -1742,6 +1815,8 @@ function findTelcoCol(hdr){
   return -1;
 }
 
+/* Lajur CK dalam fail induk = Update CPC; dipaparkan sebagai "Status CPC" */
+const UC_COL = colIdx('CK1');
 function sheetsToRows(sheets){
   const rows = [], summary = [], skipped = [];
 
@@ -1779,7 +1854,8 @@ function sheetsToRows(sheets){
         pc: map.pc !== undefined ? cellDate(r[map.pc]) : null,
         kc: map.kc !== undefined ? cellDate(r[map.kc]) : null,
         kp: map.kp !== undefined ? cellDate(r[map.kp]) : null,
-        sc: (map.sc !== undefined ? cellText(r[map.sc]) : '').toUpperCase()
+        sc: (map.sc !== undefined ? cellText(r[map.sc]) : '').toUpperCase(),
+        uc: cellText(r[UC_COL])
       });
     }
   }
@@ -1840,7 +1916,8 @@ function derive(rows){
   r.dk = dw && dc ? 'b' : (dw ? 'w' : (dc ? 'c' : null));
   if(dw || dc) r.state='drop';
   else if(r.kc || r.sc==='YES') r.state='cpc';
-  else if(r.mc) r.state='sub';
+  else if(r.mc && r.pc) r.state='sub';   /* ada CPC WO + CPC Submitted */
+  else if(r.mc) r.state='wo';             /* ada CPC WO, belum submit */
   else if(!r.eff) r.state='nd';
   else if(r.days!==null && r.days>730) r.state='e2y';
   else if(r.days!==null && r.days>365) r.state='crit';
@@ -1851,8 +1928,8 @@ function derive(rows){
   r.open = ['exp','mid','e365','crit','e2y'].includes(r.state);
 }); }
 
-const LBL = {exp:'Expired 0\u201390 days', mid:'Expired 91\u2013180 days', e365:'Expired 181\u2013365 days', crit:'Expired 1\u20132 years', e2y:'Expired over 2 years', act:'Still active', sub:'CPC submitted', cpc:'CPC complete', nd:'WP still in progress', drop:'Drop'};
-const CLS = {crit:'crit', e2y:'e2y', exp:'e90', mid:'exp', e365:'e365', act:'no', sub:'sub', cpc:'ok', nd:'nd', drop:'drop'};
+const LBL = {exp:'Expired 0\u201390 days', mid:'Expired 91\u2013180 days', e365:'Expired 181\u2013365 days', crit:'Expired 1\u20132 years', e2y:'Expired over 2 years', act:'Still active', wo:'CPC active', sub:'CPC submitted', cpc:'CPC complete', nd:'WP still in progress', drop:'Drop'};
+const CLS = {crit:'crit', e2y:'e2y', exp:'e90', mid:'exp', e365:'e365', act:'no', wo:'wo', sub:'sub', cpc:'ok', nd:'nd', drop:'drop'};
 const DROPLBL = {w:'Drop WP', c:'Drop CPC', b:'Drop WP + CPC'};
 const lblOf = r => r.state==='drop' ? DROPLBL[r.dk] : LBL[r.state];
 
@@ -1876,7 +1953,8 @@ const SGROUP = {
   open: ['exp','mid','e365','crit','e2y'],
   g1y:  ['crit','e2y'],
   g180: ['mid','e365'],
-  gcpc: ['sub','cpc']
+  gcpc: ['wo','sub','cpc'],
+  gwo:  ['wo','sub']
 };
 const F = {telco:new Set(), wp:new Set(), cpc:new Set(), st:new Set(),
            dte:new Set(), dtl:new Set(), dmc:new Set(), dkc:new Set(), state:'', pbm:'', q:'', check:null};
@@ -1920,43 +1998,114 @@ const grp = k => base.filter(r=>SGROUP[k].includes(r.state)).length;
 const pc = v => N ? v/N*100 : 0;
 const ALL = DATA.rows.length;
 const narrowed = N !== ALL;
+/* pecahan lajur CK (Update CPC) bagi rekod "CPC Status (WO)" */
+const ucMap = {};
+base.filter(r=>r.state==='wo'||r.state==='sub').forEach(r=>{
+  const k = (r.uc || 'No update').toUpperCase();
+  ucMap[k] = (ucMap[k] || 0) + 1;
+});
+const ucList = Object.entries(ucMap).sort((a,b)=>b[1]-a[1]);
+const ucMax = ucList.length ? ucList[0][1] : 1;
+const ucVar = c => c==='u-none' ? 'var(--faint)' : `var(--${c})`;
+const ucHTML = ucList.length
+  ? `<ul class="ucb">${ucList.map(([k,n])=>{ const c = ucCls(k);
+      return `<li class="ucb-i" data-uc="${escUC(k)}" role="button" tabindex="0" title="Show ${fmt(n)} records">
+        <span class="tag ${c}">${escUC(k)}</span>
+        <span class="ucbar"><i style="width:${Math.max(4, n/ucMax*100).toFixed(1)}%;background:${ucVar(c)}"></i></span>
+        <b>${fmt(n)}</b></li>`; }).join('')}</ul>`
+  : '';
 const KPIS = [
-  /* baris 1 — jumlah keseluruhan, kemudian permit luput mengikut keterukan */
-  {key:'',     lbl:'Total Application',     val:N, sp:6,
-   sub:narrowed ? `of ${fmt(ALL)} records \u00b7 click to show all` : 'all permit records in the file', cls:''},
-  /* jumlah ketiga-tiga kumpulan luput di bawahnya: permit tamat, belum ada CPC, bukan drop */
-  {key:'open', lbl:'Total Expired',         val:grp('open'), sp:6,
+  /* kumpulan 1 — gambaran keseluruhan; Total Expired jadi angka utama */
+  {g:'ov',  key:'',     lbl:'Total Application',     val:N, sp:4,
+   sub:narrowed ? `of ${fmt(ALL)} records \u00b7 click to show all` : 'All permit records in the file', cls:''},
+  {g:'ov',  key:'open', lbl:'Total Expired',         val:grp('open'), sp:8, hero:true,
    sub:Math.round(pc(grp('open')))+'% of records \u00b7 permit expired, no CPC yet', cls:'crit'},
-  {key:'g1y',  lbl:'Expired over a year',  val:grp('g1y'),  sp:4, sub:'needs immediate follow-up',   cls:'crit'},
-  {key:'g180', lbl:'Expired 91\u2013365 days', val:grp('g180'), sp:4, sub:'expired 3\u201312 months',    cls:'mid'},
-  {key:'exp',  lbl:'Expired 0\u201390 days',   val:cnt('exp'),  sp:4, sub:'expired within the last 90 days', cls:'warn'},
-  /* baris 2 — rekod yang belum masuk kiraan luput */
-  {key:'act',  lbl:'Still active',          val:cnt('act'),  sp:4, sub:'permit still within its term', cls:''},
-  {key:'nd',   lbl:'WP still in progress',  val:cnt('nd'),   sp:4, sub:'no permit expiry date yet',    cls:''},
-  {key:'drop', lbl:'Drop',                  val:cnt('drop'), sp:4, sub:'excluded from the overdue list', cls:''},
-  /* baris 3 — kemajuan CPC */
-  {key:'gcpc', lbl:'Total CPC',             val:grp('gcpc'), sp:4, sub:'submitted + complete',         cls:'ok'},
-  {key:'sub',  lbl:'CPC submitted',         val:cnt('sub'),  sp:4, sub:'order issued, approval pending', cls:'sub'},
-  {key:'cpc',  lbl:'CPC complete',          val:cnt('cpc'),  sp:4, sub:Math.round(pc(cnt('cpc')))+'% of records in view', cls:'ok'}
+  /* kumpulan 2 — permit luput mengikut keterukan */
+  {g:'exp', key:'g1y',  lbl:'Expired over a year',  val:grp('g1y'),  sp:4, sub:'Needs immediate follow-up',   cls:'crit'},
+  {g:'exp', key:'g180', lbl:'Expired 91\u2013365 days', val:grp('g180'), sp:4, sub:'Expired 3\u201312 months ago', cls:'mid'},
+  {g:'exp', key:'exp',  lbl:'Expired 0\u201390 days',   val:cnt('exp'),  sp:4, sub:'Expired within the last 90 days', cls:'warn'},
+  /* kumpulan 3 — rekod yang belum masuk kiraan luput */
+  {g:'nx',  key:'act',  lbl:'Still active',          val:cnt('act'),  sp:4, sub:'Permit still within its term', cls:''},
+  {g:'nx',  key:'nd',   lbl:'WP still in progress',  val:cnt('nd'),   sp:4, sub:'No permit expiry date yet',    cls:''},
+  {g:'nx',  key:'drop', lbl:'Drop',                  val:cnt('drop'), sp:4, sub:'Excluded from the overdue list', cls:''},
+  /* kumpulan 4 — kemajuan CPC */
+  {g:'cpc', key:'gcpc', lbl:'Total Work Order CPC',  val:grp('gcpc'), sp:6, sub:'', cls:'ok'},
+  {g:'cpc', key:'cpc',  lbl:'CPC complete',          val:cnt('cpc'),  sp:6, sub:Math.round(pc(cnt('cpc')))+'% of records in view', cls:'sub'},
+  {g:'cpc', key:'gwo',  lbl:'CPC Status (WO)',       val:grp('gwo'),  sp:12, sub:'Order issued, approval pending', cls:'sub'}
 ].map(k=>({...k, pct:k.key===''?100:pc(k.val)}));
-document.getElementById('kpis').innerHTML = KPIS.map(k=>`
-  <button type="button" class="kpi sp${k.sp} ${k.cls}" data-key="${k.key}" aria-pressed="false">
-    <span class="lbl">${k.lbl}</span>
-    <div class="val">${fmt(k.val)}</div>
-    <div class="sub">${k.sub}</div>
-    <div class="bar"><i style="width:${Math.min(100,k.pct)}%"></i></div>
+const KGROUPS = [
+  {g:'ov',  t:''},
+  {g:'exp', t:'Expired permits, CPC not complete'},
+  {g:'nx',  t:'Not counted as expired'},
+  {g:'cpc', t:'CPC progress'}
+];
+const kCard = k => {
+  const woSplit = k.key==='gwo' ? `<div class="wo-split">
+      <span class="wo-s" data-st="wo" role="button" tabindex="0" title="Filter: CPC active"><i style="background:var(--aqua)"></i>CPC active<b>${fmt(cnt('wo'))}</b></span>
+      <span class="wo-s" data-st="sub" role="button" tabindex="0" title="Filter: CPC submitted"><i style="background:var(--sky)"></i>CPC submitted<b>${fmt(cnt('sub'))}</b></span>
+    </div>` : '';
+  /* Total WO CPC = CPC complete + CPC Status (WO): tunjuk jelas sebagai persamaan + bar dua warna */
+  const nDone = cnt('cpc'), nWo = grp('gwo'), nTot = nDone + nWo;
+  const pDone = nTot ? nDone/nTot*100 : 0;
+  const isTot = k.key==='gcpc';
+  const sub = isTot
+    ? `<span class="eq"><b class="eq-ok">${fmt(nDone)}</b> CPC complete <span class="eq-op">+</span> <b class="eq-wo">${fmt(nWo)}</b> CPC Status (WO)</span>`
+    : k.sub;
+  const main = `<div class="kpi-main">
+      <span class="lbl">${k.lbl}</span>
+      <div class="val">${fmt(k.val)}</div>
+      <div class="sub">${sub}</div>${woSplit}
+    </div>`;
+  const bar = isTot
+    ? `<div class="bar split"><i style="width:${pDone.toFixed(1)}%;background:var(--sky)"></i><i style="width:${(100-pDone).toFixed(1)}%;background:var(--sky);opacity:.4"></i></div>
+       <div class="split-lg"><span>${Math.round(pDone)}% complete</span><span>${nTot?100-Math.round(pDone):0}% awaiting approval</span></div>`
+    : `<div class="bar"><i style="width:${Math.min(100,k.pct)}%"></i></div>`;
+  const uc = k.key==='gwo' ? ucHTML : '';
+  return `
+  <button type="button" class="kpi sp${k.sp} ${k.cls}${k.hero?' hero':''}${k.key==='gwo'?' has-uc':''}" data-key="${k.key}" aria-pressed="false">
+    ${k.key==='gwo' ? `<div class="kpi-split">${main}${uc}</div>` : main}
+    ${bar}
     <div class="hint">${k.key===''?'Show all':'Filter table'}</div>
-  </button>`).join('');
+  </button>`;
+};
+document.getElementById('kpis').innerHTML = KGROUPS.map(G=>`
+  <div class="kgroup">${G.t ? `<p class="kcap">${G.t}</p>` : ''}
+    <div class="kgrid">${KPIS.filter(k=>k.g===G.g).map(kCard).join('')}</div>
+  </div>`).join('');
 }
 /* Setiap KPI ada susunan yang munasabah untuknya: kes luput disusun ikut yang
    paling lama, kes CPC ikut kelulusan terbaru, selebihnya kembali ke susunan tracker. */
 const KPISORT = {
   open:['days',-1], g1y:['days',-1], g180:['days',-1], exp:['days',-1],
   mid:['days',-1], e365:['days',-1], crit:['days',-1], e2y:['days',-1],
-  cpc:['kc',-1], gcpc:['kc',-1], sub:['mc',-1],
+  cpc:['kc',-1], gcpc:['kc',-1], sub:['mc',-1], wo:['mc',-1], gwo:['mc',-1],
   act:['eff',1], nd:['mw',-1], drop:['no',1]
 };
+/* klik satu Status CPC dalam kad CPC Status (WO) -> popup senarai rekod */
+function openUC(key){
+  const rows = DATA.rows.filter(r => pass(r,'state') && (r.state==='wo' || r.state==='sub') &&
+                                     (r.uc || 'No update').toUpperCase() === key);
+  openList({eyebrow:'CPC Status (WO)', title:key, rows,
+            noun:'records with this CPC status', sortK:'mc', sortDir:-1,
+            file:'status_cpc_'+key.replace(/[^0-9a-zA-Z]+/g,'_').toLowerCase()});
+}
+document.getElementById('kpis').addEventListener('keydown',e=>{
+  const ws = e.target.closest('.wo-s');
+  if(ws && (e.key==='Enter' || e.key===' ')){ e.preventDefault(); e.stopPropagation(); woPick(ws.dataset.st); return; }
+  const u = e.target.closest('.ucb-i');
+  if(u && (e.key==='Enter' || e.key===' ')){ e.preventDefault(); e.stopPropagation(); openUC(u.dataset.uc); }
+});
+function woPick(st){
+  F.state = F.state===st ? '' : st;
+  const so = F.state ? KPISORT[F.state] : null;
+  if(so){ sortK = so[0]; sortDir = so[1]; } else { sortK = 'no'; sortDir = 1; }
+  render();
+}
 document.getElementById('kpis').addEventListener('click',e=>{
+  const ws = e.target.closest('.wo-s');
+  if(ws){ e.stopPropagation(); woPick(ws.dataset.st); return; }
+  const u = e.target.closest('.ucb-i');
+  if(u){ e.stopPropagation(); openUC(u.dataset.uc); return; }
   const b = e.target.closest('.kpi'); if(!b) return;
   const k = b.dataset.key;
   F.state = (k==='' ) ? '' : (F.state===k ? '' : k);
@@ -1974,7 +2123,8 @@ const RECON = [
   {k:'exp',  c:'rc-e90',  l:'Expired 0\u201390 days',   d:'Expired up to 90 days, CPC not complete.'},
   {k:'act',  c:'rc-act',  l:'Still Active', d:'Expiry date not yet reached. See the early warning panel.'},
   {k:'nd',   c:'rc-nd',   l:'WP still in progress', d:'No permit expiry date recorded yet, so this record sits in no expiry bucket.'},
-  {k:'sub',  c:'rc-sub',  l:'CPC submitted',    d:'CPC work start order issued, approval pending. Expiry age frozen at the order date.'},
+  {k:'wo',   c:'rc-wo',   l:'CPC active',       d:'CPC work order issued, not yet submitted to PBM.'},
+  {k:'sub',  c:'rc-sub',  l:'CPC submitted',    d:'CPC work order issued and submitted to PBM, approval pending. Expiry age frozen at the order date.'},
   {k:'cpc',  c:'rc-cpc',  l:'CPC complete',      d:'CPC order issued and CPC Status = YES. Case closed.'},
   {k:'drop', c:'rc-drop', l:'Drop',             d:'Cancelled at WP or CPC. Excluded.'}
 ];
@@ -2024,6 +2174,7 @@ const byTelco = telcos.map(t=>{
     e365:rs.filter(r=>r.state==='e365').length,
     e2y:rs.filter(r=>r.state==='e2y').length,
     act:rs.filter(r=>r.state==='act').length,
+    wo:rs.filter(r=>r.state==='wo').length,
     sub:rs.filter(r=>r.state==='sub').length,
     cpc:rs.filter(r=>r.state==='cpc').length,
     nd:rs.filter(r=>r.state==='nd').length,
@@ -2037,13 +2188,14 @@ document.getElementById('telcobars').innerHTML = byTelco.map(x=>{
   return `<div class="tbar${on?' on':''}${anySel&&!on?' off':''}">
     <div class="tbar-head"><span class="nm">${x.t}</span>
       <span class="ct">${x.n? fmt(x.crit+x.exp)+' expired &middot; '+fmt(x.n)+' records' : 'no records'}</span></div>
-    <div class="track" data-telco="${x.t}" title="${on?'Click to clear filter':'Click to filter'} — ${x.t}: ${x.crit+x.e2y} expired >1yr, ${x.e365+x.mid+x.exp} expired <1yr, ${x.act} active, ${x.sub} CPC submitted, ${x.cpc} CPC complete">
+    <div class="track" data-telco="${x.t}" title="${on?'Click to clear filter':'Click to filter'} — ${x.t}: ${x.crit+x.e2y} expired >1yr, ${x.e365+x.mid+x.exp} expired <1yr, ${x.act} active, ${x.wo} CPC active, ${x.sub} CPC submitted, ${x.cpc} CPC complete">
       <span class="s-crit" style="width:${w(x.crit)}"></span>
       <span class="s-exp" style="width:${w(x.exp)}"></span>
       <span class="s-mid" style="width:${w(x.mid)}"></span>
       <span class="s-e365" style="width:${w(x.e365)}"></span>
       <span class="s-e2y" style="width:${w(x.e2y)}"></span>
       <span class="s-act" style="width:${w(x.act)}"></span>
+      <span class="s-wo" style="width:${w(x.wo)}"></span>
       <span class="s-sub" style="width:${w(x.sub)}"></span>
       <span class="s-cpc" style="width:${w(x.cpc)}"></span>
       <span class="s-nd" style="width:${w(x.nd)}"></span>
@@ -2182,7 +2334,7 @@ let moSortK = 'days', moSortDir = -1;
 
 function moSorted(){
   if(!MO) return [];
-  const order = {e2y:0,crit:1,e365:2,mid:3,exp:4,sub:5,nd:6,act:7,cpc:8,drop:9};
+  const order = {e2y:0,crit:1,e365:2,mid:3,exp:4,wo:5,sub:6,nd:7,act:8,cpc:9,drop:10};
   const swOrder = {YES:0, NO:1, DROP:2};
   return MO.rows.slice().sort((a,b)=>{
     if(moSortK==='no') return (a.uid - b.uid) * moSortDir;
@@ -2220,6 +2372,7 @@ function moDraw(){
         <div><dt>CPC WO</dt><dd>${dstr(r.mc)}</dd></div>
         <div><dt>CPC Submitted</dt><dd>${dstr(r.pc)}</dd></div>
         <div><dt>CPC approval</dt><dd>${dstr(r.kc)}</dd></div>
+        <div><dt>Status CPC</dt><dd>${ucTag(r.uc)}</dd></div>
       </dl>
     </td>
     ${rowCells(r, cell5)}</tr>`).join('') +
@@ -2286,10 +2439,10 @@ document.getElementById('mo-filter').addEventListener('click',()=>{
 document.getElementById('mo-csv').addEventListener('click',()=>{
   if(!MO) return;
   const head = ['Row','No','Telco','Project Name','PBM','WP Work Start','WP Approval',
-                'WP Status','WP Expiry','Extension Expiry','Aging (days)','CPC WO','CPC Submitted','CPC Approval','CPC Status','Status'];
+                'WP Status','WP Expiry','Extension Expiry','Aging (days)','CPC WO','CPC Submitted','CPC Approval','CPC Complete','Status CPC','Status'];
   const esc = v => '"'+String(v??'').replace(/"/g,'""')+'"';
   const body = moSorted().map(r=>[r.uid,r.no,r.t,r.p,r.b,r.mw||'',r.kp||'',r.sw,r.te||'',r.tl||'',
-                                  (r.days!==null&&r.days>0)?r.days:'',r.mc||'',r.pc||'',r.kc||'',r.sc,lblOf(r)].map(esc).join(','));
+                                  (r.days!==null&&r.days>0)?r.days:'',r.mc||'',r.pc||'',r.kc||'',r.sc,r.uc||'',lblOf(r)].map(esc).join(','));
   const blob = new Blob(['\ufeff'+[head.map(esc).join(',')].concat(body).join('\r\n')],{type:'text/csv;charset=utf-8'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -2550,7 +2703,7 @@ function buildSlicers(){
     {id:'sl-wp',    dim:'wp',    field:'sw', vals:uniq('sw')},
     {id:'sl-cpc',   dim:'cpc',   field:'sc', vals:uniq('sc')},
     {id:'sl-state', dim:'st',    field:'state', dot:true,
-     vals:['e2y','crit','e365','mid','exp','sub','nd','act','cpc','drop']
+     vals:['e2y','crit','e365','mid','exp','wo','sub','nd','act','cpc','drop']
            .filter(k=>DATA.rows.some(r=>r.state===k))}
   ];
 }
@@ -2675,6 +2828,7 @@ const COLS = [
   {k:'mc', h:'CPC WO',        cls:'dt'},
   {k:'pc', h:'CPC Submitted', cls:'dt'},   /* Tarikh Permohonan CPC ke PBM */
   {k:'kc', h:'CPC Approval',  cls:'dt'},
+  {k:'uc', h:'Status CPC',    cls:'upd'},   /* lajur CK (Update CPC) */
   {k:'state',h:'Status',      cls:''}
 ];
 /* jadual render sehingga had ini; lebihannya dinyatakan dengan jelas di hujung jadual */
@@ -2696,11 +2850,27 @@ function cellHTML(r, c, cell5){
     case 'days':  return `<td class="num">${cell5 ? cell5(r) : ageCell(r)}</td>`;
     case 'state': return `<td><span class="tag ${CLS[r.state]}">${lblOf(r)}</span></td>`;
     case 'sw':    return `<td><span class="tag ${swCls(r.sw)}">${swLbl(r.sw)}</span></td>`;
+    case 'uc':    return `<td class="upd">${ucTag(r.uc)}</td>`;
     default:      return `<td class="${c.cls}">${dstr(r[c.k])}</td>`;
   }
 }
 function swCls(v){ return v==='YES' ? 'ok' : (v==='DROP' ? 'drop' : 'no'); }
 function swLbl(v){ return v==='YES' ? 'YES' : (v==='DROP' ? 'Drop' : (v || 'NO')); }
+/* warna tag Status CPC (lajur CK) — ikut palet status sedia ada */
+function ucCls(v){
+  const u = String(v||'').toUpperCase();
+  if(/COMPLETE|SELESAI|CPC APPROVE|APPROVED/.test(u)) return 'u-done';
+  if(/APPROVAL/.test(u))   return 'u-lime';
+  if(/JSV/.test(u))        return 'u-violet';
+  if(/SUBMISSION/.test(u)) return 'u-indigo';
+  if(/DOCUMENT/.test(u))   return 'u-magenta';
+  if(/AMENDMENT/.test(u))  return 'u-pink';
+  if(/INVOICE/.test(u))    return 'u-silver';
+  if(/PAYMENT/.test(u))    return 'u-clay';
+  return 'u-none';
+}
+function ucTag(v){ return v ? `<span class="tag ${ucCls(v)}">${escUC(v)}</span>` : '\u2014'; }
+function escUC(v){ return String(v).replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch])); }
 function rowCells(r, cell5){ return COLS.map(c => cellHTML(r, c, cell5)).join(''); }
 
 /* sel umur tamat: 0 hari dipapar bila arahan CPC keluar sebelum permit tamat */
@@ -2794,7 +2964,7 @@ function current(){
   F.q = document.getElementById('q').value.trim().toLowerCase();
   F.pbm = selP.value;
   let out = DATA.rows.filter(r=>pass(r,null));
-  const order = {e2y:0,crit:1,e365:2,mid:3,exp:4,nd:5,act:6,cpc:7,drop:8};
+  const order = {e2y:0,crit:1,e365:2,mid:3,exp:4,wo:5,sub:6,nd:7,act:8,cpc:9,drop:10};
   out.sort((a,b)=>{
     /* Bil berulang setiap telco, jadi tanpa pengasing telco senarai jadi
        semua "1" bertimbun, kemudian semua "2". Telco jadi kunci utama. */
@@ -2869,6 +3039,7 @@ function render(){
   drawSoon();
   drawTrend();
   drawChecks();
+  document.getElementById('kpis').querySelectorAll('.wo-s').forEach(w=>w.classList.toggle('on', w.dataset.st===F.state));
   document.getElementById('kpis').querySelectorAll('.kpi').forEach(b=>{
     const on = b.dataset.key!=='' && b.dataset.key===F.state;
     b.classList.toggle('on', on);
@@ -2899,6 +3070,7 @@ function render(){
         <div><dt>CPC WO</dt><dd>${dstr(r.mc)}</dd></div>
         <div><dt>CPC Submitted</dt><dd>${dstr(r.pc)}</dd></div>
         <div><dt>CPC Approval</dt><dd>${dstr(r.kc)}</dd></div>
+        <div><dt>Status CPC</dt><dd>${ucTag(r.uc)}</dd></div>
       </dl>
     </td>
     ${rowCells(r)}
@@ -2968,10 +3140,10 @@ document.getElementById('reset').addEventListener('click',()=>{
 document.getElementById('csv').addEventListener('click',()=>{
   const rows = current();
   const head = ['Row','No','Telco','Project Name','PBM','WP Work Start','WP Approval',
-                'WP Status','WP Expiry (original)','Extension Expiry','WP Expiry','Aging (days)','CPC WO','CPC Submitted','CPC Approval','CPC Status','Status'];
+                'WP Status','WP Expiry (original)','Extension Expiry','WP Expiry','Aging (days)','CPC WO','CPC Submitted','CPC Approval','CPC Complete','Status CPC','Status'];
   const esc = v => '"'+String(v??'').replace(/"/g,'""')+'"';
   const body = rows.map(r=>[r.uid,r.no,r.t,r.p,r.b,r.mw||'',r.kp||'',r.sw,r.te||'',r.tl||'',r.eff||'',
-                            (r.days!==null&&r.days>0)?r.days:'',r.mc||'',r.pc||'',r.kc||'',r.sc,lblOf(r)].map(esc).join(','));
+                            (r.days!==null&&r.days>0)?r.days:'',r.mc||'',r.pc||'',r.kc||'',r.sc,r.uc||'',lblOf(r)].map(esc).join(','));
   const blob = new Blob(['\ufeff'+[head.map(esc).join(',')].concat(body).join('\r\n')],
                         {type:'text/csv;charset=utf-8'});
   const a = document.createElement('a');
@@ -3408,7 +3580,8 @@ function fieldRows(r){
     ['Telco', `<dd>${r.t}</dd>`],
     ['PBM terlibat', `<dd>${r.b}</dd>`, true],
     ['Status WP', r.sw ? `<dd class="mono">${r.sw}</dd>` : null],
-    ['Status CPC', r.sc ? `<dd class="mono">${r.sc}</dd>` : null],
+    ['CPC complete', r.sc ? `<dd class="mono">${r.sc}</dd>` : null],
+    ['Status CPC', r.uc ? `<dd>${ucTag(r.uc)}</dd>` : null, true],
     ['WP work start order', val(dstrOrNull(r.mw), 'mono')],
     ['Permit expiry date', val(dstrOrNull(r.te), 'mono')],
     ['Extension application date', val(dstrOrNull(r.ml), 'mono')],
@@ -3571,7 +3744,7 @@ function hubSnapshot(){
     const R = DATA.rows, has = k => r => SGROUP[k].includes(r.state);
     localStorage.setItem('cpc-hub', JSON.stringify({
       over: R.filter(has('open')).length,          /* permit sudah tamat, belum selesai CPC */
-      pend: R.filter(r => r.state === 'sub').length,/* arahan CPC keluar, menunggu kelulusan */
+      pend: R.filter(r => r.state === 'sub' || r.state === 'wo').length,/* arahan CPC keluar, menunggu kelulusan */
       done: R.filter(r => r.state === 'cpc').length,
       total: R.length,
       src: DATA.src || '',
