@@ -1,16 +1,16 @@
 /* Utara Infra Dashboard Hub — service worker
    Bump CACHE_VERSION whenever you publish updated dashboard files. */
-var CACHE_VERSION = 'uisb-v3';
+var CACHE_VERSION = 'uisb-v4';
 var SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
   './UISB_NEW.png',
-  './icons/favicon.ico',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-  './icons/maskable-512.png',
-  './icons/apple-touch-icon.png'
+  './favicon.ico',
+  './icon-192.png',
+  './icon-512.png',
+  './maskable-512.png',
+  './apple-touch-icon.png'
 ];
 
 self.addEventListener('install', function(e){
@@ -45,7 +45,7 @@ self.addEventListener('fetch', function(e){
   // Pages, manifest and app icons: network first so a redeploy is picked up straight away,
   // falling back to cache when offline.
   var isPage = req.mode === 'navigate' || url.pathname.endsWith('.html') ||
-               url.pathname.endsWith('.webmanifest') || url.pathname.indexOf('/icons/') !== -1;
+               url.pathname.endsWith('.webmanifest') || /\.(png|ico)$/.test(url.pathname) && /(icon|favicon)/.test(url.pathname);
   if(isPage){
     e.respondWith(
       fetch(req).then(function(res){
