@@ -1,4 +1,5 @@
 {
+  "id": "uisb-dashboard-hub",
   "name": "Utara Infra Dashboard Hub",
   "short_name": "Utara Infra",
   "description": "Progress reports and operational metrics for Utara Infra projects.",

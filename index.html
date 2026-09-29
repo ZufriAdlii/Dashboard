@@ -951,6 +951,15 @@
     </div>
   </div>
 
+  <div class="sheet-backdrop" id="help-sheet">
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="help-sheet-title">
+      <h3 id="help-sheet-title">Install aplikasi</h3>
+      <p id="help-sheet-why"></p>
+      <ol id="help-sheet-steps"></ol>
+      <button class="sheet-close" id="help-sheet-close" type="button">Faham</button>
+    </div>
+  </div>
+
 <script>
 /* Kad CPC: tunjuk angka terkini dari kali terakhir dashboard CPC dibuka pada komputer ini.
    Tiada ringkasan → kekal dengan teks umum, supaya tiada nombor lapuk. */
@@ -1107,10 +1116,48 @@
     if(!isStandalone()) btn.classList.add('show');
   });
 
-  // iOS has no install prompt API, so show the button and explain the steps.
-  if(isIOS && !isStandalone()){
+  // Always offer the button outside the installed app. When the browser has not
+  // offered an install prompt, the button explains why and what to do instead.
+  if(!isStandalone()){
     btn.classList.add('show');
   }
+
+  var help = document.getElementById('help-sheet');
+  var helpWhy = document.getElementById('help-sheet-why');
+  var helpSteps = document.getElementById('help-sheet-steps');
+  function setSteps(items){
+    helpSteps.textContent = '';
+    items.forEach(function(t){
+      var li = document.createElement('li');
+      li.innerHTML = t; helpSteps.appendChild(li);
+    });
+  }
+  function openHelp(){
+    var isEdge = /Edg\//.test(navigator.userAgent);
+    var appsUrl = isEdge ? 'edge://apps' : 'chrome://apps';
+    if(location.protocol === 'file:'){
+      helpWhy.textContent = 'Dashboard ini dibuka terus dari folder dalam komputer (alamat bermula dengan file:///). Pelayar hanya membenarkan install dari alamat https://.';
+      setSteps([
+        'Muat naik folder dashboard ke hosting (contohnya <strong>Netlify</strong> atau <strong>GitHub Pages</strong>)',
+        'Buka dashboard melalui alamat <strong>https://</strong> yang diberi',
+        'Tekan butang <strong>Install app</strong> ini sekali lagi'
+      ]);
+    } else if(!window.isSecureContext){
+      helpWhy.textContent = 'Alamat ini bukan https://, jadi pelayar tidak membenarkan install.';
+      setSteps(['Buka dashboard menggunakan alamat yang bermula dengan <strong>https://</strong>', 'Tekan butang <strong>Install app</strong> sekali lagi']);
+    } else {
+      helpWhy.textContent = 'Pelayar belum menawarkan install. Biasanya ini kerana versi lama aplikasi (ikon huruf "U") masih terpasang dalam komputer ini.';
+      setSteps([
+        'Buka tab baru dan taip <strong>' + appsUrl + '</strong>',
+        'Klik kanan <strong>Utara Infra Dashboard Hub</strong> dan pilih <strong>' + (isEdge ? 'Uninstall' : 'Remove from Chrome') + '</strong>',
+        'Kembali ke dashboard dan tekan <strong>Ctrl + Shift + R</strong>',
+        'Tekan <strong>Install app</strong> sekali lagi, atau guna menu pelayar: ' + (isEdge ? '<strong>⋯ → Apps → Install this site as an app</strong>' : '<strong>⋮ → Cast, save and share → Install page as app</strong>')
+      ]);
+    }
+    help.classList.add('open');
+  }
+  document.getElementById('help-sheet-close').addEventListener('click', function(){ help.classList.remove('open'); });
+  help.addEventListener('click', function(e){ if(e.target === help) help.classList.remove('open'); });
 
   btn.addEventListener('click', function(){
     if(deferredPrompt){
@@ -1123,6 +1170,8 @@
       });
     } else if(isIOS){
       sheet.classList.add('open');
+    } else {
+      openHelp();
     }
   });
 
@@ -1131,19 +1180,20 @@
     if(e.target === sheet) sheet.classList.remove('open');
   });
   document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape') sheet.classList.remove('open');
+    if(e.key === 'Escape'){ sheet.classList.remove('open'); help.classList.remove('open'); }
   });
 
   window.addEventListener('appinstalled', function(){
     deferredPrompt = null;
     btn.classList.remove('show');
     btnText.textContent = 'Installed';
+    help.classList.remove('open');
   });
 
   // Service worker: required for install, and gives offline access.
   if('serviceWorker' in navigator){
     window.addEventListener('load', function(){
-      navigator.serviceWorker.register('sw.js').catch(function(err){
+      navigator.serviceWorker.register('sw.js').then(function(reg){ reg.update(); }).catch(function(err){
         console.warn('Service worker registration failed:', err);
       });
     });

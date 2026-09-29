@@ -1,6 +1,6 @@
 /* Utara Infra Dashboard Hub — service worker
    Bump CACHE_VERSION whenever you publish updated dashboard files. */
-var CACHE_VERSION = 'uisb-v2';
+var CACHE_VERSION = 'uisb-v3';
 var SHELL = [
   './',
   './index.html',
@@ -42,9 +42,10 @@ self.addEventListener('fetch', function(e){
   var url = new URL(req.url);
   if(url.origin !== self.location.origin) return;
 
-  // Pages: network first so a redeploy is picked up straight away,
+  // Pages, manifest and app icons: network first so a redeploy is picked up straight away,
   // falling back to cache when offline.
-  var isPage = req.mode === 'navigate' || url.pathname.endsWith('.html');
+  var isPage = req.mode === 'navigate' || url.pathname.endsWith('.html') ||
+               url.pathname.endsWith('.webmanifest') || url.pathname.indexOf('/icons/') !== -1;
   if(isPage){
     e.respondWith(
       fetch(req).then(function(res){
