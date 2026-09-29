@@ -1,11 +1,16 @@
 /* Utara Infra Dashboard Hub — service worker
    Bump CACHE_VERSION whenever you publish updated dashboard files. */
-var CACHE_VERSION = 'uisb-v1';
+var CACHE_VERSION = 'uisb-v2';
 var SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
-  './UISB_NEW.png'
+  './UISB_NEW.png',
+  './icons/favicon.ico',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/maskable-512.png',
+  './icons/apple-touch-icon.png'
 ];
 
 self.addEventListener('install', function(e){

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="icon" href="icons/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Deposit Recovery Tracker — Home Page</title>
@@ -1084,366 +1087,6 @@
   #gate-overlay .gright, #udmGateOverlay .gright{ padding:24px 20px !important; }
 }
 </style>
-
-<style id="mobile-gate-fix">
-#gate-overlay .d-mob{display:none}   /* asas, mesti sebelum media query */
-/* =====================================================================
-   Pembetulan mudah alih untuk skrin muat naik
-   1. Tatal: align-items:center + overflow-y:auto menyebabkan bahagian
-      atas kotak keluar dari kawasan boleh tatal. flex-start membaikinya.
-   2. Kawasan selamat: viewport-fit=cover menghantar kandungan ke bawah
-      status bar iPhone, jadi env(safe-area-inset-*) diperlukan.
-   3. Susunan: kotak muat naik dinaikkan ke atas teks penerangan supaya
-      tindakan utama berada dalam skrin pertama.
-   ===================================================================== */
-@media (max-width:880px){
-  #gate-overlay{
-    align-items:flex-start;
-    padding-top:max(18px, env(safe-area-inset-top));
-    padding-bottom:max(18px, env(safe-area-inset-bottom));
-    padding-left:max(14px, env(safe-area-inset-left));
-    padding-right:max(14px, env(safe-area-inset-right));
-    overscroll-behavior:contain;
-    -webkit-overflow-scrolling:touch;
-  }
-
-  /* gleft dileburkan supaya anak-anaknya boleh disusun semula satu per satu */
-  #gate-overlay .gleft{display:contents}
-  #gate-overlay .gbox{
-    display:flex; flex-direction:column;
-    padding:24px 20px calc(24px + env(safe-area-inset-bottom));
-    margin:auto 0;
-  }
-  #gate-overlay .gright{padding:0; margin:22px 0 0}
-
-  #gate-overlay .gback{order:1}
-  #gate-overlay .glogo{order:2}
-  #gate-overlay .geyebrow{order:3}
-  #gate-overlay h1{order:4; font-size:27px; margin-bottom:0}
-  #gate-overlay .gright{order:5}
-  #gate-overlay .gdesc{order:6; margin:26px 0 0; font-size:14px}
-  #gate-overlay .gfeats{order:7; margin:22px 0 0}
-  #gate-overlay .gby{order:8; margin-top:22px}
-  #gate-overlay .gnote{order:9}
-
-  /* display:contents menjadikan anak-anak gleft ahli flex, dan stretch lalai
-     meregangkan logo serta butang ke seluruh lebar - kunci saiz asalnya */
-  #gate-overlay .glogo{align-self:flex-start; width:auto; height:44px; margin-bottom:20px}
-
-  /* sasaran sentuh 44px mengikut garis panduan iOS dan Android */
-  #gate-overlay .gback{min-height:44px; padding:0 14px 0 11px; font-size:10.5px}
-  #gate-overlay .gbtn{min-height:44px; flex:1 1 auto; padding:0 16px}
-  #gate-overlay .gdrop{padding:30px 18px}
-  #gate-overlay .gdrop svg{width:32px; height:32px; margin-bottom:12px}
-  #gate-overlay .gdrop .big{font-size:19px}
-
-  /* tiada apa yang boleh di-"drop" pada telefon */
-  #gate-overlay .d-desk{display:none}
-  #gate-overlay .d-mob{display:inline}
-}
-</style>
-
-<style id="mobile-shell-fix">
-@media (max-width:860px){
-  .sidebar{padding-top:max(14px, env(safe-area-inset-top)) !important}
-  .main{padding-bottom:calc(34px + env(safe-area-inset-bottom))}
-  .back-btn{min-height:44px !important}
-  .update-file-btn{min-height:44px !important}
-}
-</style>
-
-<style id="theme-alt">
-/* Tema "dark" dijana daripada tema asal.
-   Sidebar dan skrin gate sengaja dikekalkan gelap. */
-:root[data-theme="dark"]{--page-bg:#202023; --card-bg:#0e0e0e; --card-border:#242428; --text-dark:#d2d2d8; --text-muted:#8c8c94; --accent-red:#bf2b2b; --accent-teal:#21cabc; --accent-purple:#8f81f1; --accent-blue:#2f6fcf; --accent-green:#2bbf6b; --accent-amber:#c68a25; --pic-blue:#3868c7; --pic-tan:#b5874e; --telco-blue:#2665c5; --telco-yellow:#dead19; --shadow: 0 1px 2px rgba(223,223,226,0.06), 0 4px 14px rgba(223,223,226,0.06)}
-:root[data-theme="dark"] body{background:
-      radial-gradient(900px 500px at 85% -10%, rgba(143,129,241,0.06), transparent 60%),
-      radial-gradient(700px 500px at -5% 100%, rgba(33,202,188,0.05), transparent 60%),
-      var(--page-bg)}
-:root[data-theme="dark"] .topbar h1{color:#dfdfe2}
-:root[data-theme="dark"] .tk-card{background:#131318}
-:root[data-theme="dark"] .filter-group select{border:1px solid #2d2d32}
-:root[data-theme="dark"] .ms-btn{border:1px solid #2d2d32; background:#0e0e0e}
-:root[data-theme="dark"] .ms-btn:hover{border-color:#44444e}
-:root[data-theme="dark"] .ms.open .ms-btn{box-shadow:0 0 0 2px rgba(143,129,241,0.18)}
-:root[data-theme="dark"] .ms-caret{border-top:6px solid #989898}
-:root[data-theme="dark"] .ms-pop{background:#0e0e0e; border:1px solid #2d2d32; box-shadow:0 8px 26px rgba(223,223,226,0.18)}
-:root[data-theme="dark"] .ms-search{border:1px solid #232329}
-:root[data-theme="dark"] .ms-actions{border-bottom:1px solid #1d1d1d}
-:root[data-theme="dark"] .ms-opt:hover{background:#12121c}
-:root[data-theme="dark"] .panel:hover{box-shadow:0 2px 6px rgba(223,223,226,0.07), 0 8px 22px rgba(223,223,226,0.09)}
-:root[data-theme="dark"] .panel h2{color:#dfdfe2}
-:root[data-theme="dark"] .mini-icons{color:#4b4b50}
-:root[data-theme="dark"] .selected-summary{color:#9b9ba3}
-:root[data-theme="dark"] .choice-btn{background:#151519; border:1px solid #222227; color:#c7c7cd}
-:root[data-theme="dark"] .choice-btn .sub{color:#6f6f76}
-:root[data-theme="dark"] .choice-btn.selected .sub{color:#9588f2}
-:root[data-theme="dark"] .choice-btn:hover{background:#1b1b22}
-:root[data-theme="dark"] .choice-btn.selected{color:#0e0e0e; box-shadow:0 2px 6px rgba(244,244,244,0.25)}
-:root[data-theme="dark"] /* Flag background behind state buttons */
-  #stateGrid .choice-btn{color:#0e0e0e}
-:root[data-theme="dark"] #stateGrid .choice-btn.select-all{color:#c7c7cd}
-:root[data-theme="dark"] #stateGrid .choice-btn.select-all.selected{color:#0e0e0e}
-:root[data-theme="dark"] #stateGrid .choice-btn.selected{box-shadow:0 2px 8px rgba(244,244,244,0.4); outline:2px solid #0e0e0e}
-:root[data-theme="dark"] .telco-btn{background:#151519; border:1px solid #222227; color:#c7c7cd}
-:root[data-theme="dark"] .telco-btn:hover{background:#1b1b22}
-:root[data-theme="dark"] .telco-btn.selected{color:#0e0e0e; box-shadow:0 2px 6px rgba(244,244,244,0.25)}
-:root[data-theme="dark"] .kpi-card:hover{box-shadow:0 4px 10px rgba(223,223,226,0.08), 0 10px 26px rgba(223,223,226,0.10)}
-:root[data-theme="dark"] .kpi-card .value{color:#dfdfe2}
-:root[data-theme="dark"] .chart-wrap .bar-row:hover rect:nth-of-type(2){fill:#161625}
-:root[data-theme="dark"] .kpi-clickable:hover{box-shadow:0 4px 10px rgba(223,223,226,0.10), 0 10px 26px rgba(223,223,226,0.14)}
-:root[data-theme="dark"] /* KPI drilldown modal */
-  .kpi-modal-overlay{background:rgba(223,223,226,0.55)}
-:root[data-theme="dark"] .kpi-modal{background:#0e0e0e; box-shadow:0 20px 60px rgba(244,244,244,0.35)}
-:root[data-theme="dark"] .kpi-modal-head{border-bottom:1px solid #191525}
-:root[data-theme="dark"] .kpi-modal-head h3{color:#dfdfe2}
-:root[data-theme="dark"] .kpi-modal-close{background:#151519; color:#9b9ba3}
-:root[data-theme="dark"] .kpi-modal-close:hover{background:#191525; color:#dfdfe2}
-:root[data-theme="dark"] table.kpi-modal-table thead th{background:#0d0d16; color:#9b9ba3; border-bottom:1px solid #191525}
-:root[data-theme="dark"] table.kpi-modal-table thead th.kpi-sortable:hover{color:var(--accent-purple, #765ded); background:#0c0a22}
-:root[data-theme="dark"] table.kpi-modal-table tbody td{border-bottom:1px solid #15131e; color:#cbcbd0}
-:root[data-theme="dark"] table.kpi-modal-table tbody tr:hover{background:#060021}
-:root[data-theme="dark"] .kpi-modal-head .kpi-modal-count b{color:#dfdfe2}
-:root[data-theme="dark"] .insights{color:#bfbfc6}
-:root[data-theme="dark"] .pin-note{color:#bfbfc6}
-:root[data-theme="dark"] .scroll-chart::-webkit-scrollbar-thumb{background:#29292e}
-:root[data-theme="dark"] .scroll-chart::-webkit-scrollbar-thumb:hover{background:#3a3a41}
-:root[data-theme="dark"] footer.note{color:#636369}
-:root[data-theme="dark"] footer.note .prepared{color:#4b4b53}
-:root[data-theme="dark"] .site-search input{border:1px solid #2d2d32}
-:root[data-theme="dark"] .site-search input:focus{box-shadow:0 0 0 3px rgba(143,129,241,0.18)}
-:root[data-theme="dark"] .site-table-wrap::-webkit-scrollbar-thumb{background:#303036}
-:root[data-theme="dark"] table.site-table thead th{background:#151519; color:#b6b6b6}
-:root[data-theme="dark"] table.site-table thead th:hover{background:#1b1b22; color:#dfdfe2}
-:root[data-theme="dark"] table.site-table thead th .sort-arrow{color:#4b4b53}
-:root[data-theme="dark"] table.site-table tbody td{border-bottom:1px solid #19191d; color:#c6c6c6}
-:root[data-theme="dark"] table.site-table tbody tr:nth-child(even){background:#0f0f14}
-:root[data-theme="dark"] table.site-table tbody tr:hover{background:#0a0329}
-:root[data-theme="dark"] .status-pill.recovered{background:#0f2d19; color:#2bbf6b}
-:root[data-theme="dark"] .status-pill.pending{background:#2d0d04; color:#c45534}
-:root[data-theme="dark"] .status-pill.other{background:#1d1d1d; color:#989898}
-:root[data-theme="dark"] .row-print-btn{color:#707078}
-:root[data-theme="dark"] .row-print-btn:hover{background:#07002c; border-color:#9b88f2}
-:root[data-theme="dark"] .gate-card{background:#cdd3e2; border:1px solid #bbc2d4; box-shadow:0 24px 60px rgba(244,244,244,0.5)}
-:root[data-theme="dark"] .gate-card .gate-logo .utara{color:#ecbf54}
-:root[data-theme="dark"] .gate-card .gate-logo .infra{color:#7dc4be}
-:root[data-theme="dark"] .gate-card h1{color:#12141d}
-:root[data-theme="dark"] .gate-card p.gate-desc{color:#5c6279}
-:root[data-theme="dark"] .gate-card p.gate-desc b{color:#181c27}
-:root[data-theme="dark"] .gate-btn.primary{background:linear-gradient(135deg,#7f72dd,#5e53c0); color:#0e0e0e}
-:root[data-theme="dark"] .gate-btn.secondary{background:#c4cadd; color:#181c27; border:1px solid #b1b9cd}
-:root[data-theme="dark"] .gate-divider{color:#8890a8}
-:root[data-theme="dark"] .gate-divider::before, :root[data-theme="dark"] .gate-divider::after{background:#bbc2d4}
-:root[data-theme="dark"] .gate-back{color:#5c6279}
-:root[data-theme="dark"] .gate-back:hover{background:#c4cadd; color:#181c27}
-:root[data-theme="dark"] .gate-footer{border-top:1px solid #bbc2d4; color:#8890a8}
-:root[data-theme="dark"] /* ---------- Print button + custom print report ---------- */
-  .print-btn{background:#151519; border:1px solid #29292e; color:#c6c6c6}
-:root[data-theme="dark"] .print-btn:hover{background:#1b1b22; border-color:#38383f}
-:root[data-theme="dark"] .pr-header{border-bottom:2px solid #dfdfe2}
-:root[data-theme="dark"] .pr-header .pr-title h1{color:#dfdfe2}
-:root[data-theme="dark"] .pr-header .pr-title .pr-sub{color:#a7a7a7}
-:root[data-theme="dark"] .pr-header .pr-meta{color:#888888}
-:root[data-theme="dark"] .pr-section-title{color:#a7a7a7}
-:root[data-theme="dark"] .pr-filters{color:#c6c6c6}
-:root[data-theme="dark"] .pr-filters b{color:#dfdfe2}
-:root[data-theme="dark"] .pr-kpi-card{border:1px solid #2d2d2d}
-:root[data-theme="dark"] .pr-kpi-card .pr-kpi-label{color:#888888}
-:root[data-theme="dark"] .pr-kpi-card .pr-kpi-value{color:#dfdfe2}
-:root[data-theme="dark"] table.pr-table thead th{background:#1d1d1d; border:1px solid #3c3c3c}
-:root[data-theme="dark"] table.pr-table tbody td{border:1px solid #2d2d2d}
-:root[data-theme="dark"] .pr-footer{border-top:1px solid #3c3c3c; color:#797979}
-:root[data-theme="dark"] .pr-detail-grid{border:1px solid #2d2d2d}
-:root[data-theme="dark"] .pr-detail-grid .pr-dt{color:#888888}
-:root[data-theme="dark"] .pr-detail-grid .pr-dd{color:#dfdfe2}
-</style>
-
-<style id="theme-toggle-css">
-/* butang togol tema - gaya sama seperti cpc */
-.theme-btn{
-  display:inline-flex; align-items:center; justify-content:center;
-  width:40px; height:40px; min-height:40px; padding:0; flex:0 0 auto;
-  border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.02);
-  color:#8192A6; cursor:pointer; border-radius:0;
-  transition:color .15s, border-color .15s, background .15s;
-}
-.theme-btn svg{width:19px;height:19px;display:block;stroke:currentColor;fill:none}
-.theme-btn:hover{color:#33A754; border-color:#33A754; background:rgba(51,167,84,.08)}
-.theme-btn:focus-visible{outline:1px solid #E0A34A; outline-offset:2px}
-.sidebar .theme-btn{width:100%; height:auto; min-height:44px; margin-top:10px; gap:8px;
-  font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
-  font-size:10px; letter-spacing:.18em; text-transform:uppercase}
-@media (max-width:860px){ .sidebar .theme-btn{min-height:44px} }
-</style>
-
-<style id="gate-theme-light">
-/* Palet terang untuk skrin gate. Gate menggunakan set --g-* tersendiri,
-   jadi tanpa ini togol tema tidak mengubah apa-apa di skrin pertama. */
-:root[data-theme="light"] #gate-overlay{
-  --g-bg:#EEF1F5;
-  --g-surface:#FFFFFF;
-  --g-surface2:#F5F7FA;
-  --g-ink:#16202B;
-  --g-dim:#4A5A6B;
-  --g-faint:#63748A;
-  --g-line:rgba(16,27,41,.10);
-  --g-line2:rgba(16,27,41,.18);
-  --g-green:#1F8A44;
-  --g-amber:#B87A21;
-  --g-crit:#C4453A;
-}
-/* logo: versi gelap untuk latar cerah, dan sebaliknya */
-:root[data-theme="light"] #gate-overlay .glogo{filter:none}
-#gate-overlay .gbox{position:relative}
-#gate-overlay .gate-theme-btn{
-  position:absolute; top:14px; right:14px; z-index:3;
-  display:inline-flex; align-items:center; justify-content:center;
-  width:44px; height:44px; padding:0;
-  border:1px solid var(--g-line2); background:transparent;
-  color:var(--g-faint); cursor:pointer; border-radius:0;
-  transition:color .15s, border-color .15s, background .15s;
-}
-#gate-overlay .gate-theme-btn svg{width:19px;height:19px;stroke:currentColor;fill:none;display:block}
-#gate-overlay .gate-theme-btn:hover{color:var(--g-green); border-color:var(--g-green)}
-#gate-overlay .gate-theme-btn:focus-visible{outline:1px solid var(--g-amber); outline-offset:2px}
-@media (max-width:880px){
-  #gate-overlay .gate-theme-btn{
-    position:static; order:0; align-self:flex-end; margin-bottom:6px;
-  }
-}
-</style>
-<script id="theme-engine">
-(function(){
-  /* ---- peta warna carta: nilai asal -> nilai tema lawan ----------------
-     Carta dilukis dalam JavaScript dengan warna tetap, jadi ia tidak
-     mengikut CSS. TC() menterjemah warna itu mengikut tema semasa. ---- */
-  var MAP = {"#f6f6f8": "#131318", "#3a3a40": "#b9b9c0", "#9a9aa2": "#61616a", "#8e1c1c": "#bf2b2b", "#f2b705": "#dead19", "#eef0f2": "#181c1f", "#999": "#6a6a6a", "#8b7cf6": "#8f81f1", "#1f5fbf": "#2665c5", "#888": "#797979", "#ffffff": "#0e0e0e", "#3366cc": "#3868c7", "#5a5a62": "#9b9ba3", "#12897f": "#21cabc", "#b8874b": "#b5874e", "#4a4a52": "#a9a9b2"};
-  var NEW_THEME = "dark", DEFAULT_THEME = "dark";   /* lalai gelap, sama seperti cpc dan udm */
-
-  window.TC = function(c){
-    if(document.documentElement.getAttribute('data-theme') === NEW_THEME){
-      return MAP[String(c).toLowerCase()] || c;
-    }
-    return c;
-  };
-
-  var MOON = '<svg viewBox="0 0 24 24" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.3A8.5 8.5 0 1 1 9.7 3.5a6.8 6.8 0 0 0 10.8 10.8z"/></svg>';
-  var SUN  = '<svg viewBox="0 0 24 24" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.4M12 19.2v2.4M4.2 12H1.8M22.2 12h-2.4M6.5 6.5 4.8 4.8M19.2 19.2l-1.7-1.7M17.5 6.5l1.7-1.7M4.8 19.2l1.7-1.7"/></svg>';
-
-  function apply(t, quiet){
-    document.documentElement.setAttribute('data-theme', t);
-    try{ localStorage.setItem('ui-theme', t); }catch(e){}
-
-    document.querySelectorAll('meta[name="theme-color"]').forEach(function(m){ m.remove(); });
-    var meta = document.createElement('meta');
-    meta.setAttribute('name','theme-color');
-    meta.setAttribute('content', t === 'dark' ? '#141416' : '#e8e8ea');
-    document.head.appendChild(meta);
-
-    var msg = (t !== 'dark') ? 'Tukar ke tema gelap' : 'Tukar ke tema terang';
-    document.querySelectorAll('.theme-btn').forEach(function(btn){
-      btn.innerHTML = (t === 'dark' ? SUN : MOON);   /* ikon sahaja, tiada label */
-      btn.setAttribute('title', msg);
-      btn.setAttribute('aria-label', msg);
-    });
-    /* butang yang sama pada skrin gate, tanpa label teks */
-    var gbtn = document.getElementById('gate-theme-toggle');
-    if(gbtn){
-      gbtn.innerHTML = (t === 'dark' ? SUN : MOON);
-      var gmsg = (t !== 'dark') ? 'Tukar ke tema gelap' : 'Tukar ke tema terang';
-      gbtn.setAttribute('title', gmsg);
-      gbtn.setAttribute('aria-label', gmsg);
-    }
-    if(!quiet) redraw();
-  }
-
-  /* carta dilukis semula supaya warnanya ikut tema baharu */
-  function redraw(){
-    /* fungsi lukis berada dalam closure, jadi ia mendaftar sendiri */
-    (window.__redraws || []).forEach(function(fn){ try{ fn(); }catch(e){} });
-    if(typeof render === 'function'){ try{ render(); }catch(e){} }
-  }
-
-  function init(){
-    var saved = null;
-    try{ saved = localStorage.getItem('ui-theme'); }catch(e){}
-    apply(saved === 'dark' || saved === 'light' ? saved : DEFAULT_THEME, true);
-    document.querySelectorAll('.theme-btn, #gate-theme-toggle').forEach(function(b){
-      b.addEventListener('click', function(){
-        var cur = document.documentElement.getAttribute('data-theme');
-        apply(cur === 'dark' ? 'light' : 'dark');
-      });
-    });
-  }
-  if(document.readyState === 'loading')
-    document.addEventListener('DOMContentLoaded', init);
-  else init();
-})();
-</script>
-
-<style id="theme-btn-topright">
-/* togol tema: ikon sahaja, hujung kanan topbar */
-.theme-btn{
-  display:inline-flex; align-items:center; justify-content:center;
-  width:40px; height:40px; min-height:40px; padding:0; flex:0 0 auto;
-  margin-left:auto;
-  border:1px solid var(--panel-border, rgba(255,255,255,.16));
-  background:transparent; color:var(--text-muted, #8192A6);
-  cursor:pointer; border-radius:8px;
-  transition:color .15s, border-color .15s, background .15s;
-}
-.theme-btn svg{width:19px;height:19px;display:block;stroke:currentColor;fill:none}
-.theme-btn:hover{color:#33A754; border-color:#33A754; background:rgba(51,167,84,.08)}
-.theme-btn:focus-visible{outline:1px solid #E0A34A; outline-offset:2px}
-.theme-btn .tt-label{display:none}   /* tiada teks, ikon sahaja */
-@media (max-width:860px){
-  .theme-btn{width:44px; height:44px; min-height:44px}
-}
-</style>
-
-<style id="theme-contrast-fix">
-/* Penjana tema menyongsangkan color:#fff menjadi hitam, walaupun latar
-   elemen ini (bendera, kecerunan, jubin gelap) tidak bertukar langsung.
-   Kembalikan teks cerah supaya ia terbaca dalam tema gelap. */
-:root[data-theme="dark"] .choice-btn.selected,
-:root[data-theme="dark"] #stateGrid .choice-btn,
-:root[data-theme="dark"] #stateGrid .choice-btn.selected,
-:root[data-theme="dark"] #stateGrid .choice-btn.select-all.selected,
-:root[data-theme="dark"] .telco-btn.selected,
-:root[data-theme="dark"] .gate-btn.primary{ color:#FFFFFF }
-
-:root[data-theme="dark"] #stateGrid .choice-btn.select-all{ color:#c7c7cd }
-
-/* skrin gate kekal gelap dalam tema gelap, jadi teksnya mesti cerah */
-:root[data-theme="dark"] .gate-card h1{ color:#F2F3F7 }
-:root[data-theme="dark"] .gate-card p.gate-desc b{ color:#E7E9F0 }
-:root[data-theme="dark"] .gate-btn.secondary{ color:#E7E9F0 }
-:root[data-theme="dark"] .gate-back:hover{ color:#E7E9F0 }
-
-/* dropdown penapis: tema gelap hanya menukar sempadan, latar kekal putih
-   sedangkan teks jadi cerah - putih atas putih */
-:root[data-theme="dark"] .filter-group select{ background:#0e0e0e; color:#d2d2d8 }
-
-/* ikon dan nota kaki: terlalu gelap selepas disongsangkan */
-:root[data-theme="dark"] .mini-icons{ color:#8B8B93 }
-:root[data-theme="dark"] footer.note .prepared{ color:#8E8E96 }
-:root[data-theme="dark"] table.site-table thead th .sort-arrow{ color:#8E8E96 }
-</style>
-
-<style id="theme-btn-order">
-/* Togol tema: kekal dalam kotak topbar, tetapi ditolak ke hujung kanan
-   sebaris dengan penapis. order:99 menjadikannya elemen terakhir tanpa
-   perlu mengubah susunan HTML. */
-.topbar{ flex-wrap:nowrap; align-items:center }
-.topbar-theme{ order:99; margin-left:14px; flex:0 0 auto }
-.topbar .filters{ margin-left:auto }
-
-@media (max-width:1100px){
-  .topbar{ flex-wrap:wrap }
-  .topbar .filters{ margin-left:0 }
-  .topbar-theme{ margin-left:auto }
-}
-</style>
 </head>
 <body>
 
@@ -1459,7 +1102,6 @@
 
   <div id="gate-overlay">
   <div class="gbox">
-    <button type="button" class="gate-theme-btn" id="gate-theme-toggle" aria-label="Tukar tema"></button>
     <div class="gleft">
       <a class="gback" href="index.html">
         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
@@ -1475,7 +1117,7 @@
     <div class="gright">
       <div class="gdrop" id="cdDropZone">
         <svg viewBox="0 0 48 48" stroke-linecap="square"><path d="M24 31V9m0 0l-8 8m8-8l8 8"/><path d="M9 29v10h30V29"/></svg>
-        <div class="big"><span class="d-desk">Drop your Excel file here</span><span class="d-mob">Tap to choose your Excel file</span></div>
+        <div class="big">Drop your Excel file here</div>
         <div class="small">or click to browse &middot; .xlsx</div>
       </div>
       <input type="file" id="gate-file-input" accept=".xlsx,.xls" style="display:none;">
@@ -1526,7 +1168,6 @@
             <div class="tk-card"><div class="tk-label">Total Deposit</div><div class="tk-value" id="state-totalDeposit" style="font-size:14px;">RM0.00</div></div>
           </div>
         </div>
-        <button type="button" class="theme-btn topbar-theme" aria-label="Tukar tema"></button>
         <div class="filters">
           <div class="filter-group">
             <label>Overall Status</label>
@@ -1660,7 +1301,6 @@
             <div class="tk-card"><div class="tk-label">Total Deposit</div><div class="tk-value" id="pic-totalDeposit" style="font-size:14px;">RM0.00</div></div>
           </div>
         </div>
-        <button type="button" class="theme-btn topbar-theme" aria-label="Tukar tema"></button>
         <div class="filters">
           <div class="filter-group">
             <label>Overall Status</label>
@@ -1799,7 +1439,6 @@
             <div class="tk-card"><div class="tk-label">Total Deposit</div><div class="tk-value" id="telco-totalDeposit" style="font-size:14px;">RM0.00</div></div>
           </div>
         </div>
-        <button type="button" class="theme-btn topbar-theme" aria-label="Tukar tema"></button>
         <div class="filters">
           <div class="filter-group">
             <label>Overall Status</label>
@@ -1990,7 +1629,7 @@
   };
 
   var TELCO_ORDER = ['Celcom','Digi'];
-  var TELCO_COLORS = {'Celcom':TC('#1f5fbf'),'Digi':TC('#f2b705')};
+  var TELCO_COLORS = {'Celcom':'#1f5fbf','Digi':'#f2b705'};
 
   function uniqueSorted(arr){
     return Array.from(new Set(arr)).sort();
@@ -2227,11 +1866,11 @@
     var areaPath = linePath + ' L' + w + ',' + h + ' L0,' + h + ' Z';
     svg.innerHTML =
       '<defs><linearGradient id="grad-'+svgId+'" x1="0" y1="0" x2="0" y2="1">' +
-      '<stop offset="0%" stop-color="'+TC('#8b7cf6')+'" stop-opacity="0.45"/>' +
-      '<stop offset="100%" stop-color="'+TC('#8b7cf6')+'" stop-opacity="0"/>' +
+      '<stop offset="0%" stop-color="#8b7cf6" stop-opacity="0.45"/>' +
+      '<stop offset="100%" stop-color="#8b7cf6" stop-opacity="0"/>' +
       '</linearGradient></defs>' +
       '<path d="'+areaPath+'" fill="url(#grad-'+svgId+')" stroke="none"/>' +
-      '<path d="'+linePath+'" fill="none" stroke="'+TC('#8b7cf6')+'" stroke-width="2"/>';
+      '<path d="'+linePath+'" fill="none" stroke="#8b7cf6" stroke-width="2"/>';
   }
 
   // ---- Horizontal bar chart (SVG) ----
@@ -2253,8 +1892,8 @@
     for(var t=0; t<=ticks; t++){
       var gx = leftLabelW + (chartW * t/ticks);
       var gv = maxVal * t/ticks;
-      gridHtml += '<line x1="'+gx.toFixed(1)+'" y1="'+topPad+'" x2="'+gx.toFixed(1)+'" y2="'+(totalH-bottomPad)+'" stroke="'+TC('#eef0f2')+'" stroke-width="1"/>';
-      gridHtml += '<text x="'+gx.toFixed(1)+'" y="'+(totalH-8)+'" font-size="10.5" fill="'+TC('#9a9aa2')+'" text-anchor="'+(t===0?'start':(t===ticks?'end':'middle'))+'">'+escapeHtml(axisLabelFn(gv))+'</text>';
+      gridHtml += '<line x1="'+gx.toFixed(1)+'" y1="'+topPad+'" x2="'+gx.toFixed(1)+'" y2="'+(totalH-bottomPad)+'" stroke="#eef0f2" stroke-width="1"/>';
+      gridHtml += '<text x="'+gx.toFixed(1)+'" y="'+(totalH-8)+'" font-size="10.5" fill="#9a9aa2" text-anchor="'+(t===0?'start':(t===ticks?'end':'middle'))+'">'+escapeHtml(axisLabelFn(gv))+'</text>';
     }
 
     var barsHtml = '';
@@ -2270,14 +1909,12 @@
       var inside = w > (estTextW + 22);
       var textX = inside ? (leftLabelW + w - 10) : (leftLabelW + Math.max(w,3) + 8);
       var anchor = inside ? 'end' : 'start';
-      /* label di DALAM bar duduk atas warna bar yang tidak bertukar ikut tema,
-         jadi ia kekal putih. Hanya label di luar bar mengikut tema. */
-      var fill = inside ? '#ffffff' : TC('#4a4a52');
+      var fill = inside ? '#ffffff' : '#4a4a52';
       barsHtml +=
         '<g class="bar-row" data-val="'+escapeHtml(String(d.label))+'" style="cursor:pointer">' +
         '<rect x="0" y="'+y+'" width="'+totalW+'" height="'+rowH+'" fill="transparent"></rect>' +
-        '<text x="'+(leftLabelW-10)+'" y="'+(barY+barH/2)+'" font-size="12" font-weight="500" fill="'+TC('#3a3a40')+'" text-anchor="end" dominant-baseline="middle">'+escapeHtml(d.label)+'</text>' +
-        '<rect x="'+leftLabelW+'" y="'+(barY-2)+'" width="'+chartW+'" height="'+(barH+4)+'" rx="6" fill="'+TC('#f6f6f8')+'"></rect>' +
+        '<text x="'+(leftLabelW-10)+'" y="'+(barY+barH/2)+'" font-size="12" font-weight="500" fill="#3a3a40" text-anchor="end" dominant-baseline="middle">'+escapeHtml(d.label)+'</text>' +
+        '<rect x="'+leftLabelW+'" y="'+(barY-2)+'" width="'+chartW+'" height="'+(barH+4)+'" rx="6" fill="#f6f6f8"></rect>' +
         '<rect x="'+leftLabelW+'" y="'+barY+'" width="'+Math.max(w,4).toFixed(1)+'" height="'+barH+'" rx="5" fill="'+color+'"></rect>' +
         '<text x="'+textX+'" y="'+(barY+barH/2)+'" font-size="11.5" font-weight="600" fill="'+fill+'" text-anchor="'+anchor+'" dominant-baseline="middle">'+escapeHtml(labelText)+'</text>' +
         '<title>Click to filter: '+escapeHtml(String(d.label))+'</title>' +
@@ -2309,8 +1946,8 @@
     for(var t=0; t<=ticks; t++){
       var gy = topPad + plotH - (plotH * t/ticks);
       var gv = niceMax * t/ticks;
-      gridHtml += '<line x1="'+leftPad+'" y1="'+gy.toFixed(1)+'" x2="'+(leftPad+plotW)+'" y2="'+gy.toFixed(1)+'" stroke="'+TC('#eef0f2')+'" stroke-width="1"/>';
-      gridHtml += '<text x="'+(leftPad-8)+'" y="'+(gy+3).toFixed(1)+'" font-size="10.5" fill="'+TC('#9a9aa2')+'" text-anchor="end">'+escapeHtml(valueLabelFn(gv,true))+'</text>';
+      gridHtml += '<line x1="'+leftPad+'" y1="'+gy.toFixed(1)+'" x2="'+(leftPad+plotW)+'" y2="'+gy.toFixed(1)+'" stroke="#eef0f2" stroke-width="1"/>';
+      gridHtml += '<text x="'+(leftPad-8)+'" y="'+(gy+3).toFixed(1)+'" font-size="10.5" fill="#9a9aa2" text-anchor="end">'+escapeHtml(valueLabelFn(gv,true))+'</text>';
     }
 
     var n = items.length;
@@ -2323,10 +1960,10 @@
       var barX = cx - barW/2;
       var barY = topPad + plotH - barH;
       barsHtml +=
-        '<rect x="'+barX.toFixed(1)+'" y="'+topPad+'" width="'+barW.toFixed(1)+'" height="'+plotH+'" rx="6" fill="'+TC('#f6f6f8')+'"></rect>' +
+        '<rect x="'+barX.toFixed(1)+'" y="'+topPad+'" width="'+barW.toFixed(1)+'" height="'+plotH+'" rx="6" fill="#f6f6f8"></rect>' +
         '<rect x="'+barX.toFixed(1)+'" y="'+barY.toFixed(1)+'" width="'+barW.toFixed(1)+'" height="'+Math.max(barH,3).toFixed(1)+'" rx="6" fill="'+colorFn(d)+'"></rect>' +
-        '<text x="'+cx.toFixed(1)+'" y="'+(barY-8).toFixed(1)+'" font-size="12" font-weight="600" fill="'+TC('#3a3a40')+'" text-anchor="middle">'+escapeHtml(valueLabelFn(d.val,false))+'</text>' +
-        '<text x="'+cx.toFixed(1)+'" y="'+(topPad+plotH+20)+'" font-size="12" font-weight="500" fill="'+TC('#5a5a62')+'" text-anchor="middle">'+escapeHtml(d.label)+'</text>';
+        '<text x="'+cx.toFixed(1)+'" y="'+(barY-8).toFixed(1)+'" font-size="12" font-weight="600" fill="#3a3a40" text-anchor="middle">'+escapeHtml(valueLabelFn(d.val,false))+'</text>' +
+        '<text x="'+cx.toFixed(1)+'" y="'+(topPad+plotH+20)+'" font-size="12" font-weight="500" fill="#5a5a62" text-anchor="middle">'+escapeHtml(d.label)+'</text>';
     });
 
     var svg = '<svg viewBox="0 0 '+totalW+' '+totalH+'" width="100%" height="'+totalH+'" xmlns="http://www.w3.org/2000/svg">' +
@@ -2581,8 +2218,8 @@
       var countArr = ALL_STATES.map(function(s){return {state:s,label:s,val:byState[s].count};}).filter(function(d){return d.val>0;}).sort(function(a,b){return b.val-a.val;});
       var depositArr = ALL_STATES.map(function(s){return {state:s,label:s,val:byState[s].deposit};}).filter(function(d){return d.val>0;}).sort(function(a,b){return b.val-a.val;});
 
-      renderHBarSVG(document.getElementById('state-chartCount'), countArr, function(){return TC('#8e1c1c');}, function(v){return fmtInt(v);}, function(v){return fmtInt(Math.round(v));});
-      renderHBarSVG(document.getElementById('state-chartDeposit'), depositArr, function(){return TC('#12897f');}, function(v){return fmtRM(v);}, function(v){return fmtRMShort(v);});
+      renderHBarSVG(document.getElementById('state-chartCount'), countArr, function(){return '#8e1c1c';}, function(v){return fmtInt(v);}, function(v){return fmtInt(Math.round(v));});
+      renderHBarSVG(document.getElementById('state-chartDeposit'), depositArr, function(){return '#12897f';}, function(v){return fmtRM(v);}, function(v){return fmtRMShort(v);});
 
       // Progress % (recovered / total)
       var recoveredCount = rows.filter(function(r){return r[4]==='RECOVERED';}).length;
@@ -2602,8 +2239,6 @@
 
       renderSiteTable(rows);
     }
-    /* daftar supaya togol tema boleh melukis semula carta ini */
-    window.__redraws = window.__redraws || []; window.__redraws.push(render);
 
     // ---- Site List & Progress table ----
     var siteSearchInput = document.getElementById('site-search-input');
@@ -3025,8 +2660,8 @@
       var countArr = PIC_ORDER.map(function(p){return {pic:p,label:p,val:byPic[p].count};}).filter(function(d){return d.val>0;}).sort(function(a,b){return b.val-a.val;});
       var depositArr = PIC_ORDER.map(function(p){return {pic:p,label:p,val:byPic[p].deposit};}).filter(function(d){return d.val>0;}).sort(function(a,b){return b.val-a.val;});
 
-      renderHBarSVG(document.getElementById('pic-chartCount'), countArr, function(){return TC('#3366cc');}, function(v){return fmtInt(v);}, function(v){return fmtInt(Math.round(v));});
-      renderHBarSVG(document.getElementById('pic-chartDeposit'), depositArr, function(){return TC('#b8874b');}, function(v){return fmtRM(v);}, function(v){return fmtRMShort(v);});
+      renderHBarSVG(document.getElementById('pic-chartCount'), countArr, function(){return '#3366cc';}, function(v){return fmtInt(v);}, function(v){return fmtInt(Math.round(v));});
+      renderHBarSVG(document.getElementById('pic-chartDeposit'), depositArr, function(){return '#b8874b';}, function(v){return fmtRM(v);}, function(v){return fmtRMShort(v);});
 
       var recoveredCount = rows.filter(function(r){return r[4]==='RECOVERED';}).length;
       var progressPct = total>0 ? (recoveredCount/total*100) : 0;
@@ -3045,8 +2680,6 @@
 
       renderSiteTable(rows);
     }
-    /* daftar supaya togol tema boleh melukis semula carta ini */
-    window.__redraws = window.__redraws || []; window.__redraws.push(render);
 
     // ---- Site List & Progress table ----
     var siteSearchInput = document.getElementById('pic-site-search-input');
@@ -3484,11 +3117,11 @@
       var depositArr = TELCO_ORDER.map(function(t){return {t:t,label:t,val:byTelco[t].deposit};}).filter(function(d){return d.val>0;}).sort(function(a,b){return b.val-a.val;});
 
       renderHBarSVG(document.getElementById('telco-chartCount'), countArr,
-        function(d){return TELCO_COLORS[d.t]||TC('#888');},
+        function(d){return TELCO_COLORS[d.t]||'#888';},
         function(v){return fmtInt(v);}, function(v){return fmtInt(Math.round(v));});
 
       renderHBarSVG(document.getElementById('telco-chartDeposit'), depositArr,
-        function(d){return TELCO_COLORS[d.t]||TC('#888');},
+        function(d){return TELCO_COLORS[d.t]||'#888';},
         function(v){return fmtRM(v);}, function(v){return fmtRMShort(v);});
 
       var recoveredCount = rows.filter(function(r){return r[4]==='RECOVERED';}).length;
@@ -3508,8 +3141,6 @@
 
       renderSiteTable(rows);
     }
-    /* daftar supaya togol tema boleh melukis semula carta ini */
-    window.__redraws = window.__redraws || []; window.__redraws.push(render);
 
     // ---- Site List & Progress table ----
     var siteSearchInput = document.getElementById('telco-site-search-input');
@@ -4030,7 +3661,5 @@
   document.addEventListener('drop', function(e){ e.preventDefault(); });
 })();
 </script>
-
-
 </body>
 </html>
