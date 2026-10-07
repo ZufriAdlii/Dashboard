@@ -1759,7 +1759,11 @@ const FIELD_RULES = {
         s => has(s,'tamat','permit') && !s.includes('lanjutan') ],
   tl: [ s => s === 'tarikh tamat lanjutan permit', s => has(s,'tamat','lanjutan') ],
   ml: [ s => s === 'tarikh permohonan lanjutan',
-        s => s.includes('lanjutan') && (s.includes('permohonan') || s.includes('mohon')) ]
+        s => s.includes('lanjutan') && (s.includes('permohonan') || s.includes('mohon')) ],
+  v:  [ s => s === 'perunding' || s === 'nama perunding' || s === 'vendor',
+        s => (s.startsWith('perunding') || s.includes('nama perunding') || s.includes('vendor'))
+             && !/bayaran|tarikh|emel|kos|harga/.test(s),
+        s => s.includes('perunding') && !/bayaran|tarikh|emel|kos|harga/.test(s) ]
 };
 
 function mapHeaders(hdr){
@@ -1855,7 +1859,8 @@ function sheetsToRows(sheets){
         kc: map.kc !== undefined ? cellDate(r[map.kc]) : null,
         kp: map.kp !== undefined ? cellDate(r[map.kp]) : null,
         sc: (map.sc !== undefined ? cellText(r[map.sc]) : '').toUpperCase(),
-        uc: cellText(r[UC_COL])
+        uc: cellText(r[UC_COL]),
+        v: map.v !== undefined ? cellText(r[map.v]) : ''
       });
     }
   }
@@ -3578,6 +3583,7 @@ function fieldRows(r){
     ['Bil (tracker)', `<dd class="mono">${r.no || '\u2014'}</dd>`],
     ['Row', `<dd class="mono">${r.uid}</dd>`],
     ['Telco', `<dd>${r.t}</dd>`],
+    ['Vendor', r.v ? `<dd>${escUC(r.v)}</dd>` : '<dd class="none">None</dd>'],
     ['PBM terlibat', `<dd>${r.b}</dd>`, true],
     ['Status WP', r.sw ? `<dd class="mono">${r.sw}</dd>` : null],
     ['CPC complete', r.sc ? `<dd class="mono">${r.sc}</dd>` : null],
@@ -3663,6 +3669,7 @@ document.getElementById('dt-copy').addEventListener('click',()=>{
   const lines = [
     `${r.p}`,
     `No ${r.uid} · ${r.t} · ${r.b}`,
+    `Vendor: ${r.v||'-'}`,
     `Status: ${lblOf(r)}`,
     `WP work start order: ${r.mw?dstr(r.mw):'-'} (WP Status: ${r.sw||'-'})`,
     `Permit expiry: ${r.te?dstr(r.te):'-'}`,
