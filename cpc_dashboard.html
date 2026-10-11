@@ -526,6 +526,20 @@ tbody tr.rowlink:focus-visible{outline:2px solid var(--amber);outline-offset:-2p
 .dgrid dd.mono{font-family:var(--mono);font-size:13px}
 .dgrid dd.none{color:var(--faint);font-style:italic}
 .dgrid .wide{grid-column:1 / -1}
+.dgrid .c1{grid-column:1} .dgrid .c2{grid-column:2}
+/* skop kerja: cadangan (biru) vs sebenar (hijau kebiruan) */
+.dgrid .sch{padding:12px 16px;border-top:2px solid}
+.dgrid .sch-c{background:var(--sky-soft);border-top-color:var(--sky)}
+.dgrid .sch-s{background:var(--teal-soft);border-top-color:var(--teal)}
+.dgrid .sch dt{margin-bottom:3px}
+.dgrid .sch-t{font-family:var(--display);font-size:18px;font-weight:500;letter-spacing:-.01em}
+.dgrid .sch-c .sch-t{color:var(--sky)} .dgrid .sch-s .sch-t{color:var(--teal)}
+.dgrid .sc-c{box-shadow:inset 3px 0 0 var(--sky)}
+.dgrid .sc-s{box-shadow:inset 3px 0 0 var(--teal)}
+.dgrid .sct{display:none;margin-left:8px;padding:1px 6px;border:1px solid}
+.dgrid .sct-c{color:var(--sky);border-color:var(--sky)}
+.dgrid .sct-s{color:var(--teal);border-color:var(--teal)}
+.dgrid .sdelta{display:block;margin-top:4px;font-family:var(--body);font-size:11.5px;color:var(--dim)}
 /* garis masa ringkas */
 .dtrack{display:flex;flex-wrap:wrap;margin-bottom:24px;border:1px solid var(--line);background:var(--well)}
 .dstep{flex:1 1 130px;min-width:0;padding:14px 14px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);position:relative}
@@ -546,6 +560,9 @@ tbody tr.rowlink:focus-visible{outline:2px solid var(--amber);outline-offset:-2p
   .dhead .mact button{flex:1}
   .dbody{padding:18px 16px 24px}
   .dgrid{grid-template-columns:1fr}
+  .dgrid .c1,.dgrid .c2{grid-column:auto}
+  .dgrid .sch{display:none}
+  .dgrid .sct{display:inline-block}
   .dtrack{flex-wrap:wrap}
   .dstep{flex:1 1 50%;border-bottom:1px solid var(--line)}
 }
@@ -1737,6 +1754,25 @@ const has = (s, ...w) => w.every(x => s.includes(x));
    (…(Tahun), Tempoh…, …DAYS, Update…). */
 const REJECT = s => /\(tahun\)|^tempoh|days$|^update|^status bayaran|invois|deraf/.test(s);
 
+/* Skop kerja: dua set lajur yang sama nama (cadangan, kemudian sebenar).
+   Excel/pemproses lain kadang menambah nombor di hujung (Korekan / HDD2), jadi nombor dibuang dulu.
+   Medan set pertama diproses dahulu, jadi ia ambil kemunculan pertama; set kedua ambil yang berikutnya. */
+const SC_BASE = s => s.replace(/\s*\d+$/, '');
+const SC_BAD  = s => /tarikh|bayaran|kos|harga|emel|status|invois/.test(s);
+const SC_TEST = {
+  hd: s => { s = SC_BASE(s); return !SC_BAD(s) && (s.includes('korekan') || /\bhdd\b/.test(s)); },
+  tu: s => { s = SC_BASE(s); return !SC_BAD(s) && s.includes('tiang baru') && /jln|jalan|utama/.test(s); },
+  tp: s => { s = SC_BASE(s); return !SC_BAD(s) && s.includes('tiang baru') && s.includes('perumah'); },
+  is: s => { s = SC_BASE(s); return !SC_BAD(s) && s.includes('infra') && s.includes('sedia'); }
+};
+const SCOPE_RULES = {
+  hd1:[SC_TEST.hd], tu1:[SC_TEST.tu], tp1:[SC_TEST.tp], is1:[SC_TEST.is],
+  jc: [s => s.includes('jarak') && s.includes('cadangan')],
+  hd2:[SC_TEST.hd], tu2:[SC_TEST.tu], tp2:[SC_TEST.tp], is2:[SC_TEST.is],
+  js: [s => s.includes('jarak') && s.includes('sebenar')]
+};
+const SCOPE_KEYS = Object.keys(SCOPE_RULES);
+
 const FIELD_RULES = {
   p:  [ s => s === 'nama projek', s => s.includes('nama projek'), s => s.includes('projek') ],
   b:  [ s => s === 'pbm terlibat', s => s.includes('pbm terlibat'),
@@ -1763,7 +1799,8 @@ const FIELD_RULES = {
   v:  [ s => s === 'perunding' || s === 'nama perunding' || s === 'vendor',
         s => (s.startsWith('perunding') || s.includes('nama perunding') || s.includes('vendor'))
              && !/bayaran|tarikh|emel|kos|harga/.test(s),
-        s => s.includes('perunding') && !/bayaran|tarikh|emel|kos|harga/.test(s) ]
+        s => s.includes('perunding') && !/bayaran|tarikh|emel|kos|harga/.test(s) ],
+  ...SCOPE_RULES
 };
 
 function mapHeaders(hdr){
@@ -1860,7 +1897,8 @@ function sheetsToRows(sheets){
         kp: map.kp !== undefined ? cellDate(r[map.kp]) : null,
         sc: (map.sc !== undefined ? cellText(r[map.sc]) : '').toUpperCase(),
         uc: cellText(r[UC_COL]),
-        v: map.v !== undefined ? cellText(r[map.v]) : ''
+        v: map.v !== undefined ? cellText(r[map.v]) : '',
+        ...Object.fromEntries(SCOPE_KEYS.map(k => [k, map[k] !== undefined ? cellText(r[map[k]]) : '']))
       });
     }
   }
@@ -3600,10 +3638,52 @@ function fieldRows(r){
     ['Permit approval date', val(dstrOrNull(r.kp), 'mono')],
     ['CPC work start order', val(dstrOrNull(r.mc), 'mono')],
     ['CPC submitted to PBM', val(dstrOrNull(r.pc), 'mono')],
-    ['CPC approval date', val(dstrOrNull(r.kc), 'mono')]
+    ['CPC approval date', val(dstrOrNull(r.kc), 'mono')],
+    ...scopeFields(r, val)
   ];
 }
 function dstrOrNull(v){ return v ? dstr(v) : null; }
+
+/* ---- skop kerja: cadangan vs sebenar ---- */
+const SCOPE_ROWS = [
+  ['Korekan / HDD',          'hd1', 'hd2'],
+  ['Tiang baru jalan utama', 'tu1', 'tu2'],
+  ['Tiang baru perumahan',   'tp1', 'tp2'],
+  ['Infra sedia ada',        'is1', 'is2'],
+  ['Jarak',                  'jc',  'js']
+];
+/* dipapar dalam grid bila fail ada lajur skop kerja; cadangan sentiasa kiri, sebenar kanan */
+function scopeFields(r, val){
+  if(!DATA || !DATA.rows.some(x => SCOPE_KEYS.some(k => x[k]))) return [];
+  /* sel kosong dikira sebagai 0 */
+  const num = v => { const t = String(v ?? '').trim(); if(!t) return 0; return /^-?\d+(\.\d+)?$/.test(t) ? Number(t) : null; };
+  const tag = t => `<span class="sct sct-${t==='Proposed'?'c':'s'}">${t}</span>`;
+  const out = [
+    ['Scope of work', '<dd class="sch-t">Proposed</dd>', 'c1 sch sch-c'],
+    ['Scope of work', '<dd class="sch-t">Actual</dd>',   'c2 sch sch-s']
+  ];
+  SCOPE_ROWS.forEach(([l,a,b]) => {
+    const name = a==='jc' ? 'Jarak' : l;
+    const va = scopeVal(r[a]) || '0', vb = scopeVal(r[b]) || '0';
+    const na = num(r[a]), nb = num(r[b]);
+    let dd = `<dd class="mono">${escUC(vb)}`;
+    if(na !== null && nb !== null){
+      const d = Math.round((nb - na) * 100) / 100;
+      dd += `<span class="sdelta">${d === 0 ? 'same as proposed'
+        : (d > 0 ? '+' : '\u2212') + Math.abs(d).toLocaleString('en-MY', {maximumFractionDigits:2}) + ' vs proposed'}</span>`;
+    }
+    dd += '</dd>';
+    out.push([name + tag('Proposed'), `<dd class="mono">${escUC(va)}</dd>`, 'c1 sc-c'],
+             [name + tag('Actual'),   dd,                                   'c2 sc-s']);
+  });
+  return out;
+}
+function scopeVal(v){
+  if(v === null || v === undefined || v === '') return '';
+  const t = String(v).trim();
+  if(/^-?\d+(\.\d+)?$/.test(t)) return Number(t).toLocaleString('en-MY', {maximumFractionDigits:2});
+  return t;
+}
 
 function openDetail(uid){
   const r = DATA.rows.find(x => String(x.uid) === String(uid));
@@ -3635,7 +3715,7 @@ function openDetail(uid){
 
   document.getElementById('dt-grid').innerHTML = fieldRows(r)
     .filter(f => f[1] !== null)
-    .map(f => `<div class="${f[2]?'wide':''}"><dt>${f[0]}</dt>${f[1]}</div>`).join('');
+    .map(f => `<div class="${f[2]===true?'wide':(f[2]||'')}"><dt>${f[0]}</dt>${f[1]}</div>`).join('');
 
   detail.classList.add('show');
   detail.querySelector('.dbody').scrollTop = 0;
@@ -3670,6 +3750,8 @@ document.getElementById('dt-copy').addEventListener('click',()=>{
     `${r.p}`,
     `No ${r.uid} · ${r.t} · ${r.b}`,
     `Vendor: ${r.v||'-'}`,
+    ...(SCOPE_ROWS.some(([,a,b]) => r[a] || r[b])
+        ? SCOPE_ROWS.map(([l,a,b]) => `${l}: proposed ${scopeVal(r[a])||'0'} / actual ${scopeVal(r[b])||'0'}`) : []),
     `Status: ${lblOf(r)}`,
     `WP work start order: ${r.mw?dstr(r.mw):'-'} (WP Status: ${r.sw||'-'})`,
     `Permit expiry: ${r.te?dstr(r.te):'-'}`,
