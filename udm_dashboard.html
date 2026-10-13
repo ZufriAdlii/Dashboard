@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" href="favicon.ico?v=3" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=3">
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=3">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>UDM Project Performance Dashboard</title>
@@ -27,6 +24,7 @@
   window.addEventListener('load', function(){ if(!window.XLSX) tryNext(); });
 })();
 </script>
+<link rel="icon" type="image/png" href="UISB_NEW.png">
 <style>
   :root{
     /* one palette for the whole app: the upload screen and the dashboard */
@@ -3261,8 +3259,14 @@ function runUdmDashboard(initialData){
 
   function parseUdmWorkbook(arrayBuffer){
     var wb = XLSX.read(arrayBuffer, {type:'array', cellDates:true});
-    var sheetName = wb.SheetNames.indexOf('UDM PROGRESS') !== -1 ? 'UDM PROGRESS'
-                  : (wb.SheetNames.indexOf('TRACKER') !== -1 ? 'TRACKER' : wb.SheetNames[0]);
+    /* Match sheet names case-insensitively: the workbook calls it "UDM Progress". */
+    function findSheet(want){
+      for(var k=0; k<wb.SheetNames.length; k++){
+        if(String(wb.SheetNames[k]).trim().toUpperCase() === want) return wb.SheetNames[k];
+      }
+      return null;
+    }
+    var sheetName = findSheet('UDM PROGRESS') || findSheet('TRACKER') || wb.SheetNames[0];
     var ws = wb.Sheets[sheetName];
     var rows = XLSX.utils.sheet_to_json(ws, {header:1, raw:true, defval:null});
 
