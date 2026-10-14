@@ -1858,6 +1858,14 @@ function findTelcoCol(hdr){
 
 /* Lajur CK dalam fail induk = Update CPC; dipaparkan sebagai "Status CPC" */
 const UC_COL = colIdx('CK1');
+/* Cari lajur "Update CPC" ikut tajuk, supaya tak tersasar bila lajur baru
+   ditambah dalam Excel. Jika tiada tajuk sepadan, guna lajur CK seperti dulu. */
+function findUcCol(hdr){
+  const norm = (hdr || []).map(h => String(h || '').toLowerCase().replace(/\s+/g,' ').trim());
+  let i = norm.findIndex(s => s === 'update cpc');
+  if(i < 0) i = norm.findIndex(s => s.includes('update') && s.includes('cpc'));
+  return i >= 0 ? i : UC_COL;
+}
 function sheetsToRows(sheets){
   const rows = [], summary = [], skipped = [];
 
@@ -1874,6 +1882,7 @@ function sheetsToRows(sheets){
   for(const {sh, pr} of useSheets){
     if(/summary|ringkasan/i.test(sh.name) && !master) continue;
     const map = pr.map;
+    const ucCol = findUcCol(sh.rows[pr.hi]);
     for(let i = pr.hi + 1; i < sh.rows.length; i++){
       const r = sh.rows[i] || [];
       const p = cellText(r[map.p]);
@@ -1896,7 +1905,7 @@ function sheetsToRows(sheets){
         kc: map.kc !== undefined ? cellDate(r[map.kc]) : null,
         kp: map.kp !== undefined ? cellDate(r[map.kp]) : null,
         sc: (map.sc !== undefined ? cellText(r[map.sc]) : '').toUpperCase(),
-        uc: cellText(r[UC_COL]),
+        uc: cellText(r[ucCol]),
         v: map.v !== undefined ? cellText(r[map.v]) : '',
         ...Object.fromEntries(SCOPE_KEYS.map(k => [k, map[k] !== undefined ? cellText(r[map[k]]) : '']))
       });
