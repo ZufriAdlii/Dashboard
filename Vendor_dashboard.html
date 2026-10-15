@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-<link rel="icon" href="favicon.ico?v=3" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=3">
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=3">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Utara Infra &mdash; Vendor Tracker</title>
@@ -1130,7 +1127,7 @@ table.wtab tr:hover td{background:transparent;color:var(--body-c)}
   <div class="grid">
     <section class="panel">
       <h2>Vendor ranking</h2>
-      <p class="note">Bar length is the vendor's total distance, split by build method, with metres and vendor cost on the right.
+      <p class="note">Ranked by vendor cost; the % is each vendor's share of total vendor cost. Bar length is the vendor's total distance, split by build method.
          Click a name for all its sites, or a single segment for that category alone.</p>
       <div id="vbars"></div>
       <div class="legend" id="legend"></div>
@@ -1236,9 +1233,12 @@ table.wtab tr:hover td{background:transparent;color:var(--body-c)}
         <h2>Operational Updates</h2>
         <p>Utara Infra Sdn Bhd &middot; Kedah</p>
       </div>
-      <div class="rep-asof">As of
-        <select id="rep-mon" aria-label="Month"></select>
-        <select id="rep-yr" aria-label="Year"></select>
+      <div class="rep-asof">From
+        <select id="rep-fmon" aria-label="From month"></select>
+        <select id="rep-fyr" aria-label="From year"></select>
+        to
+        <select id="rep-mon" aria-label="To month"></select>
+        <select id="rep-yr" aria-label="To year"></select>
       </div>
     </div>
     <div class="rep-telco" id="rep-telco"></div>
@@ -1857,14 +1857,15 @@ function drawVendors(){
     o.n++; o.t += mtot(r); o.m += tot(r); o.rmv += cost(r);
     CATS.forEach(c => o[c.k] += mval(r, c.k));
   }
-  const list = [...m.values()].sort((a,b) => b.t - a.t);
+  const list = [...m.values()].sort((a,b) => b.rmv - a.rmv);
   const max = Math.max(1, ...list.map(o => o.t));
+  const totRM = list.reduce((s,x)=>s+x.rmv,0);
 
   $('vbars').innerHTML = list.map(o => `
     <div class="tbar" data-v="${esc(o.v)}">
       <div class="tbar-head">
         <span class="nm">${esc(o.v)}</span>
-        <span class="ct">${km(o.m)} m · ${rmShort(o.rmv)} · ${fmt(o.n)} sites · ${pc(o.t, list.reduce((s,x)=>s+x.t,0)).toFixed(1)}%</span>
+        <span class="ct">${km(o.m)} m · ${rmShort(o.rmv)} · ${fmt(o.n)} sites · ${pc(o.rmv, totRM).toFixed(1)}%</span>
       </div>
       <div class="track" style="width:${Math.max(6, o.t/max*100)}%">
         ${CATS.map(c => o[c.k] > 0
@@ -2501,7 +2502,8 @@ function render(){
 
 /* ══════════════════════════════════════════════════════════════
    REPORT — satu muka A4 "Operational Updates"
-   Jarak yang digunakan ialah JARAK SEBENAR (r.js).
+   Jarak yang digunakan ialah JARAK CADANGAN (r.jc).
+   Julat tarikh: From (bulan/tahun) hingga To (bulan/tahun), ikut Arahan Mula Kerja IL.
    Peta: pin diletak pada kedudukan lat/long sebenar setiap daerah
    (fakta geografi, bukan lukisan peta orang lain). Gambar peta
    syarikat sendiri boleh dimuat naik untuk jadi latar belakang.
@@ -2522,7 +2524,7 @@ const DISTRICTS = [
   {n:'Kulim',         lat:5.365, lon:100.561},
   {n:'Bandar Baharu', lat:5.150, lon:100.520}
 ];
-let REP = {mon:'', yr:'', wo:''};
+let REP = {mon:'', yr:'', fmon:'0', fyr:'all', wo:''};
 try{ REP = Object.assign(REP, JSON.parse(localStorage.getItem(REP_KEY) || '{}')); }catch(e){}
 function repSave(){ try{ localStorage.setItem(REP_KEY, JSON.stringify(REP)); }
   catch(e){ toast && toast('The map image is too large to remember in this browser'); } }
@@ -2552,8 +2554,8 @@ function repPlace(label){
 
 const REP_MONTHS = ['January','February','March','April','May','June',
                     'July','August','September','October','November','December'];
-/* tarikh rujukan setiap baris: Arahan Mula Kerja WP, jatuh balik ke Arahan Mula Kerja IL */
-const repDate = r => r.stw || r.st || null;
+/* tarikh rujukan setiap baris: Arahan Mula Kerja IL */
+const repDate = r => r.st || null;
 const repEOM = (y, m) => {                       /* hari terakhir bulan itu, ISO */
   const d = new Date(y, m + 1, 0);
   const p = n => String(n).padStart(2, '0');
@@ -2578,25 +2580,44 @@ function drawReport(){
   mSel.innerHTML = REP_MONTHS.map((m,i) => `<option value="${i}"${String(i) === String(REP.mon) ? ' selected' : ''}>${m}</option>`).join('');
   mSel.disabled = mSel.hidden = (!REP.yr || REP.yr === 'all');
 
-  /* "As of" = hujung bulan yang dipilih; baris selepas tarikh itu ditinggalkan */
-  const cut = (REP.yr && REP.yr !== 'all') ? repEOM(+REP.yr, +REP.mon) : null;
-  const R = cut ? all.filter(r => { const d = repDate(r); return d && d <= cut; }) : all;
-  const skipped = cut ? all.length - R.length : 0;
-  const tot = R.reduce((a,r) => a + (r.js || 0), 0);
+  /* "From" = hari pertama bulan mula; 'all' = dari awal (tiada had bawah) */
+  const fySel = $('rep-fyr'), fmSel = $('rep-fmon');
+  if(REP.fyr && REP.fyr !== 'all' && !yrs.includes(+REP.fyr)) REP.fyr = 'all';
+  if(!REP.fyr) REP.fyr = 'all';
+  if(REP.fmon === '' || REP.fmon == null) REP.fmon = '0';
+  fySel.innerHTML = `<option value="all"${REP.fyr === 'all' ? ' selected' : ''}>Earliest</option>` +
+    yrs.map(y => `<option value="${y}"${String(y) === String(REP.fyr) ? ' selected' : ''}>${y}</option>`).join('');
+  fmSel.innerHTML = REP_MONTHS.map((m,i) => `<option value="${i}"${String(i) === String(REP.fmon) ? ' selected' : ''}>${m}</option>`).join('');
+  fmSel.disabled = fmSel.hidden = (REP.fyr === 'all');
+
+  /* julat: dari hari pertama bulan mula hingga hari terakhir bulan akhir */
+  let from = REP.fyr !== 'all' ? REP.fyr + '-' + String(+REP.fmon + 1).padStart(2,'0') + '-01' : null;
+  let cut  = (REP.yr && REP.yr !== 'all') ? repEOM(+REP.yr, +REP.mon) : null;
+  if(from && cut && from > cut){                      /* tertukar? betulkan sendiri */
+    const a = from, b = cut;
+    cut = repEOM(+a.slice(0,4), +a.slice(5,7) - 1);
+    from = b.slice(0,8) + '01';
+  }
+  const ranged = !!(from || cut);
+  const R = ranged ? all.filter(r => { const d = repDate(r);
+    return d && (!from || d >= from) && (!cut || d <= cut); }) : all;
+  const skipped = ranged ? all.length - R.length : 0;
+  const dmy = iso => iso.split('-').reverse().join('/');
+  const tot = R.reduce((a,r) => a + (r.jc || 0), 0);
 
   const logo = document.querySelector('.mast-brand .logo-wrap img');
   if(logo) $('rep-logo').src = logo.src;
 
   /* jalur telco */
   const byT = new Map();
-  R.forEach(r => byT.set(r.t, (byT.get(r.t) || 0) + (r.js || 0)));
+  R.forEach(r => byT.set(r.t, (byT.get(r.t) || 0) + (r.jc || 0)));
   $('rep-telco').innerHTML = [...byT].sort((a,b) => b[1] - a[1])
     .map(([t,m]) => `<div title="${esc(t)}"><b>${km(m)}m</b><span>${esc(telcoShort(t))}</span></div>`).join('')
     || '<div><b>0m</b><span>No rows</span></div>';
 
   /* daerah */
   const byD = new Map();
-  R.forEach(r => byD.set(r.d, (byD.get(r.d) || 0) + (r.js || 0)));
+  R.forEach(r => byD.set(r.d, (byD.get(r.d) || 0) + (r.jc || 0)));
   const list = [...byD].map(([d,m]) => ({d, m, p:tot ? m/tot*100 : 0, g:repPlace(d)}))
                        .sort((a,b) => b.m - a.m);
 
@@ -2647,9 +2668,10 @@ function drawReport(){
 
   const off = list.filter(o => !o.g && o.m > 0).map(o => o.d);
   $('rep-note').innerHTML =
-    `Distance shown is <b>jarak sebenar</b> &middot; source: ${esc(DATA.src || '—')} &middot; ${fmt(R.length)} applications` +
-    (cut ? ` with a WP work start order on or before ${cut.split('-').reverse().join('/')}`
-         + (skipped ? ` &middot; ${fmt(skipped)} left out (later date, or no date recorded)` : '')
+    `Distance shown is <b>jarak cadangan</b> &middot; source: ${esc(DATA.src || '—')} &middot; ${fmt(R.length)} applications` +
+    (ranged ? ` with an IL work start order ` +
+         (from && cut ? `from ${dmy(from)} to ${dmy(cut)}` : from ? `on or after ${dmy(from)}` : `on or before ${dmy(cut)}`)
+         + (skipped ? ` &middot; ${fmt(skipped)} left out (outside the date range, or no IL date recorded)` : '')
          : '') +
     (off.length ? ` &middot; not shaded on the map: ${esc(off.join(', '))}` : '') +
     `<br>District outlines: malaysia-geojson (MIT), derived from DOSM open data.`;
@@ -2669,6 +2691,8 @@ function drawReport(){
 
 $('rep-yr').addEventListener('change',  e => { REP.yr  = e.target.value; repSave(); drawReport(); });
 $('rep-mon').addEventListener('change', e => { REP.mon = e.target.value; repSave(); drawReport(); });
+$('rep-fyr').addEventListener('change',  e => { REP.fyr  = e.target.value; repSave(); drawReport(); });
+$('rep-fmon').addEventListener('change', e => { REP.fmon = e.target.value; repSave(); drawReport(); });
 /* Mod cetak report dipasang pada peristiwa beforeprint, bukan pemasa:
    sesetengah Chrome tidak menahan skrip semasa dialog cetak dibuka. */
 let REP_PRINT = false;
