@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>UDM Project Performance Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 /* If cdnjs is blocked or slow, try two more mirrors before giving up. */
@@ -1294,6 +1296,319 @@
     letter-spacing:0;text-transform:none}
 
 </style>
+<style id="ui-route-skin">
+/* ═══════════ Navy skin — original UDM palette: navy ink, blue data, green accent ═══════════ */
+:root{
+  --ink:#141A2E; --ink-2:#1D2540; --ink-3:#28314F;
+  --fibre:#2FA360; --fibre-deep:#258A50; --signal:#2FA360; --signal-text:#2FA360;
+  --bg:#F4F6F9; --panel-bg:#FFFFFF; --panel-2:#F8FAFB;
+  --panel-border:#E3E7ED; --panel-border-2:#D2D8E0;
+  --text-light:#1B1F3B; --text-dim:#3E4759; --text-muted:#6B7280;
+  --accent:#2FA360; --accent-soft:rgba(47,163,96,.12);
+  --attn:#2FA360;
+  --chart:#1B1F3B; --chart-soft:#9AA3AF; --focus:#2563EB;
+  --ov:rgba(27,31,59,.06); --ov-soft:rgba(27,31,59,.03);
+  --drafter-adam:#2FA360; --drafter-intan:#7C3AED; --drafter-nabihah:#2563EB;
+  --drafter-nasuha:#DC2626; --drafter-syafiqa:#D97706; --drafter-wan:#DB2777;
+  --body:"Archivo","Segoe UI",ui-sans-serif,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --display:var(--body);
+  --done:0%;
+  color-scheme:light;
+}
+html[data-theme="dark"]{
+  --bg:#0E1320; --panel-bg:#161B29; --panel-2:#1A2030;
+  --panel-border:rgba(255,255,255,.09); --panel-border-2:rgba(255,255,255,.17);
+  --text-light:#E7ECF5; --text-dim:#B3BCCC; --text-muted:#8B95A7;
+  --accent:#4FC181; --accent-soft:rgba(79,193,129,.16); --attn:#4FC181;
+  --fibre:#4FC181; --fibre-deep:#3FA86E; --signal:#4FC181;
+  --chart:#7AA2F7; --chart-soft:#4A5568; --focus:#7AA2F7;
+  --ov:rgba(255,255,255,.06); --ov-soft:rgba(255,255,255,.03);
+  --drafter-adam:#4FC181; --drafter-intan:#B08AF0; --drafter-nabihah:#7AA2F7;
+  --drafter-nasuha:#EF7B6E; --drafter-syafiqa:#E0A144; --drafter-wan:#F472B6;
+  --ink:#0B0F1A; --ink-2:#161B29; --ink-3:#1F2638;
+  color-scheme:dark;
+}
+body{font-family:var(--body);background:var(--bg);color:var(--text-light);
+  font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.topbar h1,.kpi-box .kb-value,.panel h2,h2,h3,.modal-head h3{font-family:var(--body)}
+
+/* ── sidebar: the dark ground the logo was drawn for ── */
+.sidebar{
+  --panel-bg:#1D2540; --panel-2:#1D2540; --panel-border:rgba(255,255,255,.14); --panel-border-2:rgba(255,255,255,.28);
+  --text-light:#F1F4FA; --text-dim:#C7CEDD; --text-muted:#8F99AE; --ov:rgba(255,255,255,.07);
+  --focus:#4FC181;
+  background:var(--ink) !important; color:var(--text-dim);
+  width:244px !important; padding:20px 16px 24px !important; border-right:0 !important;
+}
+.sidebar .brand{margin:6px 0 22px !important;padding:0 2px}
+.sidebar .brand .brand-logo{display:block;width:184px;max-width:100%;height:auto}
+.sidebar .brand.has-logo .wordmark{display:none}
+.sidebar .brand .wordmark{color:#F1F4FA}
+.back-btn{
+  font-family:var(--body) !important;font-size:12.5px !important;letter-spacing:0 !important;
+  text-transform:none !important;font-weight:500 !important;border-radius:8px !important;
+  color:#B4BDCF !important;border:1px solid rgba(255,255,255,.16) !important;
+  background:transparent !important;padding:7px 12px 7px 9px !important;margin-bottom:22px !important}
+.back-btn:hover{color:#fff !important;border-color:rgba(255,255,255,.4) !important;background:rgba(255,255,255,.05) !important}
+.sidebar .side-btn{
+  border:0 !important;background:transparent !important;border-radius:8px !important;
+  color:#B4BDCF !important;font-size:13.5px !important;font-weight:600 !important;
+  padding:10px 12px 10px 14px !important;margin-bottom:4px !important;position:relative;letter-spacing:.01em}
+.sidebar .side-btn:hover{background:rgba(255,255,255,.05) !important;color:#fff !important}
+.sidebar .side-btn.active{background:#4FC181 !important;color:#0B0F1A !important}
+.sidebar .side-btn.active::before{content:none}
+.sidebar .side-filter-label,.sidebar .side-select-label{
+  font-family:var(--body) !important;text-transform:none !important;letter-spacing:0 !important;
+  font-size:12px !important;font-weight:600 !important;color:#8F99AE !important;margin:20px 0 8px !important}
+.sidebar .drafter-chip{
+  border:1px solid transparent !important;background:transparent !important;border-radius:8px !important;
+  color:#C7CEDD !important;padding:7px 12px !important;margin-bottom:2px !important;font-size:13px !important}
+.sidebar .drafter-chip:hover{background:rgba(255,255,255,.05) !important;color:#fff !important}
+.sidebar .drafter-chip.selected{background:rgba(79,193,129,.20) !important;border-color:rgba(79,193,129,.6) !important;color:#fff !important}
+.sidebar .side-select,.sidebar .ms-dropdown-btn{
+  background:var(--ink-2) !important;border:1px solid rgba(255,255,255,.14) !important;
+  color:#F1F4FA !important;border-radius:8px !important;padding:8px 10px !important;font-size:13px !important}
+.sidebar .side-select option{background:#1D2540;color:#F1F4FA}
+.sidebar .ms-dropdown-panel{background:#1D2540 !important;border-color:rgba(255,255,255,.18) !important}
+.sidebar .ms-option{color:#DDE3EE}
+.sidebar .ms-option input{accent-color:#2E9E52}
+.sidebar .udm-change-file-btn{
+  background:transparent !important;border:1px solid rgba(255,255,255,.18) !important;color:#E3E8F2 !important;
+  border-radius:8px !important;font-weight:600 !important;font-size:12.5px !important}
+.sidebar .udm-change-file-btn:hover{background:rgba(255,255,255,.06) !important;border-color:rgba(255,255,255,.35) !important}
+.sidebar .udm-refresh-btn{background:transparent !important;border-color:rgba(255,255,255,.25) !important}
+.sidebar .theme-toggle{
+  font-family:var(--body) !important;text-transform:none !important;letter-spacing:0 !important;
+  font-size:12.5px !important;border-radius:8px !important;background:transparent !important;
+  border:1px solid rgba(255,255,255,.14) !important;color:#B4BDCF !important}
+.sidebar .theme-toggle:hover{color:#fff !important;border-color:rgba(255,255,255,.35) !important}
+.sidebar .prepared-by{color:#7E889C !important;font-size:11.5px !important;margin-top:16px !important}
+
+/* ── main column ── */
+.main{padding:26px 30px 40px !important;max-width:1520px}
+.topbar{align-items:flex-end !important;margin-bottom:22px !important;row-gap:14px !important}
+.topbar h1{font-size:27px !important;font-weight:700 !important;letter-spacing:-.025em !important;
+  font-stretch:92%;line-height:1.1;color:var(--text-light)}
+.tk-card{border-left:1px solid var(--panel-border) !important;padding:0 0 0 18px !important}
+.tk-card .tk-label{font-family:var(--body) !important;font-size:12px !important;letter-spacing:0 !important;
+  text-transform:none !important;color:var(--text-muted) !important;margin-bottom:3px !important}
+.tk-card .tk-value{font-family:var(--body) !important;font-size:17px !important;font-weight:700 !important;
+  color:var(--text-light) !important;letter-spacing:-.01em}
+
+/* the signature: completion drawn as a fibre route, laid end to end */
+.topbar::after{
+  content:"";flex:0 0 100%;height:14px;order:3;
+  background:
+    radial-gradient(circle at 7px 7px,var(--fibre) 0 5px,transparent 5.5px) left center/14px 14px no-repeat,
+    radial-gradient(circle at 7px 7px,var(--panel-bg) 0 3px,var(--signal-dot,var(--panel-border-2)) 3.5px 5px,transparent 5.5px) right center/14px 14px no-repeat,
+    linear-gradient(var(--fibre),var(--fibre)) left center/var(--done) 4px no-repeat,
+    repeating-linear-gradient(90deg,var(--panel-border-2) 0 8px,transparent 8px 13px) right center/calc(100% - var(--done)) 2px no-repeat;
+}
+.topbar.route-done::after{--signal-dot:var(--fibre)}
+
+/* KPI: one strip, not five floating cards */
+body .kpi-row{gap:0 !important;background:var(--panel-bg) !important;border:1px solid var(--panel-border) !important;
+  border-radius:14px !important;overflow:hidden !important;margin-bottom:22px !important}
+.kpi-box{border:0 !important;border-radius:0 !important;background:transparent !important;box-shadow:none !important;
+  padding:16px 18px 17px !important;border-left:1px solid var(--panel-border) !important}
+.kpi-box:first-child{border-left:0 !important}
+.kpi-box:hover{background:var(--panel-2) !important}
+.kpi-box .kb-label{font-family:var(--body) !important;font-size:12.5px !important;color:var(--text-muted) !important;
+  text-transform:none !important;letter-spacing:0 !important;margin-bottom:8px !important}
+.kpi-box .kb-value{font-size:30px !important;font-weight:700 !important;letter-spacing:-.03em !important;
+  font-stretch:88%;line-height:1 !important;color:var(--text-light)}
+.kpi-box.clickable .kb-value{color:var(--attn) !important}
+.kpi-box.clickable .click-hint{font-size:11px !important;color:var(--text-muted) !important;opacity:.8}
+.kpi-box.clickable:hover .kb-label{color:var(--text-light) !important}
+@media (max-width:1240px){ .kpi-box .kb-value{font-size:24px !important} .kpi-box{padding:13px 14px !important} }
+@media (max-width:980px){ .kpi-box .kb-value{font-size:20px !important} }
+
+/* panels */
+.content-grid{gap:18px !important;align-items:stretch !important}
+.panel{border-radius:14px !important;padding:20px 22px 22px !important;border:1px solid var(--panel-border) !important;
+  background:var(--panel-bg) !important;margin-bottom:18px !important;box-shadow:none !important}
+.content-grid .panel{margin-bottom:0 !important}
+.content-grid{margin-bottom:18px}
+.panel.zoomable:hover{border-color:var(--panel-border-2) !important;background:var(--panel-bg) !important}
+.panel h2{font-size:16px !important;font-weight:700 !important;letter-spacing:-.01em !important;margin:0 0 14px !important;
+  color:var(--text-light) !important}
+.panel .chart-wrap{flex:1;align-items:center}
+.panel .chart-wrap svg,.chart-wrap svg{height:auto !important;display:block}
+.chart-note{font-size:12.5px !important;max-width:68ch}
+.chart-controls,.legend-row{justify-content:flex-start !important;font-size:12.5px !important;gap:16px !important;
+  color:var(--text-muted) !important;margin-bottom:12px !important}
+.radio-dot{border-color:var(--panel-border-2) !important}
+.radio-dot.on{background:var(--fibre) !important;border-color:var(--fibre) !important}
+.chart-controls > span[role=radio]{display:inline-flex;align-items:center;gap:6px;padding:3px 2px;border-radius:6px}
+.chart-controls > span[role=radio]:hover{color:var(--text-light)}
+.chart-controls > span[aria-checked=true]{color:var(--text-light);font-weight:600}
+.legend-row .dot{width:9px !important;height:9px !important}
+
+/* list */
+.list-search input{background:var(--panel-2) !important;border:1px solid var(--panel-border) !important;
+  border-radius:8px !important;padding:9px 12px !important;font-size:13.5px !important;font-family:var(--body)}
+.list-search input:focus{outline:2px solid var(--focus) !important;outline-offset:0}
+.list-count{font-size:12.5px !important}
+.list-batch-btn{border-radius:8px !important;background:var(--panel-bg) !important;border:1px solid var(--panel-border-2) !important;
+  font-size:12.5px !important;font-family:var(--body)}
+.list-batch-btn:hover{border-color:var(--text-dim) !important}
+.list-table-wrap{border-radius:10px !important;max-height:420px !important}
+table.list-table{font-size:13px !important}
+table.list-table thead th,table.modal-table thead th{
+  font-family:var(--body) !important;text-transform:none !important;letter-spacing:0 !important;
+  font-size:12px !important;font-weight:600 !important;color:var(--text-muted) !important;
+  background:var(--panel-2) !important;padding:10px 12px !important}
+table.list-table tbody td{padding:10px 12px !important;color:var(--text-dim)}
+table.list-table tbody td:not(:nth-child(2)){white-space:nowrap}
+table.list-table tbody tr:hover{background:var(--accent-soft) !important}
+.list-table tbody td:first-of-type + td:hover{color:var(--fibre-deep) !important}
+html[data-theme="dark"] .list-table tbody td:first-of-type + td:hover{color:var(--accent) !important}
+.status-pill{border-radius:999px !important;font-size:11.5px !important;font-weight:600 !important;padding:3px 10px !important}
+.status-pill.complete{background:rgba(47,163,96,.13) !important;color:#258A50 !important}
+.status-pill.pending{background:rgba(217,119,6,.14) !important;color:#B45309 !important}
+html[data-theme="dark"] .status-pill.complete{background:rgba(79,193,129,.16) !important;color:#7FD6A6 !important}
+html[data-theme="dark"] .status-pill.pending{background:rgba(224,161,68,.16) !important;color:#E0A144 !important}
+footer.note{color:var(--text-muted) !important;font-size:12px !important;margin-top:10px !important}
+
+/* modals */
+.modal-overlay{background:rgba(9,12,22,.62) !important}
+.modal-box{border-radius:16px !important;box-shadow:0 30px 80px -30px rgba(9,12,22,.55) !important}
+.modal-head h3{font-size:17px !important;font-weight:700 !important}
+.detail-row{border-bottom-color:var(--panel-border) !important}
+.pm-btn{border-radius:8px !important;font-family:var(--body)}
+.pm-btn-primary{background:var(--fibre) !important;border-color:var(--fibre) !important;color:#fff !important}
+.pm-btn-primary:hover{background:var(--fibre-deep) !important}
+
+/* ── upload gate ── */
+#udmGateOverlay{
+  --g-bg:var(--bg); --g-surface:#FFFFFF; --g-surface2:#FFFFFF;
+  --g-ink:#1B1F3B; --g-dim:#3E4759; --g-faint:#6B7280; --g-line:#E3E7ED; --g-line2:#D2D8E0;
+  --g-green:#258A50; --g-amber:#B45309;
+  background:var(--bg) !important;font-family:var(--body) !important}
+html[data-theme="dark"] #udmGateOverlay{
+  --g-surface:#161B29; --g-surface2:#161B29; --g-ink:#E7ECF5; --g-dim:#B3BCCC; --g-faint:#8B95A7;
+  --g-line:rgba(255,255,255,.09); --g-line2:rgba(255,255,255,.2); --g-green:#4FC181}
+#udmGateOverlay .gbox{border-radius:18px !important;overflow:hidden;border:0 !important;
+  box-shadow:0 40px 90px -50px rgba(14,19,32,.5) !important;grid-template-columns:1fr 1fr}
+#udmGateOverlay .gleft{background:var(--ink) !important;color:#C7CEDD;border-right:0 !important;
+  padding:48px 46px !important;position:relative}
+#udmGateOverlay .gright{background:var(--g-surface) !important;padding:48px 44px !important}
+#udmGateOverlay .gback{font-family:var(--body) !important;font-size:12.5px !important;letter-spacing:0 !important;
+  text-transform:none !important;border-radius:8px !important;color:#B4BDCF !important;
+  border:1px solid rgba(255,255,255,.16) !important;background:transparent !important;margin-bottom:34px !important}
+#udmGateOverlay .gback:hover{color:#fff !important;border-color:rgba(255,255,255,.4) !important}
+#udmGateOverlay .glogo{height:auto !important;width:210px;filter:none !important;margin-bottom:34px !important}
+#udmGateOverlay .geyebrow{border:0 !important;padding:0 !important;font-family:var(--body) !important;--signal:#4FC181;
+  font-size:13px !important;letter-spacing:0 !important;text-transform:none !important;font-weight:600 !important;
+  color:var(--signal) !important;margin-bottom:10px !important}
+#udmGateOverlay h1{font-family:var(--body) !important;color:#F4F6FB !important;font-size:38px !important;
+  font-weight:700 !important;letter-spacing:-.03em !important;font-stretch:90%;line-height:1.05 !important}
+#udmGateOverlay h1 em{color:#F4F6FB !important;font-style:normal !important;font-weight:400 !important;opacity:.72}
+#udmGateOverlay .gdesc{color:#B4BDCF !important;font-size:15px !important}
+#udmGateOverlay .gfeats{gap:12px !important}
+#udmGateOverlay .gfeats li{grid-template-columns:14px 1fr !important;gap:12px !important;color:#A3ADC1 !important;font-size:13.5px !important}
+#udmGateOverlay .gfeats b{color:#F1F4FA !important}
+#udmGateOverlay .gn{font-size:0 !important;padding-top:8px !important}
+#udmGateOverlay .gn::before{content:"";display:block;width:14px;height:2px;border-radius:1px;background:var(--fibre)}
+#udmGateOverlay .gby{border-top:1px solid rgba(255,255,255,.12) !important}
+#udmGateOverlay .gby-lbl{font-family:var(--body) !important;font-size:12px !important;letter-spacing:0 !important;
+  text-transform:none !important;color:#7E889C !important}
+#udmGateOverlay .gby-name{color:#F1F4FA !important;font-size:17px !important}
+#udmGateOverlay .gdrop{border-radius:14px !important;border:1.5px dashed var(--g-line2) !important;
+  background:var(--panel-2) !important;padding:44px 24px !important}
+#udmGateOverlay .gdrop:hover,#udmGateOverlay .gdrop.over{border-color:var(--fibre) !important;background:rgba(47,163,96,.07) !important;color:var(--g-green) !important}
+#udmGateOverlay .gdrop .big{font-size:19px !important;font-weight:700 !important}
+#udmGateOverlay .gacts{gap:10px !important}
+#udmGateOverlay .gbtn,#udmGateOverlay .gl-btn{border-radius:8px !important;font-weight:600 !important}
+#udmGateOverlay #udmGateUseExisting{background:var(--fibre) !important;border-color:var(--fibre) !important;color:#fff !important}
+#udmGateOverlay #udmGateUseExisting:hover{background:var(--fibre-deep) !important}
+#udmGateOverlay .gate-toggle{font-family:var(--body) !important;text-transform:none !important;letter-spacing:0 !important;
+  font-size:12.5px !important;border-radius:8px !important}
+#udmGateOverlay .glinknote{font-size:12.5px !important;line-height:1.6 !important}
+@media (max-width:880px){
+  #udmGateOverlay .gbox{grid-template-columns:1fr !important}
+  #udmGateOverlay h1{font-size:30px !important}
+}
+
+/* ── reset filters ── */
+.reset-filters-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin:16px 0 0;
+  padding:9px 12px;border-radius:8px;font:600 12.5px var(--body);cursor:pointer;
+  background:rgba(79,193,129,.16);border:1px solid rgba(79,193,129,.55);color:#BFF0D3}
+.reset-filters-btn svg{width:14px;height:14px}
+.reset-filters-btn:hover:not(:disabled){background:rgba(79,193,129,.26);color:#fff}
+.reset-filters-btn:disabled{background:transparent;border-color:rgba(255,255,255,.10);color:rgba(255,255,255,.32);cursor:default}
+.reset-filters-btn:focus-visible{outline:2px solid #4FC181;outline-offset:2px}
+
+/* ── layout: time series run the full width ── */
+.content-grid .panel.wide{grid-column:1 / -1}
+.content-grid .panel:not(.wide) .chart-wrap{min-height:220px}
+.kpi-box.clickable.is-zero .kb-value{color:var(--text-muted) !important;opacity:.55}
+.filter-toggle{display:none}
+
+/* ── monthly distance by drafter: table view ── */
+.ml-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.ml-head h2{margin:0 !important}
+.ml-mode{display:inline-flex;border:1px solid var(--panel-border-2);border-radius:8px;padding:2px;gap:2px;margin-right:88px}
+.ml-mode button{font:600 12px var(--body);border:0;background:transparent;color:var(--text-muted);padding:5px 12px;border-radius:6px;cursor:pointer}
+.ml-mode button[aria-selected=true]{background:var(--accent-soft);color:var(--text-light)}
+.ml-mode button:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+.panel.ml-table-mode #dr-legend{display:none !important}
+.mt-wrap{max-height:300px;overflow:auto;border:1px solid var(--panel-border);border-radius:10px;cursor:auto;width:100%}
+.mt-table{width:100%;border-collapse:separate;border-spacing:0;font-size:12.5px;font-variant-numeric:tabular-nums}
+.mt-table th,.mt-table td{padding:7px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--panel-border)}
+.mt-table thead th{position:sticky;top:0;z-index:2;background:var(--panel-2);color:var(--text-muted);font-weight:600;font-size:12px}
+.mt-table tfoot th,.mt-table tfoot td{position:sticky;bottom:0;z-index:2;background:var(--panel-2);font-weight:700;color:var(--text-light);border-bottom:0;border-top:1px solid var(--panel-border-2)}
+.mt-table .mt-month{text-align:left;color:var(--text-dim);font-weight:600}
+.mt-table tbody td{color:var(--text-light)}
+.mt-table .mt-zero{color:var(--text-muted);opacity:.5}
+.mt-table .mt-total{font-weight:700;color:var(--text-light);border-left:1px solid var(--panel-border)}
+.mt-table tbody tr:hover th,.mt-table tbody tr:hover td{box-shadow:inset 0 0 0 9999px var(--ov)}
+.mt-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+#chartZoomBody .mt-wrap{max-height:none}
+.mt-note{font-size:12px;color:var(--text-muted);margin:10px 2px 0;line-height:1.5}
+.panel .chart-wrap:has(.mt-wrap){display:block}
+
+/* ── project modal: same type as the rest, sentence case ── */
+.modal-box .pm-ref span,.modal-box .pl,.modal-box .mk,.modal-box .pm-sec,.modal-box .mnode .mbar em{
+  font-family:var(--body) !important;text-transform:none !important;letter-spacing:0 !important}
+.modal-box .pm-ref span{font-size:12px}
+.modal-box .pm-ref b{font-family:var(--body);font-size:14px;font-weight:700;letter-spacing:.01em}
+.modal-box .pm-crumb{font-size:12.5px}
+.modal-box .pm-stats{border-radius:12px}
+.modal-box .pl{font-size:12px;margin-bottom:4px}
+.modal-box .pv{font-family:var(--body);font-size:22px;font-weight:700;letter-spacing:-.02em;font-stretch:90%}
+.modal-box .pm-sec{font-size:13px;color:var(--text-light) !important;margin:22px 0 14px}
+.modal-box .mnode .mbar{height:3px;top:3px;border-radius:2px}
+.modal-box .mnode .mbar.on{background:var(--fibre)}
+.modal-box .mnode .mbar.off{background:repeating-linear-gradient(90deg,var(--panel-border-2) 0 6px,transparent 6px 10px);height:2px;top:4px}
+.modal-box .mnode .mbar em{font-size:11px;top:-17px}
+.modal-box .mdot{width:10px;height:10px}
+.modal-box .mdot.on{background:var(--fibre);border-color:var(--fibre)}
+.modal-box .mk{font-size:11.5px;margin-top:8px}
+.modal-box .md{font-size:12px}
+
+/* ── small screens ── */
+@media (max-width:860px){
+  .sidebar{width:100% !important;padding:14px 14px 16px !important}
+  .sidebar .brand{margin:2px 0 14px !important}
+  .sidebar .side-btn{display:inline-block !important;width:auto !important;margin-right:6px !important}
+  .filter-toggle{display:block;width:100%;margin-top:10px;padding:10px 12px;border-radius:8px;
+    font:600 13px var(--body);color:#F1F4FA;background:transparent;border:1px solid rgba(255,255,255,.22);cursor:pointer}
+  .sidebar.filters-collapsed #drafterFilterBlock,.sidebar.filters-collapsed #overviewFilterBlock{display:none !important}
+  .sidebar .brand .brand-logo{width:120px}
+  .main{padding:18px 14px 40px !important}
+  .topbar h1{font-size:21px !important;white-space:normal !important}
+  body .kpi-row{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  .kpi-box{border-left:0 !important;border-top:1px solid var(--panel-border) !important}
+  .kpi-box:nth-child(odd){border-right:1px solid var(--panel-border) !important}
+  .kpi-box:nth-child(-n+2){border-top:0 !important}
+  .kpi-box .kb-value{font-size:24px !important}
+  table{min-width:600px}
+}
+@media (max-width:520px){
+  body .kpi-row{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+}
+</style>
 </head>
 <body>
 
@@ -1390,6 +1705,8 @@
         <div class="ms-dropdown" id="dr-f-completed-month"></div>
       </div>
 
+      <button type="button" class="reset-filters-btn" id="dr-reset" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Reset filters</button>
+
       <div class="change-file-row">
         <button class="udm-change-file-btn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
@@ -1415,6 +1732,8 @@
         <div class="ms-dropdown" id="ov-f-completed-year"></div>
         <div class="ms-dropdown" id="ov-f-completed-month"></div>
       </div>
+      <button type="button" class="reset-filters-btn" id="ov-reset" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Reset filters</button>
+
       <div class="change-file-row">
         <button class="udm-change-file-btn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
@@ -1468,7 +1787,7 @@
           <div class="chart-wrap" id="ov-chartMonthly"></div>
         </div>
         <div class="panel">
-          <h2>Cumulative Projects by Year and Month</h2>
+          <h2>Projects by Year and Month</h2>
           <div class="chart-controls"><span><span class="radio-dot on"></span>Count of Project Name</span><span><span class="radio-dot"></span>Cumulative Projects</span></div>
           <div class="chart-wrap" id="ov-chartProjMonthly"></div>
         </div>
@@ -1541,7 +1860,12 @@
           <div class="chart-wrap" id="dr-chartMonthly"></div>
         </div>
         <div class="panel">
-          <h2>Monthly Distance</h2>
+          <div class="ml-head"><h2>Monthly Distance by Drafter</h2>
+            <div class="ml-mode" role="tablist" aria-label="View">
+              <button type="button" role="tab" data-mode="table" aria-selected="true">Table</button>
+              <button type="button" role="tab" data-mode="chart" aria-selected="false">Chart</button>
+            </div>
+          </div>
           <div class="legend-row" id="dr-legend"></div>
           <div class="chart-wrap" id="dr-chartMonthlyByDrafter"></div>
         </div>
@@ -1651,12 +1975,45 @@ function runUdmDashboard(initialData){
 
   var DRAFTER_COLORS = {
     'Adam':'var(--drafter-adam)','Intan':'var(--drafter-intan)','Nabihah':'var(--drafter-nabihah)',
-    'Nasuha':'var(--drafter-nasuha)','Syafiqa':'var(--drafter-syafiqa)','Tbc':'var(--text-muted)'
+    'Nasuha':'var(--drafter-nasuha)','Syafiqa':'var(--drafter-syafiqa)','Wan':'var(--drafter-wan)','Tbc':'var(--text-muted)'
   };
   /* r[17] holds every drafter on the row; a shared site splits its distance evenly */
   function dList(r){ return (r[17] && r[17].length) ? r[17] : [r[0]]; }
   function dShare(r){ return 1 / dList(r).length; }
-  var DRAFTER_ORDER = ['Adam','Intan','Nabihah','Nasuha','Syafiqa'];
+  /* Drafters come from the data itself, so a new name in the tracker shows up
+     everywhere (filter, charts, legend) without editing this file. */
+  /* tidy drafter names once (spaces, capitals, known spellings) so "WAN " and "Wan" are one person */
+  (function(){
+    var CANON = {'SYAFIQAH':'Syafiqa','NABIHA':'Nabihah'};
+    function tidy(v){
+      var t = String(v == null ? '' : v).trim().replace(/\s+/g,' ');
+      if(!t || t.toUpperCase() === 'TBC') return 'TBC';
+      var up = t.toUpperCase();
+      return CANON[up] || up.charAt(0) + up.slice(1).toLowerCase();
+    }
+    RAW.forEach(function(r){
+      r[0] = tidy(r[0]);
+      if(r[17] && r[17].length){
+        var seen = {};
+        r[17] = r[17].map(tidy).filter(function(d){ if(seen[d]) return false; seen[d] = 1; return true; });
+      }
+    });
+  })();
+  var DRAFTER_ORDER = (function(){
+    var seen = {};
+    RAW.forEach(function(r){ dList(r).forEach(function(d){
+      if(d && String(d).toUpperCase() !== 'TBC') seen[d] = 1;
+    }); });
+    return Object.keys(seen).sort(function(a,b){ return a.localeCompare(b); });
+  })();
+  /* fixed colours stay with the five original drafters; anyone new takes the next free one */
+  var EXTRA_DRAFTER_COLORS = ['#B0457A','#4E7F2A','#C77A1E','#2A8C9C','#7A5C3E','#5468C4','#9C3D3D','#3F8F5A'];
+  DRAFTER_ORDER.forEach(function(name){
+    if(!DRAFTER_COLORS[name]){
+      var used = Object.keys(DRAFTER_COLORS).length - 7;
+      DRAFTER_COLORS[name] = EXTRA_DRAFTER_COLORS[Math.max(0, used) % EXTRA_DRAFTER_COLORS.length];
+    }
+  });
 
   function fmtInt(n){ return Math.round(n).toLocaleString('en-US'); }
   function fmtDist(n){ return Math.round(n).toLocaleString('en-US') + ' m'; }
@@ -1671,6 +2028,20 @@ function runUdmDashboard(initialData){
   // Shared aspect ratio (height/width) used by every chart so they all render
   // at the same pixel height when placed in equal-width containers.
   var CHART_ASPECT = 0.42;
+  /* Draw charts at their real on-screen width so text sits at its true size.
+     A chart in a hidden tab measures 0, so its width is worked out from the layout. */
+  function chartWidth(container, fallback){
+    var w = container ? container.clientWidth : 0;
+    if(!w){
+      var main = document.querySelector('.main'), mw = main ? main.clientWidth : 0;
+      if(!mw) return fallback;
+      var cs = getComputedStyle(main);
+      mw -= (parseFloat(cs.paddingLeft)||0) + (parseFloat(cs.paddingRight)||0);
+      var full = (container && container.closest('.panel.wide')) || window.innerWidth <= 1080;
+      w = full ? mw - 46 : (mw - 18)/2 - 46;
+    }
+    return Math.max(300, Math.min(1240, Math.round(w)));
+  }
 
   // ---- Horizontal bar chart (dark theme) ----
   /* Gradient ids must be unique per chart: a url(#id) reference resolves to the
@@ -1690,16 +2061,16 @@ function runUdmDashboard(initialData){
       return;
     }
     var maxLabelLen = Math.max.apply(null, items.map(function(d){return String(d.label).length;}));
-    var leftLabelW = Math.min(210, Math.max(100, maxLabelLen*7.4+22)), rightPad = 110, topPad = 8;
-    var totalW = 640;
-    var chartW = Math.max(200, totalW - leftLabelW - rightPad);
-    var totalH = Math.round(CHART_ASPECT * totalW);
-    var rowH = Math.min(60, Math.max(16, (totalH - topPad*2) / items.length));
-    totalH = Math.round(topPad*2 + rowH*items.length);
+    var leftLabelW = Math.min(190, Math.max(80, maxLabelLen*7.2+18)), rightPad = 96, topPad = 8;
+    var totalW = chartWidth(container, 540);
+    var chartW = Math.max(110, totalW - leftLabelW - rightPad);
+    var totalH = Math.round(Math.min(300, Math.max(200, CHART_ASPECT * totalW)));
+    var rowH = Math.min(46, Math.max(20, (totalH - topPad*2 - 14) / items.length));
+    totalH = Math.round(topPad*2 + 14 + rowH*items.length);
     var maxVal = Math.max.apply(null, items.map(function(d){return d.val;}));
     if(maxVal <= 0) maxVal = 1;
 
-    var ticks = 4, gridHtml = '';
+    var ticks = chartW < 200 ? 1 : (chartW < 380 ? 2 : 4), gridHtml = '';
     for(var t=0; t<=ticks; t++){
       var gx = leftLabelW + (chartW * t/ticks);
       var gv = maxVal * t/ticks;
@@ -1707,7 +2078,7 @@ function runUdmDashboard(initialData){
       gridHtml += '<text x="'+gx.toFixed(1)+'" y="'+(totalH-2)+'" font-size="10.5" fill="var(--text-muted)" text-anchor="'+(t===0?'start':(t===ticks?'end':'middle'))+'">'+escapeHtml(axisLabelFn(gv))+'</text>';
     }
 
-    var barFontSize = Math.max(10.5, Math.min(13, rowH*0.4));
+    var barFontSize = Math.max(12, Math.min(13.5, rowH*0.45));
     var barsHtml = '';
     var hasSelection = false;
     if(opts.isSelected){
@@ -1756,11 +2127,11 @@ function runUdmDashboard(initialData){
       container.innerHTML = '<div class="empty-note">No data for the current filters.</div>';
       return;
     }
-    var totalW = 640;
-    var totalH = Math.round(CHART_ASPECT * totalW);
-    var cx = Math.round(totalW*0.235), cy = Math.round(totalH/2);
-    var rOuter = Math.round(totalW*0.1565), rInner = Math.round(totalW*0.0957);
-    var legendX = Math.round(totalW*0.504);
+    var totalW = chartWidth(container, 520);
+    var totalH = 250;
+    var rOuter = Math.min(100, Math.max(60, Math.round((totalW - 190)/2.4))), rInner = Math.round(rOuter*0.64);
+    var cx = rOuter + 16, cy = Math.round(totalH/2);
+    var legendX = cx + rOuter + (totalW < 420 ? 22 : 36);
 
     function polarToCartesian(cx,cy,r,angleDeg){
       var a = (angleDeg-90) * Math.PI/180;
@@ -1789,18 +2160,18 @@ function runUdmDashboard(initialData){
       angle += sweep;
     });
 
-    var legendSpacing = Math.round(totalH*0.167);
+    var legendSpacing = 52;
     var legendY = Math.round(cy - legendSpacing*(items.length-1)/2);
     items.forEach(function(d){
       var pct = ((d.val/total)*100).toFixed(1);
       legendHtml += '<circle cx="'+legendX+'" cy="'+legendY+'" r="6" fill="'+colorFn(d)+'"/>' +
-        '<text x="'+(legendX+14)+'" y="'+(legendY+5)+'" font-size="13.5" fill="var(--text-dim)">'+escapeHtml(d.label)+'</text>' +
-        '<text x="'+(legendX+14)+'" y="'+(legendY+22)+'" font-size="11.5" fill="var(--text-muted)">'+escapeHtml(valueLabelFn(d.val))+' ('+pct+'%)</text>';
+        '<text x="'+(legendX+14)+'" y="'+(legendY+5)+'" font-size="14" font-weight="600" fill="var(--text-light)">'+escapeHtml(d.label)+'</text>' +
+        '<text x="'+(legendX+14)+'" y="'+(legendY+24)+'" font-size="12.5" fill="var(--text-muted)">'+escapeHtml(valueLabelFn(d.val))+' ('+pct+'%)</text>';
       legendY += legendSpacing;
     });
 
     var centerLabel = '<text x="'+cx+'" y="'+(cy-6)+'" font-size="12.5" fill="var(--text-muted)" text-anchor="middle">Total</text>' +
-      '<text x="'+cx+'" y="'+(cy+16)+'" font-size="16" fill="var(--text-light)" text-anchor="middle" font-weight="700">'+escapeHtml(valueLabelFn(total))+'</text>';
+      '<text x="'+cx+'" y="'+(cy+16)+'" font-size="'+(rInner>52?17:12.5)+'" fill="var(--text-light)" text-anchor="middle" font-weight="700">'+escapeHtml(valueLabelFn(total))+'</text>';
 
     container.innerHTML = uniqGrad('<svg viewBox="0 0 '+totalW+' '+totalH+'" width="100%" height="'+totalH+'" xmlns="http://www.w3.org/2000/svg">' + '<defs>'+'<linearGradient id="gBar" x1="0" y1="0" x2="1" y2="0">'+'<stop offset="0%" stop-color="#5D5BEA"/><stop offset="100%" stop-color="#57A5F5"/>'+'</linearGradient>'+'<linearGradient id="gCol" x1="0" y1="0" x2="0" y2="1">'+'<stop offset="0%" stop-color="#6E86F7"/><stop offset="100%" stop-color="#3E4BC4"/>'+'</linearGradient>'+'<linearGradient id="gCol2" x1="0" y1="0" x2="0" y2="1">'+'<stop offset="0%" stop-color="#9E7BF2"/><stop offset="100%" stop-color="#5B3FBF"/>'+'</linearGradient>'+'</defs>'+
       slicesHtml + centerLabel + legendHtml + '</svg>');
@@ -1814,26 +2185,38 @@ function runUdmDashboard(initialData){
       container.innerHTML = '<div class="empty-note">No data.</div>';
       return;
     }
-    var totalW = 900, totalH = Math.round(CHART_ASPECT * totalW);
-    var leftPad = 50, bottomPad = 56, topPad = 34, rightPad = 14;
+    var totalW = chartWidth(container, 520), totalH = Math.round(Math.min(240, Math.max(200, 0.46 * totalW)));
+    var leftPad = 56, bottomPad = 28, topPad = 12, rightPad = 6;
     var plotW = totalW - leftPad - rightPad;
     var plotH = totalH - topPad - bottomPad;
+    /* the chart's own toggle picks monthly or running total */
+    var ctrl = container.closest('.panel') && container.closest('.panel').querySelector('.chart-controls');
+    var cumulative = !!(ctrl && ctrl.dataset.mode === 'cumulative');
+    if(cumulative){
+      var run = 0;
+      items = items.map(function(d){ run += d.val; var c = {}; for(var k in d) c[k] = d[k]; c.val = run; return c; });
+    }
     var maxVal = Math.max.apply(null, items.map(function(d){return d.val;}));
     if(maxVal <= 0) maxVal = 1;
-    var niceMax = maxVal * 1.22;
+    var slotGuess = (totalW - leftPad - rightPad) / items.length;
+    var longest = Math.max.apply(null, items.map(function(d){ return valueLabelFn(d.val).length; }));
+    var upright = longest * 6.1 > slotGuess * 0.95;          // full numbers would collide side by side
+    var headroom = upright ? (Math.min(4, Math.ceil(longest * 5.6 / slotGuess)) * 12 + 10) / (totalH - topPad - bottomPad) : 0.08;
+    var scale = niceScale(maxVal * (1 + headroom), 5), niceMax = scale.max;
 
-    var ticks = 3, gridHtml = '';
+    var ticks = scale.ticks, gridHtml = '';
     for(var t=0;t<=ticks;t++){
       var gy = topPad + plotH - (plotH*t/ticks);
-      var gv = niceMax*t/ticks;
+      var gv = scale.step*t;
       gridHtml += '<line x1="'+leftPad+'" y1="'+gy.toFixed(1)+'" x2="'+(leftPad+plotW)+'" y2="'+gy.toFixed(1)+'" stroke="var(--panel-border)" stroke-width="1"/>';
       gridHtml += '<text x="'+(leftPad-8)+'" y="'+(gy+3).toFixed(1)+'" font-size="11" fill="var(--text-muted)" text-anchor="end">'+escapeHtml(valueLabelFn(gv))+'</text>';
     }
 
     var n = items.length;
     var slot = plotW/n;
-    var barW = Math.min(28, slot*0.55);
-    var barsHtml='', lineHtml='', labelsHtml='', pts=[];
+    var barW = Math.min(26, slot*0.62);
+    function compact(v){ return v>=1000 ? (v/1000).toFixed(v>=10000?0:1).replace(/\.0$/,'')+'k' : fmtInt(v); }
+    var barsHtml='', lineHtml='', labelsHtml='', pts=[], placed=[];
     var hasSelection = false;
     if(opts.isSelected){
       for(var si=0; si<items.length; si++){ if(opts.isSelected(items[si])){ hasSelection = true; break; } }
@@ -1852,15 +2235,39 @@ function runUdmDashboard(initialData){
         '<rect x="'+barX.toFixed(1)+'" y="'+barY.toFixed(1)+'" width="'+barW.toFixed(1)+'" height="'+barH.toFixed(1)+'" fill="'+barColor+'" opacity="'+opacity+'"'+(selected?' stroke="var(--text-light)" stroke-width="1.5"':'')+'><title>'+escapeHtml(d.label)+': '+escapeHtml(valueLabelFn(d.val))+'</title></rect>' +
         '</g>';
       if(d.val>0){
-        labelsHtml += '<text x="'+cx.toFixed(1)+'" y="'+(barY-8).toFixed(1)+'" font-size="11.5" font-weight="600" fill="var(--text-light)" text-anchor="middle">'+escapeHtml(valueLabelFn(d.val))+'</text>';
+        /* level labels, full numbers. Where neighbours would touch, the later one
+           steps up a row instead of turning sideways. */
+        var lbl = valueLabelFn(d.val), fs = upright ? 10 : (slot<34?10.5:12);
+        var lw = lbl.length * fs * 0.56 + 3, lh = fs + 2;
+        var base = barY - (cumulative ? 9 : 6);
+        var x0 = cx - lw/2, x1 = cx + lw/2, moved = true;
+        while(moved){
+          moved = false;
+          for(var b=0; b<placed.length; b++){
+            var q = placed[b];
+            if(x0 < q.x1 && x1 > q.x0 && base > q.top && base - lh < q.base){ base = q.top - 1; moved = true; }
+          }
+        }
+        placed.push({x0:x0, x1:x1, base:base, top:base - lh});
+        labelsHtml += '<text x="'+cx.toFixed(1)+'" y="'+base.toFixed(1)+'" font-size="'+fs+'" font-weight="600" fill="var(--text-dim)" text-anchor="middle" stroke="var(--panel-bg)" stroke-width="3" stroke-linejoin="round" paint-order="stroke" style="pointer-events:none;">'+escapeHtml(lbl)+'</text>';
       }
-      var showLabel = (n<=20) || (i % Math.ceil(n/20) === 0);
+      var showLabel = (slot >= 30) || (i % Math.ceil(30/slot) === 0) || i === n-1;
       if(showLabel){
-        labelsHtml += '<text x="'+cx.toFixed(1)+'" y="'+(topPad+plotH+16)+'" font-size="10" fill="var(--text-muted)" text-anchor="middle">'+escapeHtml(d.label)+'</text>';
+        labelsHtml += '<text x="'+cx.toFixed(1)+'" y="'+(topPad+plotH+16)+'" font-size="10.5" fill="var(--text-muted)" text-anchor="middle">'+escapeHtml(String(d.label).replace(/^(\w{3})\w*/, '$1'))+'</text>';
       }
     });
-    lineHtml = '<polyline points="'+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' ')+'" fill="none" stroke="var(--text-light)" stroke-width="1.6" style="pointer-events:none;"/>';
-    pts.forEach(function(p){ lineHtml += '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="2.4" fill="var(--text-light)" style="pointer-events:none;"/>'; });
+    /* monthly: bars carry the values, no line on top of them.
+       cumulative: the running total as a line over faint bars */
+    if(cumulative){
+      var base = (topPad+plotH).toFixed(1);
+      lineHtml = '<polygon points="'+pts[0][0].toFixed(1)+','+base+' '+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' ')+' '+pts[pts.length-1][0].toFixed(1)+','+base+'" fill="var(--accent)" opacity=".10" style="pointer-events:none;"/>' +
+        '<polyline points="'+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' ')+'" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linejoin="round" style="pointer-events:none;"/>';
+      pts.forEach(function(p){ lineHtml += '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3" fill="var(--panel-bg)" stroke="var(--accent)" stroke-width="1.8" style="pointer-events:none;"/>'; });
+      barsHtml = barsHtml.replace(/opacity="0\.9"/g, 'opacity="0.22"');
+    } else {
+      lineHtml = '<polyline points="'+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' ')+'" fill="none" stroke="var(--text-light)" stroke-width="1.5" stroke-linejoin="round" opacity=".85" style="pointer-events:none;"/>';
+      pts.forEach(function(p){ lineHtml += '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="2.4" fill="var(--text-light)" style="pointer-events:none;"/>'; });
+    }
 
     container.innerHTML = uniqGrad('<svg viewBox="0 0 '+totalW+' '+totalH+'" width="100%" height="'+totalH+'" xmlns="http://www.w3.org/2000/svg">' + '<defs>'+'<linearGradient id="gBar" x1="0" y1="0" x2="1" y2="0">'+'<stop offset="0%" stop-color="#5D5BEA"/><stop offset="100%" stop-color="#57A5F5"/>'+'</linearGradient>'+'<linearGradient id="gCol" x1="0" y1="0" x2="0" y2="1">'+'<stop offset="0%" stop-color="#6E86F7"/><stop offset="100%" stop-color="#3E4BC4"/>'+'</linearGradient>'+'<linearGradient id="gCol2" x1="0" y1="0" x2="0" y2="1">'+'<stop offset="0%" stop-color="#9E7BF2"/><stop offset="100%" stop-color="#5B3FBF"/>'+'</linearGradient>'+'</defs>'+
       gridHtml + barsHtml + lineHtml + labelsHtml + '</svg>');
@@ -1880,22 +2287,26 @@ function runUdmDashboard(initialData){
   function renderMultiLineChart(container, series, months, opts){
     if(!container) return;
     opts = opts || {};
-    var totalW = 900, totalH = Math.round(CHART_ASPECT * totalW);
-    var leftPad = 50, bottomPad = 26, topPad = 30, rightPad = 14;
+    var mlPanel = container.closest('.panel');
+    var mlMode = mlPanel && mlPanel.dataset.mlMode || 'table';
+    if(mlPanel) mlPanel.classList.toggle('ml-table-mode', mlMode === 'table');
+    if(mlMode === 'table'){ renderDrafterMonthTable(container, series, opts); return; }
+    var totalW = chartWidth(container, 520), totalH = Math.round(Math.min(240, Math.max(200, 0.46 * totalW)));
+    var leftPad = 50, bottomPad = 26, topPad = 22, rightPad = 12;
     var plotW = totalW - leftPad - rightPad;
     var plotH = totalH - topPad - bottomPad;
 
     var allVals = [];
     series.forEach(function(s){ s.values.forEach(function(v){ allVals.push(v); }); });
     var maxVal = Math.max.apply(null, allVals.concat([1]));
-    var niceMax = maxVal * 1.15;
+    var scale = niceScale(maxVal, 4), niceMax = scale.max;
 
-    var ticks = 4, gridHtml = '';
+    var ticks = scale.ticks, gridHtml = '';
     for(var t=0;t<=ticks;t++){
       var gy = topPad + plotH - (plotH*t/ticks);
-      var gv = niceMax*t/ticks;
+      var gv = scale.step*t;
       gridHtml += '<line x1="'+leftPad+'" y1="'+gy.toFixed(1)+'" x2="'+(leftPad+plotW)+'" y2="'+gy.toFixed(1)+'" stroke="var(--panel-border)" stroke-width="1"/>';
-      gridHtml += '<text x="'+(leftPad-8)+'" y="'+(gy+3).toFixed(1)+'" font-size="10.5" fill="var(--text-muted)" text-anchor="end">'+escapeHtml((gv>=1000?(gv/1000).toFixed(0)+'K':fmtInt(gv)))+'</text>';
+      gridHtml += '<text x="'+(leftPad-8)+'" y="'+(gy+3).toFixed(1)+'" font-size="10.5" fill="var(--text-muted)" text-anchor="end">'+escapeHtml(fmtInt(gv))+'</text>';
     }
 
     var n = months.length;
@@ -1903,9 +2314,9 @@ function runUdmDashboard(initialData){
     var xAxisHtml = '';
     months.forEach(function(m,i){
       var x = leftPad + slot*i;
-      var showLabel = (n<=20) || (i % Math.ceil(n/16) === 0) || i===n-1;
+      var showLabel = (slot >= 44) || (i % Math.ceil(44/slot) === 0) || i===n-1;
       if(showLabel){
-        xAxisHtml += '<text x="'+x.toFixed(1)+'" y="'+(topPad+plotH+16)+'" font-size="9" fill="var(--text-muted)" text-anchor="middle">'+escapeHtml(m.label)+'</text>';
+        xAxisHtml += '<text x="'+x.toFixed(1)+'" y="'+(topPad+plotH+16)+'" font-size="11" fill="var(--text-muted)" text-anchor="middle">'+escapeHtml(String(m.label).replace(/^(\w{3})\w*/, '$1'))+'</text>';
       }
     });
 
@@ -1914,7 +2325,7 @@ function runUdmDashboard(initialData){
       for(var si2=0; si2<series.length; si2++){ if(opts.isSelected(series[si2])){ hasSelection = true; break; } }
     }
 
-    var linesHtml = '', labelsHtml = '';
+    var linesHtml = '', labelsHtml = '', peakLabels = [];
     series.forEach(function(s, si){
       var pts = s.values.map(function(v,i){
         var x = leftPad + slot*i;
@@ -1925,20 +2336,47 @@ function runUdmDashboard(initialData){
       var lineOpacity = (hasSelection && !selected) ? 0.25 : 1;
       var lineWidth = selected ? 3 : 1.8;
       var cursor = opts.onClick ? 'cursor:pointer;' : '';
-      linesHtml += '<polyline points="'+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' ')+'" fill="none" stroke="'+s.color+'" stroke-width="'+lineWidth+'" opacity="'+lineOpacity+'" style="'+cursor+'" class="ml-series" data-si="'+si+'"/>';
+      var firstI = -1, lastI = -1;
+      s.values.forEach(function(v,i){ if(v>0){ if(firstI<0) firstI = i; lastI = i; } });
+      if(firstI < 0) return;                      // no distance in range: nothing to draw
+      var shown = pts.slice(firstI, lastI+1);
+      if(shown.length === 1) shown = [[shown[0][0]-0.01, shown[0][1]], shown[0]];
+      linesHtml += '<polyline points="'+shown.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' ')+'" fill="none" stroke="'+s.color+'" stroke-width="'+lineWidth+'" opacity="'+lineOpacity+'" style="'+cursor+'" class="ml-series" data-si="'+si+'"/>';
+      var peakI = s.values.reduce(function(b,v,i,a){ return v>a[b]?i:b; }, 0);
       pts.forEach(function(p,i){
         if(s.values[i]>0){
           var tip = s.name+' — '+months[i].label+': '+fmtInt(s.values[i]);
           linesHtml += '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.6" fill="'+s.color+'" opacity="0" class="ml-series" data-si="'+si+'" style="'+cursor+'"><title>'+escapeHtml(tip)+'</title></circle>' +
             '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="2.4" fill="'+s.color+'" opacity="'+lineOpacity+'" style="pointer-events:none;"><title>'+escapeHtml(tip)+'</title></circle>';
-          var labelY = p[1] - 7 - (si % 3) * 10;
-          labelsHtml += '<text x="'+p[0].toFixed(1)+'" y="'+labelY.toFixed(1)+'" font-size="9.5" font-weight="600" fill="var(--text-light)" opacity="'+lineOpacity+'" text-anchor="middle" style="pointer-events:none;">'+escapeHtml(fmtInt(s.values[i]))+'</text>';
+          if(i === peakI && (selected || (!hasSelection && s.values[i] >= maxVal*0.2)))
+            peakLabels.push({x:p[0], y:p[1], v:s.values[i], color:s.color, op:lineOpacity});
         }
       });
     });
 
     container.innerHTML = uniqGrad('<svg viewBox="0 0 '+totalW+' '+totalH+'" width="100%" height="'+totalH+'" xmlns="http://www.w3.org/2000/svg">' + '<defs>'+'<linearGradient id="gBar" x1="0" y1="0" x2="1" y2="0">'+'<stop offset="0%" stop-color="#5D5BEA"/><stop offset="100%" stop-color="#57A5F5"/>'+'</linearGradient>'+'<linearGradient id="gCol" x1="0" y1="0" x2="0" y2="1">'+'<stop offset="0%" stop-color="#6E86F7"/><stop offset="100%" stop-color="#3E4BC4"/>'+'</linearGradient>'+'<linearGradient id="gCol2" x1="0" y1="0" x2="0" y2="1">'+'<stop offset="0%" stop-color="#9E7BF2"/><stop offset="100%" stop-color="#5B3FBF"/>'+'</linearGradient>'+'</defs>'+
-      gridHtml + linesHtml + labelsHtml + xAxisHtml + '</svg>');
+      gridHtml + linesHtml + placePeaks() + xAxisHtml + '</svg>');
+
+    /* biggest peak first; a label that would run off the edge slides in, one that
+       would sit on another label steps up above it */
+    function placePeaks(){
+      var out = '', placed = [], fs = 11.5, lh = fs + 3;
+      peakLabels.sort(function(a,b){ return b.v - a.v; }).forEach(function(L){
+        var t = fmtInt(L.v), w = t.length * fs * 0.54 + 2;
+        var cx = Math.max(leftPad + w/2, Math.min(totalW - 2 - w/2, L.x));
+        var base = L.y - 8, moved = true;
+        while(moved){
+          moved = false;
+          placed.forEach(function(q){
+            if(cx - w/2 < q.x1 && cx + w/2 > q.x0 && base > q.top && base - lh < q.base){ base = q.top - 1; moved = true; }
+          });
+        }
+        if(base - fs < 2) base = fs + 2;
+        placed.push({x0:cx - w/2, x1:cx + w/2, base:base, top:base - lh});
+        out += '<text x="'+cx.toFixed(1)+'" y="'+base.toFixed(1)+'" font-size="'+fs+'" font-weight="700" fill="'+L.color+'" opacity="'+L.op+'" text-anchor="middle" stroke="var(--panel-bg)" stroke-width="3" stroke-linejoin="round" paint-order="stroke" style="pointer-events:none;">'+escapeHtml(t)+'</text>';
+      });
+      return out;
+    }
 
     if(opts.onClick){
       container.querySelectorAll('.ml-series').forEach(function(el){
@@ -1951,6 +2389,52 @@ function runUdmDashboard(initialData){
     }
   }
 
+  /* Month × drafter table: every figure readable, newest month first */
+  function renderDrafterMonthTable(container, series, opts){
+    var months = (opts.monthKeys || []);
+    var hasSel = opts.isSelected && series.some(function(s){ return opts.isSelected(s); });
+    var cols = series.filter(function(s){
+      if(hasSel) return opts.isSelected(s);
+      return s.values.some(function(v){ return v > 0; });
+    });
+    if(!cols.length || !months.length){ container.innerHTML = '<div class="empty-note">No data.</div>'; return; }
+    var max = 0;
+    cols.forEach(function(s){ s.values.forEach(function(v){ if(v > max) max = v; }); });
+    var head = '<tr><th class="mt-month">Month</th>' + cols.map(function(s){
+      return '<th><span class="mt-dot" style="background:'+s.color+'"></span>'+escapeHtml(s.name)+'</th>';
+    }).join('') + '<th class="mt-total">Total</th></tr>';
+    var body = '', colTot = cols.map(function(){ return 0; }), grand = 0;
+    for(var i = months.length - 1; i >= 0; i--){
+      var rowTot = 0, cells = '';
+      cols.forEach(function(s, c){
+        var v = Math.round(s.values[i] || 0);
+        rowTot += v; colTot[c] += v;
+        var pct = max ? Math.round(8 + 42 * v / max) : 0;
+        cells += v > 0
+          ? '<td style="background:color-mix(in srgb, '+s.color+' '+pct+'%, transparent)">'+fmtInt(v)+'</td>'
+          : '<td class="mt-zero">–</td>';
+      });
+      grand += rowTot;
+      body += '<tr><th class="mt-month" scope="row">'+escapeHtml(months[i])+'</th>'+cells+'<td class="mt-total">'+(rowTot ? fmtInt(rowTot) : '–')+'</td></tr>';
+    }
+    var foot = '<tr><th class="mt-month" scope="row">Total</th>' + colTot.map(function(v){ return '<td>'+fmtInt(v)+'</td>'; }).join('') + '<td class="mt-total">'+fmtInt(grand)+'</td></tr>';
+    container.innerHTML = '<div class="mt-wrap"><table class="mt-table"><thead>'+head+'</thead><tbody>'+body+'</tbody><tfoot>'+foot+'</tfoot></table></div>' +
+      '<p class="mt-note">By date completed, so sites still in progress are not in these months. Distance by Drafter above counts them, which is why its totals can be higher.</p>';
+    var wrap = container.querySelector('.mt-wrap');
+    wrap.addEventListener('click', function(e){ e.stopPropagation(); });
+  }
+
+  /* round axis steps (1, 2, 2.5, 5 × 10ⁿ) so gridlines read 10,000 / 20,000 rather than 12,918 */
+  function niceScale(maxVal, ticks){
+    maxVal = maxVal > 0 ? maxVal : 1;
+    var raw = maxVal / ticks, mag = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / mag;
+    var step = (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * mag;
+    if(step < 1) step = 1;
+    var n = Math.ceil(maxVal / step);
+    if(n * step < maxVal * 1.08) n += 1;   // headroom for the value labels
+    return {max: n * step, step: step, ticks: n};
+  }
+
   function buildMonthRange(rows, dateIdx){
     var keys = {};
     rows.forEach(function(r){
@@ -1961,7 +2445,13 @@ function runUdmDashboard(initialData){
     });
     var arr = Object.keys(keys).map(function(k){return keys[k];});
     arr.sort(function(a,b){ return (a.y-b.y) || (a.m-b.m); });
-    return arr;
+    if(arr.length < 2) return arr;
+    var out = [], y = arr[0].y, m = arr[0].m, end = arr[arr.length-1];
+    while(y < end.y || (y === end.y && m <= end.m)){
+      out.push({y:y, m:m});
+      m++; if(m > 12){ m = 1; y++; }
+    }
+    return out;
   }
 
   function fillMonthSeries(rows, dateIdx, valFn, months){
@@ -2745,6 +3235,13 @@ function runUdmDashboard(initialData){
       var o=document.createElement('option'); o.value=d; o.textContent=d; ovDistrictSel.appendChild(o);
     });
     ovDistrictSel.addEventListener('change', render);
+    document.getElementById('ov-reset').addEventListener('click', function(){
+      ovDistrictSel.value = 'All';
+      ovYearMonth.setYearMonth(null, null);
+      var q = document.getElementById('ov-list-search');
+      if(q && q.value){ q.value = ''; q.dispatchEvent(new Event('input')); }
+      render();
+    });
 
     var ovList = makeSortableList({
       tableId:'ov-list-table', bodyId:'ov-list-body', searchId:'ov-list-search', countId:'ov-list-count',
@@ -2852,6 +3349,10 @@ function runUdmDashboard(initialData){
       });
 
       ovList.update(rows);
+      var ovOn = (ovDistrictSel.value && ovDistrictSel.value !== 'All') ||
+        document.querySelectorAll('#ov-f-completed-year .ms-option:not(.all-option) input:checked, #ov-f-completed-month .ms-option:not(.all-option) input:checked').length > 0 ||
+        !!(document.getElementById('ov-list-search') || {}).value;
+      document.getElementById('ov-reset').disabled = !ovOn;
     }
 
     var ovKpiColumns = [
@@ -2919,6 +3420,16 @@ function runUdmDashboard(initialData){
       var o=document.createElement('option'); o.value=d; o.textContent=d; drDistrictSel.appendChild(o);
     });
     drDistrictSel.addEventListener('change', render);
+    document.getElementById('dr-reset').addEventListener('click', function(){
+      selectedDrafters.clear();
+      chipsBox.querySelectorAll('.drafter-chip').forEach(function(c){ c.classList.remove('selected'); });
+      drDistrictSel.value = 'All';
+      drReceivedYM.setYearMonth(null, null);
+      drCompletedYM.setYearMonth(null, null);
+      var q = document.getElementById('dr-list-search');
+      if(q && q.value){ q.value = ''; q.dispatchEvent(new Event('input')); }
+      render();
+    });
 
     // legend
     var legendBox = document.getElementById('dr-legend');
@@ -3033,11 +3544,16 @@ function runUdmDashboard(initialData){
       });
       var monthLabels = months.map(function(mo){return {label: monthLabel(mo.y,mo.m).slice(0,3)+(mo.m===1?(' '+mo.y):'')};});
       renderMultiLineChart(document.getElementById('dr-chartMonthlyByDrafter'), series, monthLabels, {
+        monthKeys: months.map(function(mo){ return monthLabel(mo.y, mo.m).slice(0,3) + ' ' + mo.y; }),
         onClick: function(s){ toggleDrafter(s.name); render(); },
         isSelected: function(s){ return selectedDrafters.has(s.name); }
       });
 
       drList.update(rows);
+      var drOn = selectedDrafters.size > 0 || (drDistrictSel.value && drDistrictSel.value !== 'All') ||
+        document.querySelectorAll('#dr-f-received-year .ms-option:not(.all-option) input:checked, #dr-f-received-month .ms-option:not(.all-option) input:checked, #dr-f-completed-year .ms-option:not(.all-option) input:checked, #dr-f-completed-month .ms-option:not(.all-option) input:checked').length > 0 ||
+        !!(document.getElementById('dr-list-search') || {}).value;
+      document.getElementById('dr-reset').disabled = !drOn;
     }
 
     var drKpiColumns = [
@@ -3150,7 +3666,7 @@ function runUdmDashboard(initialData){
   }
 
   var DRAFTER_CANON = {'SYAFIQA':'Syafiqa','SYAFIQAH':'Syafiqa','NASUHA':'Nasuha',
-    'NABIHAH':'Nabihah','NABIHA':'Nabihah','INTAN':'Intan','ADAM':'Adam'};
+    'NABIHAH':'Nabihah','NABIHA':'Nabihah','INTAN':'Intan','ADAM':'Adam','WAN':'Wan'};
   function normDrafter(v){
     if(v===null || v===undefined) return 'TBC';
     var s = String(v).trim();
@@ -3795,6 +4311,95 @@ function runUdmDashboard(initialData){
       try{ localStorage.setItem(KEY, next); }catch(e){}
     });
   })();
+</script>
+<script id="ui-route-skin-js">
+/* Route skin: logo in the sidebar, and the completion figure drawn as the route line */
+(function(){
+  function placeLogo(){
+    var src = document.querySelector('#udmGateOverlay .glogo');
+    var brand = document.querySelector('.sidebar .brand');
+    if(!src || !brand || brand.querySelector('.brand-logo')) return;
+    var img = document.createElement('img');
+    img.className = 'brand-logo'; img.alt = 'Utara Infra'; img.src = src.getAttribute('src');
+    brand.insertBefore(img, brand.firstChild); brand.classList.add('has-logo');
+  }
+  function syncRoute(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    var bar = el.closest('.topbar');
+    function apply(){
+      var v = parseFloat(String(el.textContent).replace(/[^0-9.]/g,''));
+      if(isNaN(v)) v = 0; v = Math.max(0, Math.min(100, v));
+      bar.style.setProperty('--done', 'calc((100% - 14px) * ' + (v/100).toFixed(4) + ' + 7px)');
+      bar.classList.toggle('route-done', v >= 100);
+      bar.title = 'Completion ' + v.toFixed(2) + '%';
+    }
+    apply();
+    new MutationObserver(apply).observe(el, {childList:true, characterData:true, subtree:true});
+  }
+  function filterToggle(){
+    var sb = document.querySelector('.sidebar'); if(!sb || sb.querySelector('.filter-toggle')) return;
+    var tabs = sb.querySelectorAll('.side-btn'); var last = tabs[tabs.length-1];
+    var b = document.createElement('button'); b.type='button'; b.className='filter-toggle';
+    b.setAttribute('aria-expanded','false'); b.textContent='Show filters';
+    last.parentNode.insertBefore(b, last.nextSibling);
+    sb.classList.add('filters-collapsed');
+    b.addEventListener('click', function(){
+      var open = sb.classList.toggle('filters-collapsed') === false;
+      b.setAttribute('aria-expanded', open ? 'true' : 'false');
+      b.textContent = open ? 'Hide filters' : 'Show filters';
+    });
+  }
+  function zeroWatch(){
+    document.querySelectorAll('.kpi-box.clickable .kb-value').forEach(function(v){
+      var box = v.closest('.kpi-box');
+      function apply(){ box.classList.toggle('is-zero', String(v.textContent).trim() === '0'); }
+      apply(); new MutationObserver(apply).observe(v, {childList:true, characterData:true, subtree:true});
+    });
+  }
+  function chartToggles(){
+    document.querySelectorAll('.chart-controls').forEach(function(ctrl){
+      var opts = ctrl.querySelectorAll(':scope > span');
+      if(opts.length !== 2) return;
+      ctrl.dataset.mode = 'monthly';
+      ctrl.setAttribute('role','radiogroup');
+      opts.forEach(function(sp, i){
+        sp.setAttribute('role','radio'); sp.tabIndex = 0; sp.style.cursor = 'pointer';
+        sp.setAttribute('aria-checked', i === 0 ? 'true' : 'false');
+        function pick(){
+          var mode = i === 0 ? 'monthly' : 'cumulative';
+          if(ctrl.dataset.mode === mode) return;
+          ctrl.dataset.mode = mode;
+          opts.forEach(function(o, j){
+            o.setAttribute('aria-checked', j === i ? 'true' : 'false');
+            var dot = o.querySelector('.radio-dot'); if(dot) dot.classList.toggle('on', j === i);
+          });
+          var page = ctrl.closest('.page-section');
+          var sel = document.getElementById(page && page.id === 'page-drafter' ? 'dr-f-district' : 'ov-f-district');
+          if(sel) sel.dispatchEvent(new Event('change'));
+        }
+        sp.addEventListener('click', function(e){ e.stopPropagation(); pick(); });
+        sp.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); pick(); } });
+      });
+    });
+  }
+  function mlToggle(){
+    document.querySelectorAll('.ml-mode').forEach(function(box){
+      var panel = box.closest('.panel');
+      panel.dataset.mlMode = 'table';
+      box.addEventListener('click', function(e){
+        var b = e.target.closest('button'); e.stopPropagation();
+        if(!b || panel.dataset.mlMode === b.dataset.mode) return;
+        panel.dataset.mlMode = b.dataset.mode;
+        box.querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+        var sel = document.getElementById('dr-f-district');
+        if(sel) sel.dispatchEvent(new Event('change'));
+      });
+    });
+  }
+  function init(){ placeLogo(); filterToggle(); zeroWatch(); chartToggles(); mlToggle(); syncRoute('ov-completion'); syncRoute('dr-completion'); }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
 </script>
 </body>
 </html>
