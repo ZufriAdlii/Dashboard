@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Utara Infra &mdash; Vendor Tracker</title>
 <meta name="description" content="Infrastructure work distance and value by vendor — Utara Infra Sdn Bhd.">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#F4F6F9">
+<meta name="theme-color" content="#0E1320">
 <style>:root{
-  --paper:#F4F6F9; --card:#FFFFFF; --card-2:#FAFBFC; --sunk:#EDF0F4;
-  --panel:#EFF8F2; --thead:#F7F9FB; --gold:#F5B324; --green-ink:#4C7A5C;
+  --paper:#DFE3E9; --card:#ECEEF2; --card-2:#E6E9EE; --sunk:#D6DBE2;
+  --panel:#E2EDE6; --thead:#E4E7EC; --gold:#F5B324; --green-ink:#4C7A5C;
   --ink:#1B1F3B; --body-c:#3E4759; --mute:#6B7280; --faint:#9AA3AF;
-  --rule:#E3E7ED; --rule-2:#D2D8E0;
+  --rule:#D1D6DE; --rule-2:#BFC6D0;
   --green:#2FA360; --green-soft:#E7F6EC;
   --indigo:#2563EB; --indigo-soft:#E6EEFD;
   --clay:#DC2626; --clay-soft:#FDECEC;
@@ -268,6 +268,31 @@ button.ghost:hover{color:var(--ink);border-color:var(--mute);filter:none}
 .panel-hint{margin-top:16px;padding-top:14px;border-top:1px solid var(--rule);font-size:12px;color:var(--faint)}
 
 /* vendor ladder */
+.top5grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px;margin-bottom:22px}
+.t5-row{padding:10px 0;border-bottom:1px solid var(--rule);cursor:pointer}
+.t5-row:hover .t5-nm{color:var(--green)}
+.t5-head{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.t5-rk{font-family:var(--num);font-size:11px;color:var(--faint);width:14px}
+.t5-nm{font-size:14px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.t5-val{font-family:var(--num);font-size:12px;color:var(--body-c);white-space:nowrap}
+.t5-pc{font-family:var(--num);font-size:11px;color:var(--mute);width:44px;text-align:right}
+.t5-track{height:10px;border-radius:5px;background:var(--sunk);margin-left:24px;overflow:hidden}
+.t5-track i{display:block;height:100%;border-radius:5px}
+.t5-other{margin-top:12px;font-size:12px;color:var(--mute);line-height:1.5}
+.t5-other b{color:var(--body-c);font-weight:600}
+.t5-tog{all:unset;cursor:pointer;color:var(--mute);border-radius:3px}
+.t5-tog:hover b,.t5-tog:focus-visible b{color:var(--green)}
+.t5-tog:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.t5-car{display:inline-block;width:12px;font-size:10px;transition:transform .15s}
+.t5-tog[aria-expanded="true"] .t5-car{transform:rotate(90deg)}
+.t5-more{margin:8px 0 4px;border-top:1px dashed var(--rule)}
+.t5-more[hidden]{display:none}
+.t5-mrow{display:flex;align-items:baseline;gap:10px;padding:5px 0;font-size:12px;color:var(--mute);cursor:pointer;border-bottom:1px dotted var(--rule)}
+.t5-mrow:last-child{border-bottom:0}
+.t5-mrow:hover .t5-nm{color:var(--green)}
+.t5-mrow .t5-nm{font-size:12px;font-weight:500;color:var(--body-c)}
+.t5-mrow .t5-val{font-size:11.5px;color:var(--mute)}
+.t5-empty{font-size:13px;color:var(--mute);padding:8px 0}
 .tbar{padding:11px 0;border-bottom:1px solid var(--rule)}
 .tbar:last-child{border-bottom:0}
 .tbar-head{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:7px;cursor:pointer}
@@ -1181,16 +1206,21 @@ table.wtab tr:hover td{background:transparent;color:var(--body-c)}
 </div>
 
 <div class="view" id="v-graf" role="tabpanel">
-  <div class="grid" style="grid-template-columns:1fr;gap:22px">
+  <div class="top5grid">
     <section class="panel">
-      <h2>Vendors by distance</h2>
-      <p class="note">Total metres held by each vendor. Click a bar for its site list.</p>
-      <div id="g-vendor-m"></div>
+      <h2>Top 5 by projects</h2>
+      <p class="note">Number of applications (each row counted once).</p>
+      <div id="g-top-n"></div>
     </section>
     <section class="panel">
-      <h2>Vendors by cost</h2>
-      <p class="note">What the vendors are paid, including TMP, CD, as-built and lump sums. The order differs from the distance chart.</p>
-      <div id="g-vendor-r"></div>
+      <h2>Top 5 by distance</h2>
+      <p class="note">Total metres, on the distance basis selected above.</p>
+      <div id="g-top-m"></div>
+    </section>
+    <section class="panel">
+      <h2>Top 5 by value</h2>
+      <p class="note">Vendor cost, including TMP, CD, as-built and lump sums.</p>
+      <div id="g-top-r"></div>
     </section>
   </div>
 
@@ -1443,7 +1473,7 @@ async function readWorkbook(buf){
 }
 
 
-let theme = 'light';
+let theme = 'dark';
 function setTheme(t){
   theme = (t === 'dark') ? 'dark' : 'light';
   document.documentElement.setAttribute('data-theme', theme);
@@ -1452,7 +1482,7 @@ function setTheme(t){
   document.querySelectorAll('meta[name="theme-color"]').forEach(m=>m.remove());
   const tc=document.createElement('meta');
   tc.setAttribute('name','theme-color');
-  tc.setAttribute('content', theme==='dark' ? '#0E1320' : '#F4F6F9');
+  tc.setAttribute('content', theme==='dark' ? '#0E1320' : '#DFE3E9');
   document.head.appendChild(tc);
   ['theme','gate-theme'].forEach(id=>{
     const el=document.getElementById(id);
@@ -3186,21 +3216,69 @@ function bindChart(target, onPick){
   const box = $(target); if(!box) return;
   box.querySelectorAll('.c-row').forEach(el => el.addEventListener('click', () => onPick(el.dataset.g)));
 }
+const T5OPEN = {};   /* panel top 5 yang senarai Others-nya sedang terbuka */
 function drawGraphs(){
   const R = rows(null);
   const pickBy = (keyOf, label) => g =>
     openList({eyebrow:label, title:g, rows:R.filter(r => String(keyOf(r)) === g)});
 
-  /* vendor: dua carta berperingkat bersebelahan */
+  /* vendor: tiga carta top 5 (permohonan, jarak, kos vendor); baki sebagai teks */
   const V = bucket(R, r => r.v);
-  const byM = [...V].sort((a,b) => b.m - a.m).slice(0, 12)
-    .map(d => ({g:d.g, v:d.m, txt:km(d.m) + ' m'}));
-  const byR = [...V].sort((a,b) => b.rmv - a.rmv).slice(0, 12)
-    .map(d => ({g:d.g, v:d.rmv, txt:rm(d.rmv)}));
-  $('g-vendor-m').innerHTML = chartRanked(byM, {unit:'metres', color:C_INK, label:'Top 12 vendors by distance'});
-  $('g-vendor-r').innerHTML = chartRanked(byR, {unit:'ringgit', color:C_GRN, label:'Top 12 vendors by vendor cost'});
-  bindChart('g-vendor-m', pickBy(r => r.v, 'Vendor'));
-  bindChart('g-vendor-r', pickBy(r => r.v, 'Vendor'));
+  const METRICS = [
+    {box:'g-top-n', key:'n',   txt:d => fmt(d.n) + (d.n === 1 ? ' application' : ' applications'), tot:t => fmt(t) + ' applications'},
+    {box:'g-top-m', key:'m',   txt:d => km(d.m) + ' m',      tot:t => km(t) + ' m'},
+    {box:'g-top-r', key:'rmv', txt:d => rm(d.rmv),           tot:t => rm(t)}
+  ];
+  /* satu warna tetap bagi setiap vendor dalam ketiga-tiga carta */
+  const PAL = ['var(--green)','var(--indigo)','var(--cat3)','var(--sage)','#0E9F9A','#E11D48','#64748B','#A16207','#DB2777','#0284C7'];
+  const colOf = new Map();
+  [...V].sort((a,b) => b.rmv - a.rmv).forEach(d => {
+    if(METRICS.some(mt => [...V].sort((a,b) => b[mt.key] - a[mt.key]).slice(0,5).includes(d)))
+      colOf.set(d.g, PAL[colOf.size % PAL.length]);
+  });
+  METRICS.forEach(mt => {
+    const box = $(mt.box);
+    const sorted = [...V].sort((a,b) => b[mt.key] - a[mt.key]);
+    const top = sorted.slice(0, 5), rest = sorted.slice(5);
+    const T = sorted.reduce((s,d) => s + d[mt.key], 0);
+    const max = Math.max(1, ...top.map(d => d[mt.key]));
+    if(!top.length){ box.innerHTML = '<div class="t5-empty">No sites match these filters.</div>'; return; }
+    const restV = rest.reduce((s,d) => s + d[mt.key], 0);
+    box.innerHTML = top.map((d,i) => `
+      <div class="t5-row" data-g="${esc(d.g)}" title="${esc(d.g)}: ${mt.txt(d)}">
+        <div class="t5-head">
+          <span class="t5-rk">${i+1}</span>
+          <span class="t5-nm">${esc(d.g)}</span>
+          <span class="t5-val">${mt.txt(d)}</span>
+          <span class="t5-pc">${pc(d[mt.key], T).toFixed(1)}%</span>
+        </div>
+        <div class="t5-track"><i style="width:${Math.max(2, d[mt.key]/max*100)}%;background:${colOf.get(d.g)}"></i></div>
+      </div>`).join('') +
+      `<div class="t5-other">` +
+      (rest.length
+        ? `<button type="button" class="t5-tog" aria-expanded="${T5OPEN[mt.box] ? 'true' : 'false'}" aria-controls="${mt.box}-more">` +
+          `<span class="t5-car">&#9656;</span><b>Others (${rest.length} vendor${rest.length > 1 ? 's' : ''})</b> ` +
+          `${mt.tot(restV)} &middot; ${pc(restV, T).toFixed(1)}%</button>` +
+          `<div class="t5-more" id="${mt.box}-more"${T5OPEN[mt.box] ? '' : ' hidden'}>` +
+          rest.map((d,i) => `
+            <div class="t5-mrow" data-g="${esc(d.g)}">
+              <span class="t5-rk">${i+6}</span>
+              <span class="t5-nm">${esc(d.g)}</span>
+              <span class="t5-val">${mt.txt(d)}</span>
+              <span class="t5-pc">${pc(d[mt.key], T).toFixed(1)}%</span>
+            </div>`).join('') +
+          `</div>`
+        : '') +
+      `Total: ${mt.tot(T)} &middot; top 5 hold ${pc(T - restV, T).toFixed(1)}%</div>`;
+    box.querySelectorAll('.t5-row, .t5-mrow').forEach(el => el.onclick = () =>
+      openList({eyebrow:'Vendor', title:el.dataset.g, rows:R.filter(r => r.v === el.dataset.g)}));
+    const tog = box.querySelector('.t5-tog');
+    if(tog) tog.onclick = () => {
+      T5OPEN[mt.box] = !T5OPEN[mt.box];
+      tog.setAttribute('aria-expanded', T5OPEN[mt.box] ? 'true' : 'false');
+      $(mt.box + '-more').hidden = !T5OPEN[mt.box];
+    };
+  });
 
   /* kategori: dua donat */
   const CC = {hdd:'var(--green)', tju:'var(--indigo)', tpr:'var(--cat3)', isa:'var(--sage)'};
@@ -3239,7 +3317,7 @@ function drawGraphs(){
   bindChart('g-tahun', pickBy(r => r.y || '—', 'Year'));
 }
 
-setTheme('light');
+setTheme('dark');   /* sentiasa buka dalam dark mode */
 </script>
 </body>
 </html>
