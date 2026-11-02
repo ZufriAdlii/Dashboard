@@ -862,9 +862,10 @@ details.rates p{margin:10px 0 0;font-size:11.5px;line-height:1.7;color:var(--fai
 .rep-key .row{display:flex;align-items:center;gap:6px;font-size:8.5px;color:#5b6472!important;margin-bottom:3px}
 .rep-key i{width:14px;height:9px;display:block;border:1px solid #cfd5dc}
 .rep-frame{fill:#fff;stroke:#e3e6eb}
-.rep-lab text{font-size:13px;font-weight:600;fill:#14181f;paint-order:stroke;
-  stroke:#fff;stroke-width:2.4px;stroke-linejoin:round}
-.rep-lab text.v{font-size:11px;font-weight:400;fill:#2c6b2f}
+.rep-lab rect{fill:#fff;fill-opacity:.94;stroke:#1f4d22;stroke-opacity:.35;stroke-width:.8}
+.rep-lab text{font-family:var(--sans)}
+.rep-lab text.nm{font-size:9.5px;font-weight:600;fill:#4b5563;letter-spacing:.02em}
+.rep-lab text.v{font-size:11.5px;font-weight:700;fill:#14181f}
 .repsheet .rep-foot{background:#f6f8f5!important}
 .repsheet,.repsheet *{color:#14181f}
 .repsheet table,.repsheet tr,.repsheet td,.repsheet th{background:transparent!important}
@@ -2655,26 +2656,43 @@ function drawReport(){
   const mx = Math.max(1, ...list.map(o => o.m));
   const byName = new Map();
   list.forEach(o => { if(o.g && !byName.has(o.g.n)) byName.set(o.g.n, o); });
+  /* sempadan: garis gelap di bawah + garis putih di atas = setiap daerah jelas terpisah */
+  const outline = Object.keys(KEDAH.paths).map(n =>
+    `<path d="${KEDAH.paths[n]}" fill="none" stroke="#1f4d22" stroke-width="3.2" stroke-linejoin="round"/>`).join('');
   const shapes = Object.keys(KEDAH.paths).map(n => {
     const o = byName.get(n), m = o ? o.m : 0;
-    const k = m ? 0.14 + 0.72 * Math.sqrt(m / mx) : 0;       /* legap ikut jarak */
+    const k = m ? 0.18 + 0.72 * Math.sqrt(m / mx) : 0;       /* legap ikut jarak */
     return `<path d="${KEDAH.paths[n]}" fill="${m ? '#2f7d32' : '#eef1f4'}" fill-opacity="${m ? k.toFixed(3) : 1}"
-      stroke="#6f7a88" stroke-width=".7" stroke-linejoin="round"><title>${esc(n)}: ${km(m)} m</title></path>`;
+      stroke="#fff" stroke-width="1.4" stroke-linejoin="round"><title>${esc(n)}: ${km(m)} m</title></path>`;
   }).join('');
+  /* label: kotak putih; daerah kecil diletak di luar dengan garis penunjuk */
+  const LAB_AT = {'Langkawi':[70,212], 'Kota Setar':[186,208], 'Yan':[200,300], 'Bandar Baharu':[262,548],
+                  'Padang Terap':[400,140], 'Baling':[468,372], 'Pokok Sena':[340,182], 'Sik':[428,262]};
+  const LEADER = new Set(['Kota Setar','Yan','Bandar Baharu']);
   const labels = Object.keys(KEDAH.paths).map(n => {
     const c = KEDAH.cent[n]; if(!c) return '';
     const o = byName.get(n), m = o ? o.m : 0;
-    return `<g class="rep-lab"><text x="${c[0]}" y="${c[1]}" text-anchor="middle">${esc(n)}</text>
-      <text class="v" x="${c[0]}" y="${c[1] + 14}" text-anchor="middle">${m ? km(m) + 'm' : '—'}</text></g>`;
+    const [lx, ly] = LAB_AT[n] || c;
+    const num = m ? km(m) + ' m' : '—';
+    const w = Math.max(n.length * 9.5 * 0.6, num.length * 11.5 * 0.62) + 14, h = 30;
+    let g = '';
+    if(LEADER.has(n)){
+      const ex = c[0] > lx ? lx + w/2 : lx - w/2;
+      g += `<line x1="${ex}" y1="${ly}" x2="${c[0]}" y2="${c[1]}" stroke="#4b5563" stroke-width="1"/>` +
+           `<circle cx="${c[0]}" cy="${c[1]}" r="2.6" fill="#14181f" stroke="#fff" stroke-width="1.2"/>`;
+    }
+    return `<g class="rep-lab">${g}<rect x="${(lx - w/2).toFixed(1)}" y="${ly - h/2}" width="${w.toFixed(1)}" height="${h}" rx="6"/>` +
+      `<text class="nm" x="${lx}" y="${ly - 3}" text-anchor="middle">${esc(n)}</text>` +
+      `<text class="v" x="${lx}" y="${ly + 10}" text-anchor="middle">${num}</text></g>`;
   }).join('');
   const keyStep = [1, .66, .4, .18, 0];
   $('rep-mapwrap').innerHTML =
     `<span class="mapbox"><svg class="map" viewBox="0 0 ${KEDAH.w} ${KEDAH.h}" role="img"
-        aria-label="Work distance by district">${shapes}${labels}</svg></span>
+        aria-label="Work distance by district">${outline}${shapes}${labels}</svg></span>
      <span class="rep-key"><h4>Distance</h4>` +
      keyStep.map((f,i) => {
        const v = mx * f;
-       const op = f ? 0.14 + 0.72 * Math.sqrt(f) : 0;
+       const op = f ? 0.18 + 0.72 * Math.sqrt(f) : 0;
        return `<span class="row"><i style="background:${f ? '#2f7d32' : '#eef1f4'};opacity:${f ? op.toFixed(2) : 1}"></i>` +
               `${f ? (i === 0 ? km(v) + 'm' : '~' + km(v) + 'm') : 'none'}</span>`;
      }).join('') + `</span>`;
