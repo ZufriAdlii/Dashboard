@@ -687,6 +687,25 @@ tfoot td{padding:9px 10px;font-size:12px}
 #refresh.busy{opacity:.65;cursor:default}
 #refresh.busy .rf-ico{animation:rfspin .8s linear infinite;transform-origin:50% 50%}
 @keyframes rfspin{to{transform:rotate(360deg)}}
+/* ── update tersedia ─────────────────────────────────────── */
+.upd{position:fixed;right:22px;bottom:22px;z-index:90;display:flex;align-items:center;gap:12px;
+  max-width:calc(100vw - 44px);padding:12px 14px 12px 16px;border-radius:10px;
+  background:var(--card);border:1px solid var(--green);box-shadow:var(--shadow);
+  opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .2s ease,transform .2s ease}
+.upd.on{opacity:1;transform:none;pointer-events:auto}
+.upd-dot{width:9px;height:9px;border-radius:50%;background:var(--green);flex:none;
+  box-shadow:0 0 0 0 var(--green);animation:updpulse 1.8s ease-out infinite}
+@keyframes updpulse{0%{box-shadow:0 0 0 0 rgba(79,193,129,.55)}100%{box-shadow:0 0 0 9px rgba(79,193,129,0)}}
+.upd-txt{font-size:12.5px;line-height:1.45;color:var(--body-c)}
+.upd-txt b{display:block;color:var(--ink);font-size:13px}
+.upd button{padding:7px 12px;font-size:12px;white-space:nowrap}
+.upd #upd-go{background:var(--green);border-color:var(--green);color:#fff;font-weight:600}
+.upd #upd-go:hover{filter:brightness(1.08)}
+.upd #upd-later{background:transparent}
+#refresh.has-update{color:var(--green);font-weight:600}
+#refresh.has-update .rf-txt::after{content:"";display:inline-block;width:6px;height:6px;margin-left:5px;
+  border-radius:50%;background:var(--green);vertical-align:middle}
+@media print{.upd{display:none!important}}
 .dataline{display:block;font-size:10.5px;color:var(--faint)}
 .dataline:empty{display:none}
 
@@ -1357,6 +1376,12 @@ table.wtab tr:hover td{background:transparent;color:var(--body-c)}
 </div>
 
 
+<div class="upd" id="upd" role="status" aria-live="polite">
+  <span class="upd-dot" aria-hidden="true"></span>
+  <span class="upd-txt"><b>New update available</b><span id="upd-when">The Excel file has been saved again.</span></span>
+  <button type="button" id="upd-later">Later</button>
+  <button type="button" id="upd-go">Update now</button>
+</div>
 <script>
 /* ================= Pembaca XLSX dalam pelayar (tiada pustaka luar) ================= */
 const RELNS = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
@@ -2948,6 +2973,8 @@ async function loadFromHandle(h, quiet){
     const file = await h.getFile();
     await handleFile(file);
     fileHandle = h;
+    lastSig = file.lastModified + ':' + file.size;   /* tandatangan versi yang sedang dipapar */
+    hideUpdate();
     const rb = $('refresh'); if(rb) rb.hidden = false;
     const now = DATA ? DATA.rows.length : 0;
     const dl = $('dataline');
@@ -3009,8 +3036,51 @@ if($('linkclear')) $('linkclear').onclick = async () => {
   const sm = document.querySelector('.drop .small');
   if(sm) sm.textContent = 'or click to browse \u00b7 .xlsx';
   const rb = $('refresh'); if(rb) rb.hidden = true;
+  lastSig = laterSig = null; hideUpdate();
   toast('File unlinked');
 };
+/* ---- kesan update: semak fail berpaut setiap minit & bila kembali ke tab ini ---- */
+let lastSig = null, laterSig = null, checking = false;
+function showUpdate(file){
+  const t = new Date(file.lastModified).toLocaleString('en-MY',
+    {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
+  $('upd-when').textContent = 'The Excel file was saved again at ' + t + '.';
+  $('upd').classList.add('on');
+  const rb = $('refresh'); if(rb) rb.classList.add('has-update');
+}
+function hideUpdate(){
+  const u = $('upd'); if(u) u.classList.remove('on');
+  const rb = $('refresh'); if(rb) rb.classList.remove('has-update');
+}
+async function checkForUpdate(){
+  if(!fileHandle || !lastSig || checking || document.hidden) return;
+  checking = true;
+  try{
+    if(await fileHandle.queryPermission({mode:'read'}) !== 'granted') return;
+    const f = await fileHandle.getFile();
+    const sig = f.lastModified + ':' + f.size;
+    if(sig !== lastSig && sig !== laterSig) showUpdate(f);
+  }catch(e){ /* fail sedang disegerak / dikunci — cuba lagi nanti */ }
+  finally{ checking = false; }
+}
+setInterval(checkForUpdate, 60000);
+document.addEventListener('visibilitychange', () => { if(!document.hidden) checkForUpdate(); });
+window.addEventListener('focus', checkForUpdate);
+$('upd-go').onclick = async () => {
+  if(!fileHandle) return hideUpdate();
+  try{
+    const perm = await fileHandle.requestPermission({mode:'read'});
+    if(perm !== 'granted') return;
+    laterSig = null;
+    await loadFromHandle(fileHandle);
+  }catch(err){ toast('Could not read the update \u00b7 try again in a moment'); }
+};
+$('upd-later').onclick = async () => {
+  /* jangan tanya lagi untuk versi ini; versi seterusnya akan dimaklumkan */
+  try{ const f = await fileHandle.getFile(); laterSig = f.lastModified + ':' + f.size; }catch(e){}
+  $('upd').classList.remove('on');          /* titik pada butang Refresh kekal sebagai peringatan */
+};
+
 window.__initLinked = initLinked;
 if($('refresh')) $('refresh').onclick = async () => {
   if(!fileHandle) return;
