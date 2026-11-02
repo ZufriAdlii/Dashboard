@@ -357,6 +357,16 @@ button.ghost:hover{color:var(--ink);border-color:var(--mute);filter:none}
 /* ── mod baris ── */
 .rowmode-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px}
 .rowmode-note{font-size:11.5px;color:var(--faint)}
+.sla-sw{display:inline-flex;align-items:center;gap:9px;padding:4px 8px 4px 4px;border:0;
+  background:transparent;color:var(--ink);font-size:13px;font-weight:700;cursor:pointer;border-radius:999px}
+.sla-sw .sw{position:relative;width:38px;height:22px;border-radius:999px;flex:none;
+  background:var(--sunk);border:1px solid var(--rule-2);transition:background .2s,border-color .2s}
+.sla-sw .sw i{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.35);transition:transform .2s ease}
+.sla-sw[aria-checked="true"] .sw{background:var(--green);border-color:var(--green)}
+.sla-sw[aria-checked="true"] .sw i{transform:translateX(16px)}
+.sla-sw:hover .sw{border-color:var(--green)}
+.sla-sw:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 
 /* ── tables ───────────────────────────── */
 .tablewrap{background:var(--card);border:1px solid var(--rule);max-height:74vh;overflow:auto}
@@ -413,7 +423,7 @@ tfoot td:first-child{font-family:var(--sans)}
               padding:24px 28px 18px;border-bottom:1px solid var(--rule)}
 .mhead h3,.dhead h3{margin:0;font-size:23px;letter-spacing:-.03em;font-weight:700}
 .msub,.dsubline{font-size:12.5px;color:var(--mute);margin-top:6px}
-.mact{display:flex;gap:8px;flex-shrink:0}
+.mact{display:flex;gap:8px;flex-shrink:0;align-items:center}
 .mclose{background:transparent;color:var(--mute);border:1px solid var(--rule-2)}
 .mclose:hover{color:var(--red);border-color:var(--red)}
 .mbody,.dbody{overflow-y:auto;flex:1}
@@ -1315,6 +1325,8 @@ table.wtab tr:hover td{background:transparent;color:var(--body-c)}
       <button data-r="app" class="on">One row per application</button>
       <button data-r="site">One row per site</button>
     </span>
+    <button type="button" id="sla-col" class="sla-sw" role="switch" aria-checked="true"
+      title="Show or hide the 95-day SLA column"><span class="sw" aria-hidden="true"><i></i></span><span>SLA</span></button>
     <span class="rowmode-note">Applications that share a project name are the same site &mdash; merging them shows the full site cost on one line.</span>
   </div>
   <div class="tablewrap">
@@ -1363,6 +1375,8 @@ table.wtab tr:hover td{background:transparent;color:var(--body-c)}
         <div class="msub" id="mo-sub"></div>
       </div>
       <div class="mact">
+        <button type="button" id="mo-sla" class="sla-sw" role="switch" aria-checked="true"
+          title="Show or hide the 95-day SLA column"><span class="sw" aria-hidden="true"><i></i></span><span>SLA</span></button>
         <button class="ghost" id="mo-csv">CSV</button>
         <button class="mclose" data-close>Close</button>
       </div>
@@ -2371,13 +2385,19 @@ function sortRows(R, key, dir){
     return dir * ((x ?? -1) - (y ?? -1));
   });
 }
+/* suis SLA: tunjuk / sorok lajur 95-day SLA dalam senarai tapak */
+let SHOW_SLA = true;
+try{ SHOW_SLA = localStorage.getItem('vd-sla-col') !== 'off'; }catch(e){}
+const slaCols = C => SHOW_SLA ? C : C.filter(([k]) => k !== 's95');
 function drawTable(){
+  if(!SHOW_SLA && sortKey === 's95'){ sortKey = 'no'; sortDir = -1; }
+  const COLS_V = slaCols(COLS);
   const base = rowMode === 'site' ? mergeSites(rows(null)) : rows(null);
   const R = sortRows(base, sortKey, sortDir);
-  $('thead').innerHTML = COLS.map(([k,l]) =>
+  $('thead').innerHTML = COLS_V.map(([k,l]) =>
     `<th data-k="${k}">${l}${sortKey === k ? `<span class="ar">${sortDir < 0 ? '▾' : '▴'}</span>` : ''}</th>`).join('');
   $('tbody').innerHTML = R.map(r =>
-    `<tr class="rowlink" data-no="${r.no}">${COLS.map(([k]) => cellFor(r,k)).join('')}${cardCell(r)}</tr>`).join('');
+    `<tr class="rowlink" data-no="${r.no}">${COLS_V.map(([k]) => cellFor(r,k)).join('')}${cardCell(r)}</tr>`).join('');
   $('empty').style.display = R.length ? 'none' : 'block';
   $('count').innerHTML = `<b>${fmt(R.length)}</b> ${rowMode === 'site' ? 'sites' : 'applications'} <span class="tot-all">/ ${fmt(DATA.rows.length)} total</span> · ${km(R.reduce((s,r)=>s+tot(r),0))} m · ${rm(R.reduce((s,r)=>s+amt(r),0))}`;
   $('tab-rec-n').textContent = fmt(R.length);
@@ -2398,8 +2418,8 @@ let MO = null;
 function moCols(cat){
   const base = [['no','No'], ['ref','Reference'], ['np','Project name'], ['v','Vendor'], ['t','Telco'], ['d','District']];
   if(cat) base.push([cat, CATS.find(c => c.k === cat).l + ' (m)']);
-  return base.concat([['jc','Proposed (m)'], ['js','Actual (m)'], ['amt','Claim (RM)'], ['cost','Cost (RM)'], ['margin','Margin (RM)'],
-                      ['state','Status'], ['s95','95-day SLA'], ['kil','Wayleave approved'], ['kwp','Permit approved']]);
+  return slaCols(base.concat([['jc','Proposed (m)'], ['js','Actual (m)'], ['amt','Claim (RM)'], ['cost','Cost (RM)'], ['margin','Margin (RM)'],
+                      ['state','Status'], ['s95','95-day SLA'], ['kil','Wayleave approved'], ['kwp','Permit approved']]));
 }
 function openList(cfg){
   const cat = cfg.cat || null;
@@ -2407,7 +2427,7 @@ function openList(cfg){
   if(cfg.sort === 'cat' && cat) R = [...R].sort((a,b) => val(b,cat) - val(a,cat));
   else if(cfg.sort) R = sortRows(R, cfg.sort, -1);
   else R = [...R].sort((a,b) => tot(b) - tot(a));
-  MO = {rows:R, cat, title:cfg.title};
+  MO = {rows:R, cat, title:cfg.title, cfg};
   const cols = moCols(cat);
   $('mo-eyebrow').textContent = cfg.eyebrow || 'Site list';
   $('mo-title').textContent = cfg.title;
@@ -2805,6 +2825,18 @@ function drawReport(){
   try{ if(localStorage.getItem(KEY) === 'off') document.body.classList.add('sb-off'); }catch(e){}
   $('sb-hide').addEventListener('click', () => set(true));
   $('sb-show').addEventListener('click', () => set(false));
+})();
+
+(function(){
+  const sw = [$('sla-col'), $('mo-sla')].filter(Boolean);
+  const paint = () => sw.forEach(b => b.setAttribute('aria-checked', SHOW_SLA ? 'true' : 'false'));
+  paint();
+  sw.forEach(b => b.addEventListener('click', () => {
+    SHOW_SLA = !SHOW_SLA; paint();
+    try{ localStorage.setItem('vd-sla-col', SHOW_SLA ? 'on' : 'off'); }catch(e){}
+    if(DATA) drawTable();
+    if(MO && MO.cfg && $('modal').classList.contains('show')) openList(MO.cfg);   /* lukis semula senarai popup */
+  }));
 })();
 
 $('rep-yr').addEventListener('change',  e => { REP.yr  = e.target.value; repSave(); drawReport(); });
