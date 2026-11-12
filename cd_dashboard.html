@@ -133,6 +133,9 @@ main{padding:34px 0 56px;display:flex;flex-direction:column;gap:44px}
 .filters{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;padding:14px 16px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
 .filters label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600;color:var(--muted)}
 .filters select{height:40px;min-width:150px;padding:0 10px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface-2);color:var(--ink);font-size:14px}
+.filters input[type=number]{height:40px;width:130px;padding:0 10px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface-2);color:var(--ink);font-size:14px}
+.amt-custom{display:flex;align-items:flex-end;gap:8px}.amt-custom[hidden]{display:none}.amt-to{padding-bottom:10px;color:var(--muted);font-size:13px}
+.btn-line svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-2px;margin-right:6px}
 .btn-line{height:40px;padding:0 16px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font-weight:600;cursor:pointer}
 .btn-line:hover{border-color:var(--muted)}
 .btn-line[hidden]{display:none}
@@ -345,6 +348,12 @@ footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;paddin
     <label>Authority type<select id="fJenis"><option value="">All authorities</option></select></label>
     <label>Stage<select id="fStage"><option value="">All stages</option><option value="CPC">Waiting for CPC</option><option value="CCC">Waiting for CCC</option><option value="CLOSED">Closed</option></select></label>
     <label>Step<select id="fStep"><option value="">All steps</option></select></label>
+    <label>Deposit amount<select id="fAmt"><option value="">Any amount</option><option value="10000">RM10k and above</option><option value="20000">RM20k and above</option><option value="50000">RM50k and above</option><option value="100000">RM100k and above</option><option value="500000">RM500k and above</option><option value="1000000">RM1M and above</option><option value="custom">Custom range</option></select></label>
+    <div class="amt-custom" id="amtCustom" hidden>
+      <label>From (RM)<input type="number" id="fMin" min="0" step="1000" inputmode="numeric" placeholder="0"></label>
+      <span class="amt-to" aria-hidden="true">to</span>
+      <label>To (RM)<input type="number" id="fMax" min="0" step="1000" inputmode="numeric" placeholder="No limit"></label>
+    </div>
     <div class="grow"></div>
     <button type="button" class="btn-line" id="resetBtn" hidden>Clear filters</button>
   </section>
@@ -385,6 +394,7 @@ footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;paddin
           <button type="button" data-show="closed" aria-pressed="false">Closed</button>
           <button type="button" data-show="all" aria-pressed="false">All</button>
         </div>
+        <button type="button" class="btn-line" id="exportBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12m0 0l-5-5m5 5l5-5"/><path d="M4 20h16"/></svg>Export to Excel</button>
         <button type="button" class="btn-line" id="printBtn">Print list</button>
       </div>
     </div>
@@ -468,7 +478,7 @@ try { stored = sessionStorage.getItem('cdb_raw'); storedName = sessionStorage.ge
 var ROWS = toRows(stored ? JSON.parse(stored) : JSON.parse($('raw-data').textContent));
 $('srcName').textContent = storedName || 'Tracker_Progress.xlsx';
 
-var S = { sel:new Set(), f:{region:'', telco:'', jenis:'', stage:'', step:'', status:''}, q:'', show:'pending', limit:30, printAll:false };
+var S = { sel:new Set(), f:{region:'', telco:'', jenis:'', stage:'', step:'', status:'', min:'', max:''}, q:'', show:'pending', limit:30, printAll:false };
 
 function passFilters(r, skip){
   var f = S.f; skip = (skip && typeof skip === 'object') ? skip : {};
@@ -479,11 +489,29 @@ function passFilters(r, skip){
   if(!skip.step && f.step && r.step !== f.step) return false;
   if(!skip.status && f.status === 'rec' && !r.rec) return false;
   if(!skip.status && f.status === 'pend' && r.rec) return false;
+  if(f.min !== '' && r.dep < f.min) return false;
+  if(f.max !== '' && r.dep > f.max) return false;
   return true;
 }
 function inSel(r){ return S.sel.size === 0 || S.sel.has(r.state); }
 function rowsFor(skip){ return ROWS.filter(function(r){ return passFilters(r, skip) && inSel(r); }); }
-function syncSelects(){ $('fTelco').value = S.f.telco; $('fJenis').value = S.f.jenis; $('fStage').value = S.f.stage; $('fStep').value = S.f.step; $('fRegion').value = S.f.region; }
+function syncSelects(){ $('fTelco').value = S.f.telco; $('fJenis').value = S.f.jenis; $('fStage').value = S.f.stage; $('fStep').value = S.f.step; $('fRegion').value = S.f.region; syncAmount(); }
+var AMT_PRESETS = ['10000','20000','50000','100000','500000','1000000'];
+function syncAmount(){
+  var none = S.f.min === '' && S.f.max === '', preset = S.f.max === '' && AMT_PRESETS.indexOf(String(S.f.min)) >= 0;
+  if(none){ if($('fAmt').value !== 'custom'){ $('fAmt').value = ''; $('amtCustom').hidden = true; } }
+  else if(preset && $('fAmt').value !== 'custom'){ $('fAmt').value = String(S.f.min); $('amtCustom').hidden = true; }
+  else { $('fAmt').value = 'custom'; $('amtCustom').hidden = false; }
+  if(document.activeElement !== $('fMin')) $('fMin').value = S.f.min === '' ? '' : S.f.min;
+  if(document.activeElement !== $('fMax')) $('fMax').value = S.f.max === '' ? '' : S.f.max;
+}
+function amountLabel(){
+  var a = S.f.min, b = S.f.max;
+  if(a !== '' && b !== '') return rm(a) + ' to ' + rm(b);
+  if(a !== '') return rm(a) + ' and above';
+  if(b !== '') return 'Up to ' + rm(b);
+  return '';
+}
 function scoped(){ return ROWS.filter(function(r){ return passFilters(r) && (S.sel.size === 0 || S.sel.has(r.state)); }); }
 function sum(rows){
   var o = {n:rows.length, dep:0, rec:0, nrec:0, cpc:0, ncpc:0, ccc:0, nccc:0};
@@ -509,9 +537,23 @@ function buildFilters(){
   $(p[0]).addEventListener('change', function(){ S.f[p[1]] = this.value; if(p[1] === 'step' && this.value){ S.f.stage = ''; } if(p[1] === 'stage' && this.value){ S.f.step = ''; } syncSelects(); S.limit = 30; render(); });
 });
 $('resetBtn').addEventListener('click', function(){
-  S.f = {region:'', telco:'', jenis:'', stage:'', step:'', status:''};
-  ['fRegion','fTelco','fJenis','fStage','fStep'].forEach(function(id){ $(id).value = ''; });
-  render();
+  S.f = {region:'', telco:'', jenis:'', stage:'', step:'', status:'', min:'', max:''};
+  $('fAmt').value = ''; syncSelects(); render();
+});
+$('fAmt').addEventListener('change', function(){
+  if(this.value === 'custom'){ $('amtCustom').hidden = false; $('fMin').focus(); return; }
+  $('amtCustom').hidden = true; S.f.min = this.value ? Number(this.value) : ''; S.f.max = ''; syncSelects(); render();
+});
+var amtTimer;
+['fMin','fMax'].forEach(function(id){
+  $(id).addEventListener('input', function(){
+    clearTimeout(amtTimer);
+    amtTimer = setTimeout(function(){
+      var a = $('fMin').value.trim(), b = $('fMax').value.trim();
+      S.f.min = a === '' || isNaN(+a) ? '' : Math.max(0, +a); S.f.max = b === '' || isNaN(+b) ? '' : Math.max(0, +b);
+      render();
+    }, 300);
+  });
 });
 
 /* ---------- map ---------- */
@@ -574,7 +616,7 @@ function render(){
   // hero
   var selArr = Array.from(S.sel);
   var scope = selArr.length === 0 ? 'All of Malaysia' : selArr.length === 1 ? selArr[0] : selArr.length + ' states';
-  var filt = Object.keys(S.f).some(function(k){ return S.f[k]; });
+  var filt = Object.keys(S.f).some(function(k){ return S.f[k] !== '' && S.f[k] != null; });
   $('scopeLine').textContent = scope + (filt ? ' with filters' : '') + ', still waiting to be recovered';
   $('bigPending').textContent = rm(t.dep - t.rec);
   $('bigSub').textContent = 'across ' + int(t.n - t.nrec) + ' sites, out of ' + rm(t.dep) + ' lodged at ' + int(t.n) + ' sites';
@@ -674,10 +716,11 @@ function render(){
   if(S.f.step) parts.push(STEP_LABEL[S.f.step]);
   else if(S.f.stage) parts.push(S.f.stage === 'CLOSED' ? 'Closed' : 'Waiting for ' + S.f.stage);
   if(S.f.status) parts.push(S.f.status === 'rec' ? 'Recovered' : 'Pending');
+  if(amountLabel()) parts.push(amountLabel());
   $('fbar').hidden = parts.length === 0;
   if(parts.length){
     var pendN = rows.filter(function(r){ return !r.rec; }).length;
-    $('fbarText').textContent = 'Filtered by ' + parts.join(' + ') + ', ' + int(rows.length) + ' sites';
+    $('fbarText').textContent = 'Filtered by ' + parts.join(' + ') + ', ' + int(rows.length) + ' sites worth ' + rm(rows.reduce(function(a, r){ return a + r.dep; }, 0));
     $('fbarView').textContent = 'View ' + int(S.show === 'pending' ? pendN : S.show === 'closed' ? rows.length - pendN : rows.length) + ' sites';
   }
 
@@ -696,7 +739,7 @@ function renderList(rows, scope){
   $('sitesTitle').textContent = titles[S.show];
   $('sitesSub').textContent = scope + ', largest amounts first';
   $('printTitle').textContent = 'Project CD: ' + titles[S.show].toLowerCase() + ' (' + scope + ')';
-  var shown = list;
+  var shown = list; S.lastList = list; S.lastScope = scope; S.lastTitle = titles[S.show];
   $('list').innerHTML = shown.length ? shown.map(function(r, i){
     var chip = r.stage === 'CLOSED' ? 'Closed' : r.stage;
     return '<div class="lrow"><span class="rank num">' + String(i + 1).padStart(2, '0') + '</span>' +
@@ -727,7 +770,7 @@ document.querySelector('.split').addEventListener('click', function(e){
 document.querySelector('.legend-pick').addEventListener('click', function(e){ var b = e.target.closest('[data-status]'); if(b) toggleFilter('status', b.getAttribute('data-status')); });
 $('trackDots').parentNode.addEventListener('click', function(e){ var b = e.target.closest('[data-step]'); if(b) toggleFilter('step', b.getAttribute('data-step')); });
 $('fbarView').addEventListener('click', function(){ $('sites').scrollIntoView({behavior:'smooth', block:'start'}); });
-$('fbarClear').addEventListener('click', function(){ S.f = {region:'', telco:'', jenis:'', stage:'', step:'', status:''}; syncSelects(); render(); });
+$('fbarClear').addEventListener('click', function(){ S.f = {region:'', telco:'', jenis:'', stage:'', step:'', status:'', min:'', max:''}; $('fAmt').value = ''; syncSelects(); render(); });
 $('cards').addEventListener('click', function(e){ var b = e.target.closest('.card'); if(!b || b.classList.contains('off')) return; toggleState(b.getAttribute('data-state')); });
 $('q').addEventListener('input', function(){ S.q = this.value; S.limit = 30; render(); });
 document.querySelectorAll('.seg button').forEach(function(b){
@@ -736,6 +779,52 @@ document.querySelectorAll('.seg button').forEach(function(b){
     document.querySelectorAll('.seg button').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
     render();
   });
+});
+$('exportBtn').addEventListener('click', function(){
+  var list = S.lastList || [];
+  if(!list.length){ toast('Nothing to export. Clear some filters first.'); return; }
+  var head = ['No', 'Site or route', 'State', 'PIC', 'Region', 'Telco', 'Authority type', 'Authority', 'Stage', 'Status', 'Overall status', 'Deposit (RM)'];
+  var aoa = [head].concat(list.map(function(r, i){
+    return [i + 1, r.site, r.state, r.pic, r.region, r.telco, JENIS_LABEL[r.jenis] || r.jenis, r.auth, r.stage === 'CLOSED' ? 'Closed' : r.stage, r.detail, r.rec ? 'Recovered' : 'Pending', Math.round(r.dep * 100) / 100];
+  }));
+  var total = list.reduce(function(a, r){ return a + r.dep; }, 0), n = list.length;
+  aoa.push(['', 'Total', '', '', '', '', '', '', '', '', int(n) + ' sites', '']);
+  var ws = XLSX.utils.aoa_to_sheet(aoa);
+  ws['L' + (n + 2)] = {t:'n', f:'SUM(L2:L' + (n + 1) + ')', v:Math.round(total * 100) / 100, z:'#,##0.00'};
+  for(var i = 2; i <= n + 1; i++){ var c = ws['L' + i]; if(c) c.z = '#,##0.00'; }
+  ws['!cols'] = [{wch:6},{wch:48},{wch:16},{wch:8},{wch:11},{wch:9},{wch:20},{wch:30},{wch:9},{wch:22},{wch:14},{wch:16}];
+  ws['!autofilter'] = {ref:'A1:L' + (n + 1)};
+  var parts = [];
+  if(S.sel.size) parts.push('States: ' + Array.from(S.sel).join(', '));
+  if(S.f.region) parts.push('Region: ' + S.f.region);
+  if(S.f.telco) parts.push('Telco: ' + S.f.telco);
+  if(S.f.jenis) parts.push('Authority type: ' + (JENIS_LABEL[S.f.jenis] || S.f.jenis));
+  if(S.f.step) parts.push('Step: ' + STEP_LABEL[S.f.step]); else if(S.f.stage) parts.push('Stage: ' + S.f.stage);
+  if(S.f.status) parts.push('Status: ' + (S.f.status === 'rec' ? 'Recovered' : 'Pending'));
+  if(amountLabel()) parts.push('Deposit: ' + amountLabel());
+  if(S.q.trim()) parts.push('Search: ' + S.q.trim());
+  var rec = list.filter(function(r){ return r.rec; }), recSum = rec.reduce(function(a, r){ return a + r.dep; }, 0);
+  var sum = XLSX.utils.aoa_to_sheet([
+    ['Project CD site list'],
+    ['List', S.lastTitle],
+    ['Scope', S.lastScope],
+    ['Filters', parts.length ? parts.join('; ') : 'None'],
+    ['Source', $('srcName').textContent],
+    ['Exported', new Date().toLocaleString('en-MY')],
+    [],
+    ['Sites', n],
+    ['Total deposit (RM)', Math.round(total * 100) / 100],
+    ['Recovered (RM)', Math.round(recSum * 100) / 100],
+    ['Pending (RM)', Math.round((total - recSum) * 100) / 100]
+  ]);
+  ['B9','B10','B11'].forEach(function(k){ if(sum[k]) sum[k].z = '#,##0.00'; });
+  sum['!cols'] = [{wch:20},{wch:70}];
+  var wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sites');
+  XLSX.utils.book_append_sheet(wb, sum, 'Summary');
+  var d = new Date(), stamp = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  XLSX.writeFile(wb, 'Project_CD_sites_' + stamp + '.xlsx');
+  toast('Exported ' + int(n) + ' sites to Excel');
 });
 $('printBtn').addEventListener('click', function(){ S.printAll = true; render(); window.print(); });
 window.addEventListener('afterprint', function(){ if(S.printAll){ S.printAll = false; render(); } });
